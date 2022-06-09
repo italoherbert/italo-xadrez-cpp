@@ -1,8 +1,10 @@
-<h1>Italo Xadrez - Versão C++</h1>
+====================================================
+Italo Xadrez - Versão C++
+====================================================
 
 Este jogo de xadrez foi construído em C++ e a IDE utilizada foi o Eclipse CDT. 
 
-# Estrutura do Projeto
+ESTRUTURA DO PROJETO
 
 	Os arquivos cabeçalhos (.h) e fonte (.cpp) estão na pasta "Src".
 	As pastas Debug e Release contêm o código compilado em arquivos (.o) e o executável 
@@ -12,7 +14,7 @@ as imagens, audios e DLLs necessárias para o aplicativo funcionar. Você pode c
 o conteúdo da pasta deploy para qualquer lugar do sistema de arquivos e executar 
 o arquivo Xadrez.exe para jogar "Italo Xadrez - Versão C++"
 	
-# Compilando e linkando o código fonte
+COMPILANDO E LINKANDO O CÓDIGO FONTE
 
 Para compilar e rodar o projeto é necessário configurar primeiramente a 
 ferramenta KIT de desenvolvimento na IDE de sua escolha. Utilizei o MinGW como KIT 
@@ -61,6 +63,7 @@ Adicione os seguintes argumentos para o linker:
 	
 Não se esqueça de configurar sua IDE para encontrar o código fonte na pasta Src. Ou, 
 então, copie o conteúdo da pasta para a raiz do projeto se preferir.
+
 
 Agora é só compilar e rodar!
 
