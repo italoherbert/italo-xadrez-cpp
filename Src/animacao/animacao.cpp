@@ -14,7 +14,6 @@ Animacao::~Animacao() {
 }
 
 bool Animacao::move( Movimento* movimento, int raioInc ) {
-	bool moveu = false;
 	if ( movimento->getMovimento1() != NULL ) {		
 		if ( !movimento->getMovimento1()->isMoveu() ) {			
 			int d2 = pecaAnim->move( movimento->getMovimento1(), raioInc );

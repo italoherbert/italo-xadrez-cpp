@@ -23,7 +23,7 @@ Algoritmo::Algoritmo( Jogo* jogo, JogadaGerenciador* jGer ) {
 float Algoritmo::calculaPeso( Peca* peca ) {
 	float peso = 0;
 	switch( peca->getTipo() ) {
-		case Jogo::REI: peso = 20; break;
+		case Jogo::REI: peso = 8; break;
 		case Jogo::RAINHA: peso = 9; break;
 		case Jogo::TORRE: peso = 5; break;
 		case Jogo::BISPO:  peso = 3; break;
