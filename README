@@ -48,7 +48,7 @@ instalação do MinGW. Logo, se o MinGW estiver em: C:\MinGW. A estrutura contin
 	C:\MinGW\lib
 	C:\MinGW\share
 	
-Agora chegou a hora de configurar o compilador. Vamos assumir que as bibliotecas do SDL2 
+Agora chegou a hora de configurar o compilador e o linker. Vamos assumir que as bibliotecas do SDL2 
 estão em: C:\SDL2. Vamos lá!
 
 Adicione o caminho de includes: "C:\SDL2\includes" ao compilador C++
