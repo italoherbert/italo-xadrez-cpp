@@ -7,6 +7,9 @@ Este jogo de xadrez foi construído em C++ e a IDE utilizada foi o Eclipse CDT C
 ESTRUTURA DO PROJETO
 
 	Os arquivos cabeçalhos (.h) e fonte (.cpp) estão na pasta "Src".
+	As pastas "img" e "audio" são os recursos que o jogo necessita para executar audio e mostrar as devidas imagens.
+	O arquivo BASKVILL.TTF é o arquivo de fonte do windows para as mensagens do jogo serem mostradas com uso de tal fonte.
+	Na raiz do projeto estão as DLLs necessárias para o jogo funcionar.
 			
 COMPILANDO E LINKANDO O CÓDIGO FONTE
 
