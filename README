@@ -9,11 +9,7 @@ ESTRUTURA DO PROJETO
 	Os arquivos cabeçalhos (.h) e fonte (.cpp) estão na pasta "Src".
 	As pastas Debug e Release contêm o código compilado em arquivos (.o) e o executável 
 gerado.
-	A pasta deploy contém uma versão executável do projeto, com o arquivo executável, 
-as imagens, audios e DLLs necessárias para o aplicativo funcionar. Você pode copiar 
-o conteúdo da pasta deploy para qualquer lugar do sistema de arquivos e executar 
-o arquivo Xadrez.exe para jogar "Italo Xadrez - Versão C++"
-	
+		
 COMPILANDO E LINKANDO O CÓDIGO FONTE
 
 Para compilar e rodar o projeto é necessário configurar primeiramente a 
