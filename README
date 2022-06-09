@@ -1,0 +1,72 @@
+# Italo Xadrez - Versão C++
+
+Este jogo de xadrez foi construído em C++ e a IDE utilizada foi o Eclipse CDT. 
+
+# Estrutura do Projeto
+
+	Os arquivos cabeçalhos (.h) e fonte (.cpp) estão na pasta "Src".
+	As pastas Debug e Release contêm o código compilado em arquivos (.o) e o executável 
+gerado.
+	A pasta deploy contém uma versão executável do projeto, com o arquivo executável, 
+as imagens, audios e DLLs necessárias para o aplicativo funcionar. Você pode copiar 
+o conteúdo da pasta deploy para qualquer lugar do sistema de arquivos e executar 
+o arquivo Xadrez.exe para jogar "Italo Xadrez - Versão C++"
+	
+# Compilando e linkando o código fonte
+
+Para compilar e rodar o projeto é necessário configurar primeiramente a 
+ferramenta KIT de desenvolvimento na IDE de sua escolha. Utilizei o MinGW como KIT 
+de desenvolvimento para Windows. 
+
+As bibliotecas SDL2, SDL2_ttf, SDL2_mixer, SDL2_image foram utilizadas e necessita 
+ser instalada e configurada na IDE para que o compilador ache os arquivos 
+cabeçalhos dessas bibliotecas e o linker ache as DLLs e Libs necessárias para 
+gerar o executável Windows. Então vamos lá:
+
+Navegue até o site https://libsdl.org/ e baixe as seguintes bibliotecas:
+	SDL2, 
+	SDL2_mixer, 
+	SDL2_image
+
+Após isto, baixe também a biblioteca SDL2_ttf no mesmo site ou no site abaixo:
+	https://github.com/libsdl-org/SDL_ttf
+	
+Importante, você já deve ter também instalado o MinGW ou equivalente em seu Windows!
+
+Agora, verifique se seu MinGW compila para arquitetura x86_64 ou i686 e, ao descompactar 
+as bibliotecas baixadas, copie o conteúdo da pasta equivalente a arquitetura de 
+compilação do MinGW para a pasta raiz do MinGW ou para uma pasta separada. Eu particularmente 
+preferi descompactar em C:\SDL2. Assim, haverá a seguinte estrutura de pastas após a instalação:
+	C:\SDL2\bin
+	C:\SDL2\include
+	C:\SDL2\lib
+	C:\SDL2\share
+
+Se copiar para pasta do MinGW, estas pastas serão mescladas com as já existentes na 
+instalação do MinGW. Logo, se o MinGW estiver em: C:\MinGW. A estrutura continuará como abaixo:
+	C:\MinGW\bin
+	C:\MinGW\include
+	C:\MinGW\lib
+	C:\MinGW\share
+	
+Agora chegou a hora de configurar o compilador. Vamos assumir que as bibliotecas do SDL2 
+estão em: C:\SDL2. Vamos lá!
+
+Adicione o caminho de includes: "C:\SDL2\includes" ao compilador C++
+
+Adicione o caminho das libs: "C:\SDL2\lib" ao linker
+
+Adicione os seguintes argumentos para o linker: 
+	-lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf -mwindows
+	
+Não se esqueça de configurar sua IDE para encontrar o código fonte na pasta Src. Ou, 
+então, copie o conteúdo da pasta para a raiz do projeto se preferir.
+
+Agora é só compilar e rodar!
+
+Qualquer dúvida, entre em contato: italoherbert@outlook.com
+Boa sorte!
+
+
+
+
