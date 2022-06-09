@@ -1,56 +1,58 @@
-# Italo Xadrez - Vers„o C++
+====================================================
+Italo Xadrez - Vers√£o C++
+====================================================
 
-Este jogo de xadrez foi construÌdo em C++ e a IDE utilizada foi o Eclipse CDT. 
+Este jogo de xadrez foi constru√≠do em C++ e a IDE utilizada foi o Eclipse CDT. 
 
-# Estrutura do Projeto
+ESTRUTURA DO PROJETO
 
-	Os arquivos cabeÁalhos (.h) e fonte (.cpp) est„o na pasta "Src".
-	As pastas Debug e Release contÍm o cÛdigo compilado em arquivos (.o) e o execut·vel 
+	Os arquivos cabe√ßalhos (.h) e fonte (.cpp) est√£o na pasta "Src".
+	As pastas Debug e Release cont√™m o c√≥digo compilado em arquivos (.o) e o execut√°vel 
 gerado.
-	A pasta deploy contÈm uma vers„o execut·vel do projeto, com o arquivo execut·vel, 
-as imagens, audios e DLLs necess·rias para o aplicativo funcionar. VocÍ pode copiar 
-o conte˙do da pasta deploy para qualquer lugar do sistema de arquivos e executar 
-o arquivo Xadrez.exe para jogar "Italo Xadrez - Vers„o C++"
+	A pasta deploy cont√©m uma vers√£o execut√°vel do projeto, com o arquivo execut√°vel, 
+as imagens, audios e DLLs necess√°rias para o aplicativo funcionar. Voc√™ pode copiar 
+o conte√∫do da pasta deploy para qualquer lugar do sistema de arquivos e executar 
+o arquivo Xadrez.exe para jogar "Italo Xadrez - Vers√£o C++"
 	
-# Compilando e linkando o cÛdigo fonte
+COMPILANDO E LINKANDO O C√ìDIGO FONTE
 
-Para compilar e rodar o projeto È necess·rio configurar primeiramente a 
+Para compilar e rodar o projeto √© necess√°rio configurar primeiramente a 
 ferramenta KIT de desenvolvimento na IDE de sua escolha. Utilizei o MinGW como KIT 
 de desenvolvimento para Windows. 
 
 As bibliotecas SDL2, SDL2_ttf, SDL2_mixer, SDL2_image foram utilizadas e necessita 
 ser instalada e configurada na IDE para que o compilador ache os arquivos 
-cabeÁalhos dessas bibliotecas e o linker ache as DLLs e Libs necess·rias para 
-gerar o execut·vel Windows. Ent„o vamos l·:
+cabe√ßalhos dessas bibliotecas e o linker ache as DLLs e Libs necess√°rias para 
+gerar o execut√°vel Windows. Ent√£o vamos l√°:
 
-Navegue atÈ o site https://libsdl.org/ e baixe as seguintes bibliotecas:
+Navegue at√© o site https://libsdl.org/ e baixe as seguintes bibliotecas:
 	SDL2, 
 	SDL2_mixer, 
 	SDL2_image
 
-ApÛs isto, baixe tambÈm a biblioteca SDL2_ttf no mesmo site ou no site abaixo:
+Ap√≥s isto, baixe tamb√©m a biblioteca SDL2_ttf no mesmo site ou no site abaixo:
 	https://github.com/libsdl-org/SDL_ttf
 	
-Importante, vocÍ j· deve ter tambÈm instalado o MinGW ou equivalente em seu Windows!
+Importante, voc√™ j√° deve ter tamb√©m instalado o MinGW ou equivalente em seu Windows!
 
 Agora, verifique se seu MinGW compila para arquitetura x86_64 ou i686 e, ao descompactar 
-as bibliotecas baixadas, copie o conte˙do da pasta equivalente a arquitetura de 
-compilaÁ„o do MinGW para a pasta raiz do MinGW ou para uma pasta separada. Eu particularmente 
-preferi descompactar em C:\SDL2. Assim, haver· a seguinte estrutura de pastas apÛs a instalaÁ„o:
+as bibliotecas baixadas, copie o conte√∫do da pasta equivalente a arquitetura de 
+compila√ß√£o do MinGW para a pasta raiz do MinGW ou para uma pasta separada. Eu particularmente 
+preferi descompactar em C:\SDL2. Assim, haver√° a seguinte estrutura de pastas ap√≥s a instala√ß√£o:
 	C:\SDL2\bin
 	C:\SDL2\include
 	C:\SDL2\lib
 	C:\SDL2\share
 
-Se copiar para pasta do MinGW, estas pastas ser„o mescladas com as j· existentes na 
-instalaÁ„o do MinGW. Logo, se o MinGW estiver em: C:\MinGW. A estrutura continuar· como abaixo:
+Se copiar para pasta do MinGW, estas pastas ser√£o mescladas com as j√° existentes na 
+instala√ß√£o do MinGW. Logo, se o MinGW estiver em: C:\MinGW. A estrutura continuar√° como abaixo:
 	C:\MinGW\bin
 	C:\MinGW\include
 	C:\MinGW\lib
 	C:\MinGW\share
 	
 Agora chegou a hora de configurar o compilador. Vamos assumir que as bibliotecas do SDL2 
-est„o em: C:\SDL2. Vamos l·!
+est√£o em: C:\SDL2. Vamos l√°!
 
 Adicione o caminho de includes: "C:\SDL2\includes" ao compilador C++
 
@@ -59,12 +61,13 @@ Adicione o caminho das libs: "C:\SDL2\lib" ao linker
 Adicione os seguintes argumentos para o linker: 
 	-lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf -mwindows
 	
-N„o se esqueÁa de configurar sua IDE para encontrar o cÛdigo fonte na pasta Src. Ou, 
-ent„o, copie o conte˙do da pasta para a raiz do projeto se preferir.
+N√£o se esque√ßa de configurar sua IDE para encontrar o c√≥digo fonte na pasta Src. Ou, 
+ent√£o, copie o conte√∫do da pasta para a raiz do projeto se preferir.
 
-Agora È sÛ compilar e rodar!
 
-Qualquer d˙vida, entre em contato: italoherbert@outlook.com
+Agora √© s√≥ compilar e rodar!
+
+Qualquer d√∫vida, entre em contato: italoherbert@outlook.com
 Boa sorte!
 
 
