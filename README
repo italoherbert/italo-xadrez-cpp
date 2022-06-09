@@ -7,9 +7,7 @@ Este jogo de xadrez foi construído em C++ e a IDE utilizada foi o Eclipse CDT C
 ESTRUTURA DO PROJETO
 
 	Os arquivos cabeçalhos (.h) e fonte (.cpp) estão na pasta "Src".
-	As pastas Debug e Release contêm o código compilado em arquivos (.o) e o executável 
-gerado.
-		
+			
 COMPILANDO E LINKANDO O CÓDIGO FONTE
 
 Para compilar e rodar o projeto é necessário configurar primeiramente a 
