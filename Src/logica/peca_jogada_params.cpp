@@ -1,8 +1,7 @@
 
 #include "peca_jogada_params.h"
 
-PecaJogadaParams::PecaJogadaParams( JogadaUtil* jUtil, Jogo* jogo, JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp, bool isCaptura ) {
-	this->jUtil = jUtil;
+PecaJogadaParams::PecaJogadaParams( Jogo* jogo, JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp, bool isCaptura ) {
 	this->jogo = jogo;
 	this->lista = lista;
 	this->posX = posX;
@@ -10,10 +9,6 @@ PecaJogadaParams::PecaJogadaParams( JogadaUtil* jUtil, Jogo* jogo, JogadaLista* 
 	this->isComp = isComp;
 	this->isCaptura = isCaptura;
 	this->pecas = pecas;
-}
-
-JogadaUtil* PecaJogadaParams::getJogadaUtil() {
-	return jUtil;
 }
 
 Jogo* PecaJogadaParams::getJogo() {

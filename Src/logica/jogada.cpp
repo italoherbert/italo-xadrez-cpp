@@ -8,6 +8,7 @@ Jogada::Jogada( int posX, int posY, Peca* captura, int tipo ) {
 	this->posY = posY;
 	this->captura = captura;
 	this->tipo = tipo;
+	this->peso = 0;
 }
 
 Jogada* Jogada::nova() {

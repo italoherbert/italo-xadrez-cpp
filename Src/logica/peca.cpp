@@ -2,7 +2,6 @@
 
 #include <cstdlib>
 
-
 Peca::Peca( bool deComp, int tipo, int posX, int posY ) {
 	this->deComp = deComp;
 	this->posX = posX;
@@ -12,7 +11,7 @@ Peca::Peca( bool deComp, int tipo, int posX, int posY ) {
 	this->animPosY = 0;
 	this->removida = false;	
 	this->moveuContador = 0;
-	
+	this->jogadaCont = 0;
 }
 
 Peca* Peca::nova() {
@@ -21,7 +20,17 @@ Peca* Peca::nova() {
 	p->setMoveuContador( moveuContador );
 	p->setAnimPosX( animPosX );
 	p->setAnimPosY( animPosY );
+
+	p->jogadaCont = jogadaCont;
 	return p;
+}
+
+void Peca::incJogadaCont() {
+	jogadaCont++;
+}
+
+int Peca::getJogadaCont() {
+	return jogadaCont;
 }
 
 bool Peca::isIgual( Peca* peca ) {

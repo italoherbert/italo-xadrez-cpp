@@ -2,10 +2,9 @@
 
 #include <cstdlib>
 
-#include "../logica/jogada_roque.h"
+#include "../jogada_roque.h"
 
 void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {		
-	JogadaUtil* jUtil = params->getJogadaUtil();
 	Jogo* jogo = params->getJogo();
 	JogadaLista* lista = params->getJogadas();
 	int posX = params->getPosX();
@@ -29,12 +28,12 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 	}			
 		
 	if ( peca->getMoveuContador() == 0 && !isCaptura ) {
-		Peca* jogPecas[ Jogo::N_PECAS];
-		Peca* compPecas[ Jogo::N_PECAS ];						
+		Peca* jogPecas[ JogoConstantes::N_PECAS ];
+		Peca* compPecas[ JogoConstantes::N_PECAS ];
 			
 		jogo->copia_pecas( pecas, jogPecas, compPecas );
 				
-		bool xeque = jogo->isCaptura( jUtil, ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, posX, posY, !isComp );		
+		bool xeque = jogo->isCaptura( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, posX, posY, !isComp );
 		if ( !xeque ) {						
 			if ( isComp ) {			
 				Peca* torreEsq = pecas->getComputadorPeca( 0, 0 );
@@ -44,11 +43,11 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 						Peca* bispo = pecas->getPeca( 2, 0 );
 						Peca* rainha = pecas->getPeca( 3, 0 );
 						if ( cavalo == NULL && bispo == NULL && rainha == NULL ) {																											
-							bool isCap = jogo->isCaptura( jUtil, jogPecas, jogPecas, compPecas, 1, 0, false );
+							bool isCap = jogo->isCaptura( jogPecas, jogPecas, compPecas, 1, 0, false );
 							if ( isCap == false ) {						
-								isCap = jogo->isCaptura( jUtil, jogPecas, jogPecas, compPecas, 2, 0, false );
+								isCap = jogo->isCaptura( jogPecas, jogPecas, compPecas, 2, 0, false );
 								if( isCap == false ) {
-									isCap = jogo->isCaptura( jUtil, jogPecas, jogPecas, compPecas, 3, 0, false );
+									isCap = jogo->isCaptura( jogPecas, jogPecas, compPecas, 3, 0, false );
 									if ( isCap == false )								
 										lista->addJogada( new JogadaRoque( 2, 0, 3, 0, NULL, peca, torreEsq ) );																																							
 								}
@@ -63,9 +62,9 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 						Peca* bispo = pecas->getPeca( 5, 0 );
 						Peca* cavalo = pecas->getPeca( 6, 0 );
 						if ( cavalo == NULL && bispo == NULL ) {
-							bool isCap = jogo->isCaptura( jUtil, jogPecas, jogPecas, compPecas, 5, 0, false );
+							bool isCap = jogo->isCaptura( jogPecas, jogPecas, compPecas, 5, 0, false );
 							if ( isCap == false ) {
-								isCap = jogo->isCaptura( jUtil, jogPecas, jogPecas, compPecas, 6, 0, false );
+								isCap = jogo->isCaptura( jogPecas, jogPecas, compPecas, 6, 0, false );
 								if ( isCap == false ) {																	
 									lista->addJogada( new JogadaRoque( 6, 0, 5, 0, NULL, peca, torreDir ) );
 								}
@@ -81,11 +80,11 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 						Peca* bispo = pecas->getPeca( 2, 7 );
 						Peca* rainha = pecas->getPeca( 3, 7 );
 						if ( cavalo == NULL && bispo == NULL && rainha == NULL ) {												
-							bool isCap = jogo->isCaptura( jUtil, compPecas, jogPecas, compPecas, 1, 7, true );						
+							bool isCap = jogo->isCaptura( compPecas, jogPecas, compPecas, 1, 7, true );
 							if ( isCap == false ) {												
-								isCap = jogo->isCaptura( jUtil, compPecas, jogPecas, compPecas, 2, 7, true );							
+								isCap = jogo->isCaptura( compPecas, jogPecas, compPecas, 2, 7, true );
 								if( isCap == false ) {
-									isCap = jogo->isCaptura( jUtil, compPecas, jogPecas, compPecas, 3, 7, true );								
+									isCap = jogo->isCaptura( compPecas, jogPecas, compPecas, 3, 7, true );
 									if ( isCap == false )
 										lista->addJogada( new JogadaRoque( 2, 7, 3, 7, NULL, peca, torreEsq ) );				
 								}													
@@ -99,9 +98,9 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 						Peca* bispo = pecas->getPeca( 5, 7 );
 						Peca* cavalo = pecas->getPeca( 6, 7 );
 						if ( cavalo == NULL && bispo == NULL ) {
-							bool isCap = jogo->isCaptura( jUtil, compPecas, jogPecas, compPecas, 5, 7, true );						
+							bool isCap = jogo->isCaptura( compPecas, jogPecas, compPecas, 5, 7, true );
 							if( isCap == false ) {
-								isCap = jogo->isCaptura( jUtil, compPecas, jogPecas, compPecas, 6, 7, true );
+								isCap = jogo->isCaptura( compPecas, jogPecas, compPecas, 6, 7, true );
 								if ( isCap == false )
 									lista->addJogada( new JogadaRoque( 6, 7, 5, 7, NULL, peca, torreDir ) );								
 							}

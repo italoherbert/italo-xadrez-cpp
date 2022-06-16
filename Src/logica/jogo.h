@@ -2,15 +2,34 @@
 #ifndef JOGO_H
 #define JOGO_H
 
-#include "../jogada/jogada_util.h"
+
+#include "jogada/bispo_peca_jogada.h"
+#include "jogada/cavalo_peca_jogada.h"
+#include "jogada/peao_peca_jogada.h"
+#include "jogada/rainha_peca_jogada.h"
+#include "jogada/rei_peca_jogada.h"
+#include "jogada/torre_peca_jogada.h"
+
 #include "jogada_lista.h"
 #include "movimento.h"
 #include "peca.h"
 #include "pecas.h"
 #include "tela.h"
 #include "tela_driver.h"
+#include "jogo_constantes.h"
+#include "peca_jogada_params.h"
 
-class Jogo : public Pecas {	
+#include <string>
+
+class BispoPecaJogada;
+class CavaloPecaJogada;
+class PeaoPecaJogada;
+class ReiPecaJogada;
+class RainhaPecaJogada;
+class TorrePecaJogada;
+
+class Jogo : public Pecas, public JogoConstantes {
+
 	private:		
 		Tela* tela;
 		
@@ -23,9 +42,11 @@ class Jogo : public Pecas {
 		Peca* ultPeca = nullptr;
 		Peca* ultPecaComp = nullptr;
 		Peca* ultPecaJog = nullptr;
+
+		int compJogadasCont = 0;
+		int compJogadaRepetidaCont = 0;
 				
 		bool vezComputador = false;
-		int quantCompJogadas = 0;
 		bool compRoque = false;
 		bool jogRoque = false;
 		bool audioLigado = true;
@@ -34,67 +55,57 @@ class Jogo : public Pecas {
 		int fim = 0;
 		
 		Movimento* movimento = nullptr;
+
+		PeaoPecaJogada* peaoPecaJogada;
+		ReiPecaJogada* reiPecaJogada;
+		CavaloPecaJogada* cavaloPecaJogada;
+		TorrePecaJogada* torrePecaJogada;
+		BispoPecaJogada* bispoPecaJogada;
+		RainhaPecaJogada* rainhaPecaJogada;
 							
-	public:			
-		const static int NIVEL_NENHUM = 0;
-		const static int NIVEL_FACIL = 1;
-		const static int NIVEL_NORMAL = 2;
-		const static int NIVEL_DIFICIL = 3;
-	
-		const static int JOGADOR_VENCEU = 1;
-		const static int COMPUTADOR_VENCEU = 2;
-		const static int EMPATE = 3;
-		const static int NAO_FIM = 0;
-		
-		const static int N_PECAS = 16;
-		
-		const static int TORRE = 1;
-		const static int CAVALO = 2;
-		const static int BISPO = 3;
-		const static int RAINHA = 4;
-		const static int REI = 5;
-		const static int PEAO = 6;
-		
-		const static int PECA_REI_INDICE = 4;
-		const static int PECA_PEAO_MEIO_ESQ_INDICE = 11;
-		const static int PECA_PEAO_MEIO_DIR_INDICE = 12;
-		const static int PECA_CAVALO_ESQ_INDICE = 1;
-		const static int PECA_CAVALO_DIR_INDICE = 6;
-		const static int PECA_BISPO_ESQ_INDICE = 2;
-		const static int PECA_BISPO_DIR_INDICE = 5;		
-		
-		const static int TORRE_ESQ_INDICE = 0;
-		const static int TORRE_DIR_INDICE = 7;
-				
+	public:
 		Jogo( TelaDriver* drv );
+		~Jogo();
 		
 		void reinicia();
-		
+
+		void calculaJogadas( JogadaLista* lista, Pecas* pecas, bool isComp, bool isCaptura );
+
+		void filtraJogadas(
+					JogadaLista* lista,
+					Peca* jogPecas[ N_PECAS ],
+					Peca* compPecas[ N_PECAS],
+					int posX, int posY, bool isComp );
+
+		void calculaJogadasPossiveis(
+				JogadaLista* lista,
+				Pecas* pecas,
+				int posX, int posY, int tipo, bool isComp, bool isCaptura );
+
 		bool move( int posX, int posY, int novaPosX, int novaPosY );
 		bool move( Peca* pecas1[N_PECAS], Peca* pecas2[N_PECAS], int posX, int posY, int novaPosX, int novaPosY );		
 			
-		bool isJogadorReiEmXeque( JogadaUtil* util );
-		bool isCompReiEmXeque( JogadaUtil* util );
+		bool isJogadorReiEmXeque();
+		bool isCompReiEmXeque();
 	
-		bool isCaptura( JogadaUtil* util, Peca* outras[N_PECAS], 
+		bool isCaptura( Peca* outras[N_PECAS],
 					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp );
 		
-		Peca* pecaCaptura( JogadaUtil* util, Peca* outras[N_PECAS], 
+		Peca* pecaCaptura( Peca* outras[N_PECAS],
 					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp );
 					
-		bool isCaptura( JogadaUtil* util, Peca* outras[N_PECAS], 
+		bool isCaptura( Peca* outras[N_PECAS],
 					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp, bool incluirRei );
 	
-		Peca* pecaCaptura( JogadaUtil* util, Peca* outras[N_PECAS], 
+		Peca* pecaCaptura( Peca* outras[N_PECAS],
 					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp, bool incluirRei );
 	
 	
-		bool isReiEmXeque( JogadaUtil* util, Peca* outras[N_PECAS], 
-					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp );
-					
-		int isXequeMate( JogadaUtil* util, bool isComp );
-		int isXequeMate( JogadaUtil* util, Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp );
-	
+		bool isReiEmXeque( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp );
+
+		int isXequeMateOuEmpate( bool isComp );
+		int isXequeMateOuEmpate( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp );
+
 		int isPosicaoValida( int posX, int posY );			
 		bool addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp );					
 				
@@ -150,14 +161,18 @@ class Jogo : public Pecas {
 		Peca* getUltimaPeca();		
 		void setUltimaPeca( Peca* peca );
 
+		int getCompJogadaRepetidaCont();
+		void incCompJogadaRepetidaCont();
+		void zeraCompJogadaRepetidaCont();
+
 		Peca* getJogadorJogadaPeca();
 		void setJogadorJogadaPeca( Peca* peca );
-		
-		int getQuantCompJogadas();
-		void incQuantCompJogadas();
-		
+
 		bool isCompRoqueFeito();
 		bool isJogRoqueFeito();
+
+		void incCompJogadasCont();
+		int getCompJogadasCont();
 						
 		int getFIM();
 		void setFim( int fim );								
@@ -171,7 +186,7 @@ class Jogo : public Pecas {
 		int getNivel();
 		void setNivel( int nivel );		
 				
-		//std::string get_peca_str( int tipo );
+		std::string get_peca_str( int tipo );
 };
 
 #endif

@@ -2,13 +2,12 @@
 #ifndef JOGO_GRAFICO_CONTROLADOR_H
 #define JOGO_GRAFICO_CONTROLADOR_H
 
-#include "../algoritmo/algoritmo.h"
+#include "../algoritmo/algoritmo_gerenciador.h"
 #include "../animacao/animacao.h"
 #include "../audio/jogo_audio.h"
 #include "../grafico/jogo_grafico.h"
 #include "../gui/GUI.h"
 #include "../gui/GUI_Listener.h"
-#include "../jogada/jogada_gerenciador.h"
 #include "../logica/jogo.h"
 
 class JogoGraficoControlador : public JogoGraficoListener {
@@ -20,8 +19,7 @@ class JogoGraficoControlador : public JogoGraficoListener {
 		JogoGrafico* jogoGrafico;
 		JogoAudio* audio;
 		
-		JogadaGerenciador* jGer;
-		Algoritmo* algoritmo;
+		AlgoritmoGerenciador* algGer;
 		Animacao* animacao;		
 		
 		Peca* pecaSelecionada;
@@ -35,8 +33,8 @@ class JogoGraficoControlador : public JogoGraficoListener {
 		bool isMensagemDelay;
 		
 	public:
-		JogoGraficoControlador( Jogo* jogo, JogadaGerenciador* jGer, 
-			Algoritmo* alg, Animacao* anim, 
+		JogoGraficoControlador( Jogo* jogo,
+			AlgoritmoGerenciador* algGer, Animacao* anim,
 			GUI* gui, JogoGrafico* jG, JogoAudio* audio );
 		
 		void executando();

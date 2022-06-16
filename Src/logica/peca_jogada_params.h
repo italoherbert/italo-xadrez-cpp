@@ -2,16 +2,16 @@
 #ifndef PECA_JOGADA_PARAMS_H
 #define PECA_JOGADA_PARAMS_H
 
-#include "../logica/jogada_lista.h"
-#include "../logica/jogo.h"
-#include "../logica/pecas.h"
-#include "jogada_util.h"
+#include "jogo.h"
+#include "jogada_lista.h"
+#include "pecas.h"
+
+class Jogo;
 
 class PecaJogadaParams {
 	
 	private:
-	 	Jogo* jogo;
-	 	JogadaUtil* jUtil;
+		Jogo* jogo;
 		JogadaLista* lista;
 		int posX;
 		int posY;
@@ -21,9 +21,12 @@ class PecaJogadaParams {
 		Pecas* pecas;
 					
 	public:
-		PecaJogadaParams( JogadaUtil* jUtil, Jogo* jogo, JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp, bool isCaptura );
-						
-		JogadaUtil* getJogadaUtil();				
+		PecaJogadaParams(
+				Jogo* jogo,
+				JogadaLista* lista,
+				Pecas* pecas,
+				int posX, int posY, bool isComp, bool isCaptura );
+
 		Jogo* getJogo();
 		JogadaLista* getJogadas();
 		int getPosX();

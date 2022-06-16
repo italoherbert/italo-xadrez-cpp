@@ -2,9 +2,9 @@
 
 #include <cstdlib>
 
-#include "../logica/jogada_en_passant.h"
-#include "../logica/jogada_lista.h"
-#include "../logica/jogo.h"
+#include "../jogada_en_passant.h"
+#include "../jogada_lista.h"
+#include "../jogo.h"
 
 void PeaoPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {		
 	Jogo* jogo = params->getJogo();

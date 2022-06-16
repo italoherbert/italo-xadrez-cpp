@@ -1,10 +1,9 @@
+
 #include "bispo_peca_jogada.h"
 
 #include <cstdlib>
 
-
-
-void BispoPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {		
+void BispoPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 	Jogo* jogo = params->getJogo();
 	JogadaLista* lista = params->getJogadas();
 	int posX = params->getPosX();

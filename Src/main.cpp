@@ -1,5 +1,5 @@
 
-#include "algoritmo/algoritmo.h"
+#include "algoritmo/algoritmo_gerenciador.h"
 #include "animacao/animacao.h"
 #include "audio/jogo_audio.h"
 #include "controlador/abertura_grafico_controlador.h"
@@ -11,7 +11,6 @@
 #include "gui/GUI.h"
 #include "gui/GUI_Listener.h"
 #include "gui/jogo_grafico_listener.h"
-#include "jogada/jogada_gerenciador.h"
 #include "logica/jogo.h"
 #include "tela_driver_adapter.h"
 
@@ -21,9 +20,8 @@ int main(int argc, char** argv) {
 	TelaDriverAdapter* tdAdapter = new TelaDriverAdapter( gui );
 		
 	Jogo* jogo = new Jogo( tdAdapter );
-	JogadaGerenciador* jGer = new JogadaGerenciador( jogo );
 	
-	Algoritmo* algoritmo = new Algoritmo( jogo, jGer );
+	AlgoritmoGerenciador* algGer = new AlgoritmoGerenciador( jogo );
 	Animacao* animacao = new Animacao( jogo );
 	
 	JogoAudio* jA = new JogoAudio();
@@ -33,7 +31,7 @@ int main(int argc, char** argv) {
 	
 	GUI_Controlador* guiCtrl = new GUI_Controlador( jogo, gui, aG, jG, jA );
 	AberturaGraficoControlador* aberturaGCtrl = new AberturaGraficoControlador( jogo, gui, aG, jA );
-	JogoGraficoControlador* jogoGCtrl = new JogoGraficoControlador( jogo, jGer, algoritmo, animacao, gui, jG, jA );
+	JogoGraficoControlador* jogoGCtrl = new JogoGraficoControlador( jogo, algGer, animacao, gui, jG, jA );
 		
 	gui->setGUIListener( guiCtrl );
 	gui->setAberturaGraficoListener( aberturaGCtrl );
@@ -41,7 +39,7 @@ int main(int argc, char** argv) {
 	
 	gui->setAberturaGrafico( aG );		
 	gui->setJogoGrafico( jG );
-		
+
 	gui->executa( "Jogo de Xadrez", Consts::JANELA_LARGURA, Consts::JANELA_ALTURA ); 
 	
 	return 0;

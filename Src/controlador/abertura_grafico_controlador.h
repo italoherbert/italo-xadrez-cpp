@@ -18,7 +18,8 @@ class AberturaGraficoControlador : public AberturaGraficoListener {
 		JogoAudio* audio;	
 	public:		
 		AberturaGraficoControlador( Jogo* jogo, GUI* gui, AberturaGrafico* aG, JogoAudio* audio );
-	
+		virtual ~AberturaGraficoControlador() {}
+
 		void mouseSobre( int x, int y );
 		void mousePressionado( int x, int y );
 		void teclaPressionada( int tecla );
