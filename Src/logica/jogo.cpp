@@ -138,16 +138,18 @@ void Jogo::calculaJogadasPossiveis( JogadaLista* lista, Pecas* pecas, int posX, 
 			rainhaPecaJogada->calculaJogadasPossiveis( params );
 			break;
 	}
+
+	delete params;
 }
 
 void Jogo::filtraJogadas(
 			JogadaLista* lista,
-			Peca* jogPecas[Jogo::N_PECAS],
-			Peca* compPecas[Jogo::N_PECAS],
+			Peca** jogPecas,
+			Peca** compPecas,
 			int posX, int posY, bool isComp ) {
 
-	Peca* jps[ Jogo::N_PECAS ];
-	Peca* cps[ Jogo::N_PECAS ];
+	Peca* jps[ N_PECAS ];
+	Peca* cps[ N_PECAS ];
 
 	JogadaLista* jogadas = new JogadaLista();
 
@@ -179,7 +181,7 @@ bool Jogo::move( int posX, int posY, int novaPosX, int novaPosY ) {
 	return this->move( jogadorPecas, computadorPecas, posX, posY, novaPosX, novaPosY );
 }
 
-bool Jogo::move( Peca* pecas1[N_PECAS], Peca* pecas2[N_PECAS], int posX, int posY, int novaPosX, int novaPosY ) {
+bool Jogo::move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX, int novaPosY ) {
 	Peca* novaPos = this->getPeca( pecas1, pecas2, novaPosX, novaPosY );	
 	
 	if ( novaPos != NULL )
@@ -200,7 +202,7 @@ int Jogo::isXequeMateOuEmpate( bool isComp ) {
 	return this->isXequeMateOuEmpate( jogadorPecas, computadorPecas, isComp );
 }
 
-int Jogo::isXequeMateOuEmpate( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp ) {
+int Jogo::isXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 	bool fim = true;
 	for( int i = 0; fim && i < N_PECAS; i++ ) {
 		Peca* p = ( isComp ? compPecas[i] : jogPecas[i] );
@@ -218,7 +220,7 @@ int Jogo::isXequeMateOuEmpate( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS]
 			fim = false;
 
 		this->deleta_jogadas( lista );
-		delete pecas;
+		this->deleta_pecas( pecas );
 	}
 
 	if ( fim ) {
@@ -239,7 +241,7 @@ int Jogo::isXequeMateOuEmpate( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS]
 	return NAO_FIM;
 }
 
-bool Jogo::isReiEmXeque( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp ) {
+bool Jogo::isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 	for( int i = 0; i < N_PECAS; i++ ) {
 		Peca* peca = ( isComp ? compPecas[ i ] : jogPecas[ i ] );
 		if ( peca->isRemovida() )
@@ -255,13 +257,18 @@ bool Jogo::isReiEmXeque( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool
 		int tam = lista->getTam();
 		for( int j = 0; j < tam; j++ ) {
 			Jogada* jogada = lista->getJogada( j );
-			if( jogada->getCaptura() != NULL )
-				if ( jogada->getCaptura()->getTipo() == REI )
+			if( jogada->getCaptura() != NULL ) {
+				if ( jogada->getCaptura()->getTipo() == REI ) {
+					this->deleta_jogadas( lista );
+					this->deleta_pecas( jps );
+
 					return true;
+				}
+			}
 		}
 
 		this->deleta_jogadas( lista );
-		delete jps;
+		this->deleta_pecas( jps );
 	}
 
 	return false;
@@ -275,27 +282,33 @@ bool Jogo::isCompReiEmXeque() {
 	return this->isReiEmXeque( jogadorPecas, computadorPecas, false );
 }
 
-bool Jogo::isCaptura( Peca* outras[N_PECAS],
-			Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp ) {	
+bool Jogo::isCaptura( Peca** outras,
+			Peca** jogPecas, Peca** compPecas,
+			int posX, int posY, bool isComp ) {
 			
 	Peca* p = this->pecaCaptura( outras, jogPecas, compPecas, posX, posY, isComp, true );
 	return ( p != NULL );					
 }
 
-Peca* Jogo::pecaCaptura( Peca* outras[N_PECAS],
-			Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp ) {	
+Peca* Jogo::pecaCaptura( Peca** outras,
+			Peca** jogPecas, Peca** compPecas,
+			int posX, int posY, bool isComp ) {
+
 	return this->pecaCaptura( outras, jogPecas, compPecas, posX, posY, isComp, true );
 }
 
-bool Jogo::isCaptura( Peca* outras[N_PECAS],
-			Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp, bool incluirRei ) {	
+bool Jogo::isCaptura( Peca** outras,
+			Peca** jogPecas, Peca** compPecas,
+			int posX, int posY, bool isComp, bool incluirRei ) {
 			
 	Peca* p = this->pecaCaptura( outras, jogPecas, compPecas, posX, posY, isComp, incluirRei );
 	return ( p != NULL );					
 }
 
-Peca* Jogo::pecaCaptura( Peca* outras[N_PECAS],
-			Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp, bool incluirRei ) {	
+Peca* Jogo::pecaCaptura( Peca** outras,
+			Peca** jogPecas, Peca** compPecas,
+			int posX, int posY, bool isComp, bool incluirRei ) {
+
 	for( int i = 0; i < N_PECAS; i++ ) {
 		Peca* peca = outras[ i ];				
 		if ( peca->isRemovida() )
@@ -323,10 +336,10 @@ Peca* Jogo::pecaCaptura( Peca* outras[N_PECAS],
 		} else {								
 			JogadaLista* lista = new JogadaLista();	
 			
-			JogoPecas* jps = new JogoPecas( this );
-			jps->setPecas( jogPecas, compPecas );						
+			JogoPecas* jpecas = new JogoPecas( this );
+			jpecas->setPecas( jogPecas, compPecas );
 																	
-			this->calculaJogadasPossiveis( lista, jps, peca->getPosX(), peca->getPosY(), peca->getTipo(), isComp, true );
+			this->calculaJogadasPossiveis( lista, jpecas, peca->getPosX(), peca->getPosY(), peca->getTipo(), isComp, true );
 			
 			int tam = lista->getTam();
 			for( int j = 0; j < tam; j++ ) {			
@@ -334,14 +347,14 @@ Peca* Jogo::pecaCaptura( Peca* outras[N_PECAS],
 				
 				if ( jogada->getPosX() == posX && jogada->getPosY() == posY ) {									
 					this->deleta_jogadas( lista );
-					delete jps;					
+					this->deleta_pecas( jpecas );
 						
 					return peca;
 				}
 			}			
 			
 			this->deleta_jogadas( lista );
-			delete jps;
+			this->deleta_pecas( jpecas );
 		}	
 	
 	}
@@ -367,14 +380,14 @@ bool Jogo::addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool
 	return false;
 }
 
-Peca* Jogo::getPeca( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY ) {
+Peca* Jogo::getPeca( Peca** jogPecas, Peca** compPecas, int posX, int posY ) {
 	Peca* p = this->getPeca( jogPecas, posX, posY );
 	if ( p == NULL )
 		p = this->getPeca( compPecas, posX, posY );		
 	return p;
 }
 		
-Peca* Jogo::getPeca( Peca* pecas[ N_PECAS ], int posX, int posY ) {
+Peca* Jogo::getPeca( Peca** pecas, int posX, int posY ) {
 	for( int i = 0; i < N_PECAS; i++ ) {
 		Peca* p = pecas[ i ];
 		if ( p->isRemovida() )
@@ -386,7 +399,7 @@ Peca* Jogo::getPeca( Peca* pecas[ N_PECAS ], int posX, int posY ) {
 	return NULL;
 }
 		
-Peca* Jogo::getPeca( Peca* vetor[ N_PECAS ], int indice ) {
+Peca* Jogo::getPeca( Peca** vetor, int indice ) {
 	Peca* p = vetor[ indice ];
 	if ( p->isRemovida() )
 		return NULL;
@@ -446,32 +459,32 @@ void Jogo::registraRoque( bool isComp ) {
 	else jogRoque = true;
 }
 
-Peca* Jogo::getPecaPeaoMeioEsq( Peca* vetor[N_PECAS] ) {
+Peca* Jogo::getPecaPeaoMeioEsq( Peca** vetor ) {
 	Peca* p = vetor[ PECA_PEAO_MEIO_ESQ_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
 
-Peca* Jogo::getPecaPeaoMeioDir( Peca* vetor[N_PECAS] ) {
+Peca* Jogo::getPecaPeaoMeioDir( Peca** vetor ) {
 	Peca* p = vetor[ PECA_PEAO_MEIO_DIR_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
 
-Peca* Jogo::getPecaCavaloEsq( Peca* vetor[N_PECAS] ) {
+Peca* Jogo::getPecaCavaloEsq( Peca** vetor ) {
 	Peca* p = vetor[ PECA_CAVALO_ESQ_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
 
-Peca* Jogo::getPecaCavaloDir( Peca* vetor[N_PECAS] ) {	
+Peca* Jogo::getPecaCavaloDir( Peca** vetor ) {
 	Peca* p = vetor[ PECA_CAVALO_DIR_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
 
-Peca* Jogo::getPecaBispoEsq( Peca* vetor[N_PECAS] ) {
+Peca* Jogo::getPecaBispoEsq( Peca** vetor ) {
 	Peca* p = vetor[ PECA_BISPO_ESQ_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
 
-Peca* Jogo::getPecaBispoDir( Peca* vetor[N_PECAS] ) {	
+Peca* Jogo::getPecaBispoDir( Peca** vetor ) {
 	Peca* p = vetor[ PECA_BISPO_DIR_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
@@ -482,7 +495,7 @@ Peca* Jogo::getPecaRei( bool isComp ) {
 	return jogadorPecas[ PECA_REI_INDICE ];
 }
 
-Peca* Jogo::getPecaRei( Peca* vetor[N_PECAS] )  {
+Peca* Jogo::getPecaRei( Peca** vetor )  {
 	return vetor[ PECA_REI_INDICE ];
 }
 
@@ -526,18 +539,20 @@ void Jogo::setJogadorJogadaPeca( Peca* peca ) {
 	this->jogadaPeca = peca;
 }
 
-void Jogo::copia_pecas( Peca* novoJPs[N_PECAS], Peca* novoCPs[N_PECAS] ) {
+void Jogo::copia_pecas( Peca** novoJPs, Peca** novoCPs ) {
 	this->copia_pecas( novoJPs, novoCPs, jogadorPecas, computadorPecas );
 }
 
-void Jogo::copia_pecas( Pecas* pecas, Peca* novoJPs[N_PECAS], Peca* novoCPs[N_PECAS] ) {
+void Jogo::copia_pecas( Pecas* pecas, Peca** novoJPs, Peca** novoCPs ) {
 	for( int i = 0; i < N_PECAS; i++ ) {
-		novoJPs[ i ] = pecas->getJogadorPeca( i )->nova();
-		novoCPs[ i ] = pecas->getComputadorPeca( i )->nova();
+		Peca* jogador = pecas->getJogadorPeca( i );
+		Peca* computador = pecas->getComputadorPeca( i );
+		novoJPs[ i ] = jogador->nova();
+		novoCPs[ i ] = computador->nova();
 	}
 }
 
-void Jogo::copia_pecas( Peca* novoJPs[N_PECAS], Peca* novoCPs[N_PECAS], Peca* jps[N_PECAS], Peca* cps[N_PECAS] ) {
+void Jogo::copia_pecas( Peca** novoJPs, Peca** novoCPs, Peca** jps, Peca** cps ) {
 	for( int i = 0; i < N_PECAS; i++ ) {
 		novoJPs[ i ] = jps[ i ]->nova();
 		novoCPs[ i ] = cps[ i ]->nova();
@@ -551,18 +566,8 @@ void Jogo::deleta_pecas() {
 
 void Jogo::deleta_pecas( Pecas* pecas ) {
 	if ( pecas != NULL ) {
-		pecas->deleta_pecas();
-	
 		delete pecas;
-		pecas = NULL;
-	}
-}
-
-void Jogo::deleta_pecas( Peca* vetor[N_PECAS] ) {
-	if ( vetor != NULL ) {	
-		for( int i = 0; i < N_PECAS; i++ )
-			if ( vetor[i] != NULL )
-				delete vetor[i];			
+		pecas = nullptr;
 	}
 }
 
@@ -576,6 +581,14 @@ void Jogo::deleta_jogadas( JogadaLista* lista ) {
 		delete lista;
 		lista = NULL;
 	}	
+}
+
+void Jogo::deleta_pecas( Peca** vetor ) {
+	if ( vetor != NULL ) {
+		for( int i = 0; i < N_PECAS; i++ )
+			if ( vetor[i] != NULL )
+				delete vetor[i];
+	}
 }
 
 void Jogo::incCompJogadasCont() {

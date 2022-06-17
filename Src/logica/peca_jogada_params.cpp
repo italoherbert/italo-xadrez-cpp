@@ -4,11 +4,11 @@
 PecaJogadaParams::PecaJogadaParams( Jogo* jogo, JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp, bool isCaptura ) {
 	this->jogo = jogo;
 	this->lista = lista;
+	this->pecas = pecas;
 	this->posX = posX;
 	this->posY = posY;
 	this->isComp = isComp;
 	this->isCaptura = isCaptura;
-	this->pecas = pecas;
 }
 
 Jogo* PecaJogadaParams::getJogo() {

@@ -236,6 +236,9 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 		jogo->calculaJogadasPossiveis( lista, jogo, posX, posY, peca->getTipo(), isComp, false );
 		jogo->filtraJogadas( lista, jogPecas, compPecas, posX, posY, isComp );
 		
+		jogo->deleta_pecas( jogPecas );
+		jogo->deleta_pecas( compPecas );
+
 		if ( lista->getTam() == 0 ) {
 			bool reiEmXeque = false;
 			if ( isComp )

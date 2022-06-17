@@ -73,8 +73,8 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		void filtraJogadas(
 					JogadaLista* lista,
-					Peca* jogPecas[ N_PECAS ],
-					Peca* compPecas[ N_PECAS],
+					Peca** jogPecas,
+					Peca** compPecas,
 					int posX, int posY, bool isComp );
 
 		void calculaJogadasPossiveis(
@@ -83,28 +83,28 @@ class Jogo : public Pecas, public JogoConstantes {
 				int posX, int posY, int tipo, bool isComp, bool isCaptura );
 
 		bool move( int posX, int posY, int novaPosX, int novaPosY );
-		bool move( Peca* pecas1[N_PECAS], Peca* pecas2[N_PECAS], int posX, int posY, int novaPosX, int novaPosY );		
+		bool move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX, int novaPosY );
 			
 		bool isJogadorReiEmXeque();
 		bool isCompReiEmXeque();
 	
-		bool isCaptura( Peca* outras[N_PECAS],
-					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp );
+		bool isCaptura( Peca** outras,
+					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp );
 		
-		Peca* pecaCaptura( Peca* outras[N_PECAS],
-					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp );
+		Peca* pecaCaptura( Peca** outras,
+					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp );
 					
-		bool isCaptura( Peca* outras[N_PECAS],
-					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp, bool incluirRei );
+		bool isCaptura( Peca** outras,
+					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp, bool incluirRei );
 	
-		Peca* pecaCaptura( Peca* outras[N_PECAS],
-					Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY, bool isComp, bool incluirRei );
+		Peca* pecaCaptura( Peca** outras,
+					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp, bool incluirRei );
 	
 	
-		bool isReiEmXeque( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp );
+		bool isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		int isXequeMateOuEmpate( bool isComp );
-		int isXequeMateOuEmpate( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], bool isComp );
+		int isXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		int isPosicaoValida( int posX, int posY );			
 		bool addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp );					
@@ -113,13 +113,13 @@ class Jogo : public Pecas, public JogoConstantes {
 		
 		Peca* getPecaRei( bool isComp );
 		
-		Peca* getPecaRei( Peca* vetor[N_PECAS] );		
-		Peca* getPecaPeaoMeioEsq( Peca* vetor[N_PECAS] );
-		Peca* getPecaPeaoMeioDir( Peca* vetor[N_PECAS] );
-		Peca* getPecaCavaloEsq( Peca* vetor[N_PECAS] );
-		Peca* getPecaCavaloDir( Peca* vetor[N_PECAS] );
-		Peca* getPecaBispoEsq( Peca* vetor[N_PECAS] );
-		Peca* getPecaBispoDir( Peca* vetor[N_PECAS] );
+		Peca* getPecaRei( Peca** vetor );
+		Peca* getPecaPeaoMeioEsq( Peca** vetor );
+		Peca* getPecaPeaoMeioDir( Peca** vetor );
+		Peca* getPecaCavaloEsq( Peca** vetor );
+		Peca* getPecaCavaloDir( Peca** vetor );
+		Peca* getPecaBispoEsq( Peca** vetor );
+		Peca* getPecaBispoDir( Peca** vetor );
 
 		Peca* getJogadorPeca( int indice );
 		Peca* getComputadorPeca( int indice );
@@ -129,9 +129,9 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		Peca* getPeca( int posX, int posY );
 	
-		Peca* getPeca( Peca* jogPecas[N_PECAS], Peca* compPecas[N_PECAS], int posX, int posY );	
-		Peca* getPeca( Peca* vetor[N_PECAS], int posX, int posY );						
-		Peca* getPeca( Peca* vetor[N_PECAS], int indice );								
+		Peca* getPeca( Peca** jogPecas, Peca** compPecas, int posX, int posY );
+		Peca* getPeca( Peca** vetor, int posX, int posY );
+		Peca* getPeca( Peca** vetor, int indice );
 		
 		Peca** getJogadorPecas();
 		Peca** getComputadorPecas();
@@ -142,14 +142,14 @@ class Jogo : public Pecas, public JogoConstantes {
 		
 		void registraRoque( bool isComp );
 		
-		void copia_pecas( Peca* novoJPs[N_PECAS], Peca* novoCPs[N_PECAS] );		
-		void copia_pecas( Pecas* pecas, Peca* novoJPs[N_PECAS], Peca* novoCPs[N_PECAS] );		
-		void copia_pecas( Peca* novoJPs[N_PECAS], Peca* novoCPs[N_PECAS], Peca* jps[N_PECAS], Peca* cps[N_PECAS] );
+		void copia_pecas( Peca** novoJPs, Peca** novoCPs );
+		void copia_pecas( Pecas* pecas, Peca** novoJPs, Peca** novoCPs );
+		void copia_pecas( Peca** novoJPs, Peca** novoCPs, Peca** jps, Peca** cps );
 		
 		void deleta_pecas();
 		void deleta_pecas( Pecas* pecas );
 		
-		void deleta_pecas( Peca* vetor[N_PECAS] );
+		void deleta_pecas( Peca** vetor );
 		void deleta_jogadas( JogadaLista* lista );
 
 		bool isVezComputador();		

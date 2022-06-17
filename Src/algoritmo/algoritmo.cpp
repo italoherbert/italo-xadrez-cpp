@@ -5,8 +5,6 @@
 #include <cmath>
 #include <ctime>
 
-#include <vector>
-
 #include "../logica/jogo_pecas.h"
 
 using namespace std;
@@ -23,13 +21,9 @@ void Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada ) {
 		jogo->copia_pecas( jogPecas, compPecas );
 		this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, true );
 	} else {
-		MiniMaxNo* perc = no;
-		while( perc->ant != NULL )
-			perc = no->ant;
-
-		*posX = perc->posX;
-		*posY = perc->posY;
-		*jogada = perc->jogada;
+		*posX = no->posX;
+		*posY = no->posY;
+		*jogada = no->jogada;
 	}
 
 	this->limpaMiniMaxArvoreELs( nosLista );
@@ -69,6 +63,10 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNoLista** nosLista, MiniMaxNo* no, bool is
 		this->efetuaJogadas( no, jogPecas, compPecas );
 
 	int status = jogo->isXequeMateOuEmpate( jogPecas, compPecas, !isComp );
+
+	jogo->deleta_pecas( jogPecas );
+	jogo->deleta_pecas( compPecas );
+
 	if ( nivel <= 0 || status != Jogo::NAO_FIM )
 		return no;
 
@@ -86,12 +84,18 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNoLista** nosLista, MiniMaxNo* no, bool is
 		if ( p == NULL )
 			continue;
 
+		p = p->nova();
+
 		JogadaLista* lista = new JogadaLista();
 		JogoPecas* jogoPecas = new JogoPecas( jogo );
 		jogoPecas->setPecas( jogPecas, compPecas );
 
 		jogo->calculaJogadasPossiveis( lista, jogoPecas, p->getPosX(), p->getPosY(), p->getTipo(), isComp, false );
 		jogo->filtraJogadas( lista, jogPecas, compPecas, p->getPosX(), p->getPosY(), isComp );
+
+		jogo->deleta_pecas( jogPecas );
+		jogo->deleta_pecas( compPecas );
+		jogo->deleta_pecas( jogoPecas );
 
 		int tam = lista->getTam();
 		for( int j = 0; !fim && j < tam; j++ ) {
@@ -104,15 +108,20 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNoLista** nosLista, MiniMaxNo* no, bool is
 			bool isXeque = false;
 			float peso = this->move( jogPecas, compPecas, p, jog, isComp, &isXeque );
 
+			jogo->deleta_pecas( jogPecas );
+			jogo->deleta_pecas( compPecas );
+
 			MiniMaxNo* filho = new MiniMaxNo;
 			filho->jogada = jog->nova();
 			filho->posX = p->getPosX();
 			filho->posY = p->getPosY();
-			filho->peso = ( isComp ? peso : -peso );
+			filho->peso = isComp ? peso : -peso;
 			filho->ant = no;
 			filho->prox = NULL;
-			if ( no != NULL )
+			if ( no != NULL ) {
 				no->prox = filho;
+				filho->peso += no->peso;
+			}
 
 			MiniMaxNoLista* lno = new MiniMaxNoLista;
 			lno->no = filho;
@@ -120,16 +129,18 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNoLista** nosLista, MiniMaxNo* no, bool is
 			*nosLista = lno;
 
 			MiniMaxNo* no2 = this->minimax( nosLista, filho, !isComp, nivel-1, alpha, beta );
-			if ( no2 == NULL )
+			if ( no2 == NULL ) {
+				cout << "XXXXXXXXXXX" << endl;
 				continue;
+			}
 
-			filho->peso += no2->peso;
+			filho->peso = no2->peso;
 
 			if ( isComp ) {
 				if ( filho->peso > minimaxNo->peso )
 					minimaxNo = filho;
 
-				if ( alpha > minimaxNo->peso )
+				if ( minimaxNo->peso > alpha )
 					alpha = minimaxNo->peso;
 				if ( beta <= alpha )
 					fim = true;
@@ -137,15 +148,15 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNoLista** nosLista, MiniMaxNo* no, bool is
 				if ( filho->peso < minimaxNo->peso )
 					minimaxNo = filho;
 
-				if ( beta < minimaxNo->peso )
+				if ( minimaxNo->peso < beta )
 					beta = minimaxNo->peso;
 				if ( beta <= alpha )
 					fim = true;
 			}
 		}
 
+
 		jogo->deleta_jogadas( lista );
-		delete jogoPecas;
 	}
 
 	return minimaxNo;
