@@ -20,16 +20,19 @@ void Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada ) {
 	raiz->filhos = NULL;
 
 	MiniMaxNo* no = this->minimax( raiz, true, jogo->getNivel(), INT32_MIN, INT32_MAX );
-	while( no->pai != raiz && no->pai != NULL )
-		no = no->pai;
 
 	if ( no->peso == 0 ) {
 		jogo->copia_pecas( jogPecas, compPecas );
-		this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, true );
+
+		bool tentativaDominioCentro = this->tentaDominioDoCentro( jogPecas, compPecas, posX, posY, jogada );
+		if ( !tentativaDominioCentro )
+			this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, true );
 
 		jogo->deleta_pecas( jogPecas );
 		jogo->deleta_pecas( compPecas );
 	} else {
+		while( no->pai->pai != NULL  )
+			no = no->pai;
 		*posX = no->posX;
 		*posY = no->posY;
 		*jogada = no->jogada;
@@ -127,7 +130,7 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isComp, int nivel, float alph
 			filho->jogada = jog;
 			filho->posX = p->getPosX();
 			filho->posY = p->getPosY();
-			filho->peso = no->peso + peso;
+			filho->peso = no->peso + ( isComp ? peso : -peso );
 			filho->pai = no;
 			filho->filhos = NULL;
 
@@ -193,7 +196,7 @@ float Algoritmo::move( Peca** jps, Peca** cps, Peca* p, Jogada* jog, bool isComp
 
 	bool isXeque = jogo->isReiEmXeque( jps, cps, isComp );
 	if ( isXeque )
-		xequePeso = 0.01;
+		xequePeso = 1.0;
 
 	float capPecaPeso = 0;
 	if ( antesMovePodeSerCapturada ) {
@@ -201,7 +204,7 @@ float Algoritmo::move( Peca** jps, Peca** cps, Peca* p, Jogada* jog, bool isComp
 			capPecaPeso = this->calculaPeso( p );
 	} else {
 		if ( aposMovePodeSerCapturada )
-			capPecaPeso -= this->calculaPeso( p );
+			capPecaPeso = -this->calculaPeso( p );
 	}
 
 	return capturadaPeso + capPecaPeso + xequePeso;
@@ -434,4 +437,32 @@ Jogada* Algoritmo::sorteiaPecaJogada( Peca* peca, Peca* jps[ Jogo::N_PECAS ], Pe
 	jogo->deleta_jogadas( lista2 );
 
 	return jog;
+}
+
+bool Algoritmo::tentaDominioDoCentro( Peca** jps, Peca** cps, int* posX, int* posY, Jogada** jogada ) {
+	bool jogou = false;
+	for( int i = 0; !jogou && i < Jogo::N_JOGADAS_DOMINIO_CENTRO; i++ ) {
+		int* jog = jogo->getCompJogadaDominioCentro( i );
+		int px1 = jog[ 0 ];
+		int py1 = jog[ 1 ];
+		int px2 = jog[ 2 ];
+		int py2 = jog[ 3 ];
+		Peca* p = jogo->getPeca( cps, px1, py1 );
+		if ( p != NULL ) {
+			if ( p->getMoveuContador() == 0 ) {
+				Peca* p2 = jogo->getPeca( jps, cps, px2, py2 );
+				if ( p2 != NULL )
+					if ( p2->getTipo() == Jogo::REI )
+						p2 = NULL;
+
+				if ( p2 == NULL ){
+					*posX = px1;
+					*posY = py1;
+					*jogada = new Jogada( px2, py2, p2, Jogada::NORMAL );
+					jogou = true;
+				}
+			}
+		}
+	}
+	return jogou;
 }

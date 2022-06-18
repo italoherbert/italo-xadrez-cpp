@@ -35,6 +35,13 @@ class Jogo : public Pecas, public JogoConstantes {
 		
 		Peca* jogadorPecas[ 16 ];
 		Peca* computadorPecas[ 16 ];
+
+		int compJogadasDominioCentro[4][4] = {
+			{ 3, 1, 3, 3 },
+			{ 6, 0, 5, 2 },
+			{ 5, 1, 5, 2 },
+			{ 1, 0, 2, 2 }
+		};
 				
 		JogadaLista* jogadas;
 		Peca* jogadaPeca = nullptr;
@@ -173,6 +180,8 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		void incCompJogadasCont();
 		int getCompJogadasCont();
+
+		int* getCompJogadaDominioCentro( int i );
 						
 		int getFIM();
 		void setFim( int fim );								

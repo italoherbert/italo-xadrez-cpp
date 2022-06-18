@@ -511,6 +511,10 @@ JogadaLista* Jogo::getJogadasPossiveis() {
 	return jogadas;
 }
 
+int* Jogo::getCompJogadaDominioCentro( int i ) {
+	return compJogadasDominioCentro[ i ];
+}
+
 bool Jogo::isCompRoqueFeito() {
 	return compRoque;
 }

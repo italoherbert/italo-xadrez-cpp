@@ -15,6 +15,7 @@ class JogoConstantes {
 		const static int NAO_FIM = 0;
 
 		const static int N_PECAS = 16;
+		const static int N_JOGADAS_DOMINIO_CENTRO = 4;
 
 		const static int TORRE = 1;
 		const static int CAVALO = 2;
