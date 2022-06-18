@@ -8,7 +8,6 @@ class Jogada {
 	private:
 		int posX;
 		int posY;
-		int peso;
 		Peca* captura;
 		
 		int tipo;		

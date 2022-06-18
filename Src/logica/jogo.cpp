@@ -67,8 +67,8 @@ void Jogo::reinicia() {
 	for( int i = 0; i < N_PECAS; i++ ) {
 		jogadorPecas[i]->setRemovida( false );
 		computadorPecas[i]->setRemovida( false );
-		//jogadorPecas[i]->setRemovida( i != 4 ? true : false );
-		//computadorPecas[i]->setRemovida( i > 7 ? true : false );
+		jogadorPecas[i]->setRemovida( i > 7 ? true : false );
+		computadorPecas[i]->setRemovida( i != 4 ? true : false );
 	}
 
 	jogadas->limpaJogadas();
@@ -249,10 +249,10 @@ bool Jogo::isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 
 		JogadaLista* lista = new JogadaLista();
 
-		JogoPecas* jps = new JogoPecas( this );
-		jps->setPecas( jogPecas, compPecas );
+		JogoPecas* jogoPecas = new JogoPecas( this );
+		jogoPecas->setPecas( jogPecas, compPecas );
 
-		this->calculaJogadasPossiveis( lista, jps, peca->getPosX(), peca->getPosY(), peca->getTipo(), isComp, true );
+		this->calculaJogadasPossiveis( lista, jogoPecas, peca->getPosX(), peca->getPosY(), peca->getTipo(), isComp, true );
 
 		int tam = lista->getTam();
 		for( int j = 0; j < tam; j++ ) {
@@ -260,7 +260,7 @@ bool Jogo::isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 			if( jogada->getCaptura() != NULL ) {
 				if ( jogada->getCaptura()->getTipo() == REI ) {
 					this->deleta_jogadas( lista );
-					this->deleta_pecas( jps );
+					this->deleta_pecas( jogoPecas );
 
 					return true;
 				}
@@ -268,7 +268,7 @@ bool Jogo::isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 		}
 
 		this->deleta_jogadas( lista );
-		this->deleta_pecas( jps );
+		this->deleta_pecas( jogoPecas );
 	}
 
 	return false;
@@ -567,17 +567,12 @@ void Jogo::deleta_pecas() {
 void Jogo::deleta_pecas( Pecas* pecas ) {
 	if ( pecas != NULL ) {
 		delete pecas;
-		pecas = nullptr;
+		pecas = NULL;
 	}
 }
 
 void Jogo::deleta_jogadas( JogadaLista* lista ) {
-	if ( lista != NULL ) {	
-		int tam = lista->getTam();
-		for( int i = 0; i < tam; i++ )	
-			if ( lista->getJogada( i ) != NULL )			
-				delete lista->getJogada( i );						
-				
+	if ( lista != NULL ) {
 		delete lista;
 		lista = NULL;
 	}	

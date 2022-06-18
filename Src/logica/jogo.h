@@ -62,7 +62,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		TorrePecaJogada* torrePecaJogada;
 		BispoPecaJogada* bispoPecaJogada;
 		RainhaPecaJogada* rainhaPecaJogada;
-							
+
 	public:
 		Jogo( TelaDriver* drv );
 		~Jogo();
@@ -158,7 +158,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		Peca* getUltimaPecaComputador();
 		Peca* getUltimaPecaJogador();
 
-		Peca* getUltimaPeca();		
+		Peca* getUltimaPeca();
 		void setUltimaPeca( Peca* peca );
 
 		int getCompJogadaRepetidaCont();

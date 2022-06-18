@@ -6,13 +6,12 @@
 Jogada::Jogada( int posX, int posY, Peca* captura, int tipo ) {
 	this->posX = posX;
 	this->posY = posY;
-	this->captura = captura;
+	this->captura = ( captura != NULL ? captura->nova() : NULL );
 	this->tipo = tipo;
-	this->peso = 0;
 }
 
 Jogada* Jogada::nova() {
-	return new Jogada( posX, posY, captura, tipo );	
+	return new Jogada( posX, posY, captura, tipo );
 }
 
 int Jogada::getPosX() {

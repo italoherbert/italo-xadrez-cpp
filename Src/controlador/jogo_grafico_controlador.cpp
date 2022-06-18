@@ -54,39 +54,17 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 			int posY = ( y - ty ) / cd;			
 			
 			if ( pecaSelecionada != NULL ) {			
-					Peca* p = jogo->getPeca( posX, posY );
-					if ( p != NULL ) {
-						if ( !p->isIgual( pecaSelecionada ) && p->isDeComp() == jogo->isVezComputador() ) {
-							jogo->getJogadasPossiveis()->limpaJogadas();
-							jogo->setJogadorJogadaPeca( NULL );
-							pecaSelecionada = NULL;
-						}							
-					}
-				}
-										
-			if ( jogo->isVezComputador() ) {																										
-				/*
-				if ( pecaSelecionada == NULL ) {			
-					Peca* peca = jogo->getComputadorPeca( posX, posY );
-					if ( peca != NULL ) {				
-						bool selecionada = this->selecionaPeca( posX, posY, true );				
-						if ( selecionada ) {
-							jogo->setJogadorJogadaPeca( peca );					
-							pecaSelecionada = peca;					
-						}
-					}
-				} else {
-					Jogada* jogada = jogo->getJogada( posX, posY );
-					if ( jogada != NULL ) {				
-						jogo->setMovimento( animacao->criaMovimentos( jogada, pecaSelecionada ) );						
-					} else {
+				Peca* p = jogo->getPeca( posX, posY );
+				if ( p != NULL ) {
+					if ( !p->isIgual( pecaSelecionada ) && p->isDeComp() == jogo->isVezComputador() ) {
 						jogo->getJogadasPossiveis()->limpaJogadas();
 						jogo->setJogadorJogadaPeca( NULL );
-						pecaSelecionada = NULL;	
-					}										
-				} 
-				*/
-			} else {											
+						pecaSelecionada = NULL;
+					}
+				}
+			}
+
+			if ( !jogo->isVezComputador() ) {
 				if ( pecaSelecionada == NULL ) {
 					Peca* peca = jogo->getJogadorPeca( posX, posY );
 					if ( peca != NULL ) {
@@ -141,6 +119,7 @@ void JogoGraficoControlador::executando() {
 			int posX, posY;
 			
 			algGer->calculaMelhorJogada( &posX, &posY, &jogada );
+
 			Peca* peca = jogo->getPeca( posX, posY );			
 			jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );								
 		}						
@@ -151,21 +130,13 @@ void JogoGraficoControlador::executando() {
 		if ( animou ) {		
 			int posX = movimento->getMovimento1()->getPeca()->getPosX();
 			int posY = movimento->getMovimento1()->getPeca()->getPosY();
-			
+
 			Jogada* jogada = movimento->getJogada();
-						
+
 			Peca* peca = jogo->getPeca( posX, posY );
 			peca->setAnimPosX( 0 );
 			peca->setAnimPosY( 0 );
 
-			if ( jogada->getTipo() == Jogada::EN_PASSANT ) {			
-				int capPosX = jogada->getCaptura()->getPosX();
-				int capPosY = jogada->getCaptura()->getPosY();
-				
-				Peca* capturada = jogo->getPeca( capPosX, capPosY );
-				capturada->setRemovida( true );							
-			}
-							
 			bool moveu;	
 						
 			if( jogada->getTipo() == Jogada::ROQUE ) {						
@@ -188,8 +159,18 @@ void JogoGraficoControlador::executando() {
 				jogo->registraRoque( peca->isDeComp() );				
 				
 				moveu = true;
+			} else if ( jogada->getTipo() == Jogada::EN_PASSANT ){
+				int capPosX = jogada->getCaptura()->getPosX();
+				int capPosY = jogada->getCaptura()->getPosY();
+
+				Peca* capturada = jogo->getPeca( capPosX, capPosY );
+				capturada->setRemovida( true );
+
+				jogo->move( posX, posY, jogada->getPosX(), jogada->getPosY() );
+
+				moveu = true;
 			} else {
-				moveu = jogo->move( posX, posY, jogada->getPosX(), jogada->getPosY() );																			
+				moveu = jogo->move( posX, posY, jogada->getPosX(), jogada->getPosY() );
 			}
 																				
 			if ( moveu ) {

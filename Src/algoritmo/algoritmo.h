@@ -12,13 +12,15 @@
 
 using namespace std;
 
+typedef struct MiniMaxNoLista MiniMaxNoLista;
+
 typedef struct MiniMaxNo {
 	Jogada* jogada;
 	int posX;
 	int posY;
 	float peso;
-	struct MiniMaxNo* ant;
-	struct MiniMaxNo* prox;
+	struct MiniMaxNo* pai;
+	struct MiniMaxNoLista* filhos;
 }MinMaxNo;
 
 typedef struct MiniMaxNoLista {
@@ -35,24 +37,19 @@ class Algoritmo {
 	protected:
 		Jogo* jogo;
 
-		Peca* sorteiaPeca( Peca* vetor[ Jogo::N_PECAS ], Peca* jps[ Jogo::N_PECAS], Peca* cps[ Jogo::N_PECAS ], bool isComp );
-		Jogada* sorteiaPecaJogada( Peca* peca, Peca* jps[ Jogo::N_PECAS], Peca* cps[ Jogo::N_PECAS ], bool isComp );
-		void sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca* jps[ Jogo::N_PECAS ], Peca* cps[ Jogo::N_PECAS ], bool isComp );
+		Peca* sorteiaPeca( Peca** vetor, Peca** jps, Peca** cps, bool isComp );
+		Jogada* sorteiaPecaJogada( Peca* peca, Peca** jps, Peca** cps, bool isComp );
+		void sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
 
 		float calculaPeso( Peca* peca );
 
-		MiniMaxNo* minimax( MiniMaxNoLista** nosLista, MiniMaxNo* no, bool isComp, int nivel, float alpha, float beta );
-		void limpaMiniMaxArvoreELs( MiniMaxNoLista* no );
+		MiniMaxNo* minimax( MiniMaxNo* no, bool isComp, int nivel, float alpha, float beta );
 
+		void limpaMiniMaxArvore( MiniMaxNo* no );
 		void efetuaJogadas( MiniMaxNo* no, Peca* jps[Jogo::N_PECAS], Peca* cps[Jogo::N_PECAS] );
 
-		float move(
-				Peca* jps[ Jogo::N_PECAS ],
-				Peca* cps[ Jogo::N_PECAS ],
-				Peca* p,
-				Jogada* jogada,
-				bool isComp,
-				bool* isXeque );
+		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp );
+		float calculaGanhoOuPerda( Peca** jps, Peca** cps, bool isComp );
 
 	public:
 		Algoritmo( Jogo* jogo );
