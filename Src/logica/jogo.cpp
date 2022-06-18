@@ -67,8 +67,8 @@ void Jogo::reinicia() {
 	for( int i = 0; i < N_PECAS; i++ ) {
 		jogadorPecas[i]->setRemovida( false );
 		computadorPecas[i]->setRemovida( false );
-		jogadorPecas[i]->setRemovida( i > 7 ? true : false );
-		computadorPecas[i]->setRemovida( i != 4 ? true : false );
+		//jogadorPecas[i]->setRemovida( i != 4 ? true : false );
+		//computadorPecas[i]->setRemovida( i > 7 ? true : false );
 	}
 
 	jogadas->limpaJogadas();
