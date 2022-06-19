@@ -19,7 +19,9 @@ void Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 	raiz->pai = NULL;
 	raiz->filhos = NULL;
 
-	MiniMaxNo* no = this->minimax( raiz, true, jogo->getNivel(), INT32_MIN, INT32_MAX, isComp );
+	int nivel = jogo->getNivel( isComp );
+
+	MiniMaxNo* no = this->minimax( raiz, true, nivel, INT32_MIN, INT32_MAX, isComp );
 
 	jogo->copia_pecas( jogPecas, compPecas );
 

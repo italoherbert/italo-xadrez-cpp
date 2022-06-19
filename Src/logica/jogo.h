@@ -58,11 +58,14 @@ class Jogo : public Pecas, public JogoConstantes {
 		int jogadorJogadaRepetidaCont = 0;
 				
 		bool vezComputador = false;
+		bool jogadorHumano = true;
+
 		bool compRoque = false;
 		bool jogRoque = false;
 		bool audioLigado = true;
 		
-		int nivel = NIVEL_DIFICIL;
+		int nivelJogador = NIVEL_NORMAL;
+		int nivelComputador = NIVEL_DIFICIL;
 		int fim = 0;
 		
 		Movimento* movimento = nullptr;
@@ -199,8 +202,11 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool isAudioLigado();
 		void setAudioLigado( bool b );
 				
-		int getNivel();
-		void setNivel( int nivel );		
+		int getNivel( bool isComp );
+		void setNivel( bool isComp, int nivel );
+
+		bool isJogadorHumano();
+		void setJogadorHumano( bool b );
 				
 		std::string get_peca_str( int tipo );
 };

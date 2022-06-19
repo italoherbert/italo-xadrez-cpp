@@ -14,12 +14,6 @@ AlgoritmoGerenciador::~AlgoritmoGerenciador() {
 }
 
 void AlgoritmoGerenciador::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp ) {
-	switch( jogo->getNivel() ) {
-		case Jogo::NIVEL_FACIL:
-		case Jogo::NIVEL_NORMAL:
-		case Jogo::NIVEL_DIFICIL:
-			minimaxAlgoritmo->calculaMelhorJogada( posX, posY, jogada, isComp );
-			break;
-	}
+	minimaxAlgoritmo->calculaMelhorJogada( posX, posY, jogada, isComp );
 }
 

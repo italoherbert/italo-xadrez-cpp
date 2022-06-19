@@ -11,11 +11,11 @@ AberturaGraficoControlador::AberturaGraficoControlador( Jogo* jogo, GUI* gui, Ab
 void AberturaGraficoControlador::mousePressionado( int x, int y ) {	
 	bool opSelecionada = true;
 	if ( aberturaGrafico->isMouseEmFacilBT( x, y ) ) {
-		jogo->setNivel( Jogo::NIVEL_FACIL );
+		jogo->setNivel( true, Jogo::NIVEL_FACIL );
 	} else if ( aberturaGrafico->isMouseEmNormalBT( x, y ) ) {
-		jogo->setNivel( Jogo::NIVEL_NORMAL );
+		jogo->setNivel( true, Jogo::NIVEL_NORMAL );
 	} else if ( aberturaGrafico->isMouseEmDificilBT( x, y ) ) {
-		jogo->setNivel( Jogo::NIVEL_DIFICIL );
+		jogo->setNivel( true, Jogo::NIVEL_DIFICIL );
 	} else {
 		opSelecionada = false;
 	}	

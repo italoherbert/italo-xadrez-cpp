@@ -79,6 +79,7 @@ void Jogo::reinicia() {
 	movimento = NULL;
 	
 	vezComputador = false;
+	jogadorHumano = false;
 	
 	compRoque = false;
 	jogRoque = false;
@@ -86,7 +87,8 @@ void Jogo::reinicia() {
 			
 	compJogadasCont = 0;
 	
-	nivel = NIVEL_DIFICIL;
+	nivelJogador = NIVEL_NORMAL;
+	nivelComputador = NIVEL_DIFICIL;
 	fim = NAO_FIM;	
 }
 
@@ -685,12 +687,21 @@ void Jogo::setMovimento( Movimento* movimento ) {
 	this->movimento = movimento;
 }			
 
-int Jogo::getNivel() {
-	return nivel;
+int Jogo::getNivel( bool isComp ) {
+	return isComp ? nivelComputador : nivelJogador;
 }
 
-void Jogo::setNivel( int nivel ) {
-	this->nivel = nivel;
+void Jogo::setNivel( bool isComp,  int nivel ) {
+	if ( isComp )
+		this->nivelComputador = nivel;
+	else this->nivelJogador = nivel;
+}
+
+bool Jogo::isJogadorHumano() {
+	return jogadorHumano;
+}
+void Jogo::setJogadorHumano( bool b ) {
+	this->jogadorHumano = b;
 }
 
 std::string Jogo::get_peca_str( int tipo ) {

@@ -114,12 +114,15 @@ void JogoGraficoControlador::executando() {
 	if ( jogo->getMovimento() == NULL ) {
 		this->processaMensagem();						
 
-		//if ( jogo->isVezComputador() && jogo->getFIM() == Jogo::NAO_FIM ) {
-		bool isComp = jogo->isVezComputador();
-		if ( jogo->getFIM() == Jogo::NAO_FIM ) {
+		bool mov = jogo->getFIM() == Jogo::NAO_FIM;
+		if ( jogo->isJogadorHumano() )
+			mov = jogo->isVezComputador();
+
+		if ( mov ) {
 			Jogada* jogada;
 			int posX, posY;
 			
+			bool isComp = jogo->isVezComputador();
 			algGer->calculaMelhorJogada( &posX, &posY, &jogada, isComp );
 
 			Peca* peca = jogo->getPeca( posX, posY );			
