@@ -6,7 +6,7 @@
 Jogada::Jogada( int posX, int posY, Peca* captura, int tipo ) {
 	this->posX = posX;
 	this->posY = posY;
-	this->captura = ( captura != NULL ? captura->nova() : NULL );
+	this->captura = captura;
 	this->tipo = tipo;
 }
 

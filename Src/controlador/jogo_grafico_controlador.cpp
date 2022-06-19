@@ -111,18 +111,20 @@ void JogoGraficoControlador::teclaPressionada( int tecla ) {
 void JogoGraficoControlador::executando() {
 	audio->tocaAudio();
 
-	if ( jogo->getMovimento() == NULL ) {				
+	if ( jogo->getMovimento() == NULL ) {
 		this->processaMensagem();						
-															
-		if ( jogo->isVezComputador() && jogo->getFIM() == Jogo::NAO_FIM ) {		
+
+		//if ( jogo->isVezComputador() && jogo->getFIM() == Jogo::NAO_FIM ) {
+		bool isComp = jogo->isVezComputador();
+		if ( jogo->getFIM() == Jogo::NAO_FIM ) {
 			Jogada* jogada;
 			int posX, posY;
 			
-			algGer->calculaMelhorJogada( &posX, &posY, &jogada );
+			algGer->calculaMelhorJogada( &posX, &posY, &jogada, isComp );
 
 			Peca* peca = jogo->getPeca( posX, posY );			
-			jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );								
-		}						
+			jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );
+		}
 	} else {		
 		Movimento* movimento = jogo->getMovimento();					
 		
@@ -201,7 +203,7 @@ void JogoGraficoControlador::executando() {
 									
 			this->verificaXequeEXequeMate( moveu );						
 		}						
-	}				
+	}
 }
 
 bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
@@ -251,7 +253,6 @@ void JogoGraficoControlador::verificaXequeEXequeMate( bool moveu ) {
 	
 	if ( moveu && status == Jogo::NAO_FIM ) {			
 		bool reiEmXeque = false;
-		
 		
 		if ( jogo->isVezComputador() )
 			reiEmXeque = jogo->isCompReiEmXeque();

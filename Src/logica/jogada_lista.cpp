@@ -34,7 +34,7 @@ void JogadaLista::limpaJogadas() {
 	jogadas_tam = 0;
 }
 
-void JogadaLista::copia( JogadaLista* lista ) {
+void JogadaLista::setTo( JogadaLista* lista ) {
 	lista->limpaJogadas();
 	for( int i = 0; i < jogadas_tam; i++ ) {	
 		int posX = jogadas[i]->getPosX();

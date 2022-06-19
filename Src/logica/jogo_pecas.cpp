@@ -44,7 +44,7 @@ Peca* JogoPecas::getPeca( int posX, int posY ) {
 	return jogo->getPeca( jogadorPecas, computadorPecas, posX, posY );
 }
 
-void JogoPecas::setPecas( Peca* jogPecas[ Jogo::N_PECAS ], Peca* compPecas[ Jogo::N_PECAS ] )  {
+void JogoPecas::setPecas( Peca** jogPecas, Peca** compPecas )  {
 	jogo->copia_pecas( jogadorPecas, computadorPecas, jogPecas, compPecas );
 }
 

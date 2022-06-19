@@ -23,7 +23,7 @@ class JogadaLista {
 		
 		void limpaJogadas();
 		
-		void copia( JogadaLista* lista );
+		void setTo( JogadaLista* lista );
 		
 		int getTam();
 		

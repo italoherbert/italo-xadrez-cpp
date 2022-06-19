@@ -33,14 +33,15 @@ class Jogo : public Pecas, public JogoConstantes {
 	private:		
 		Tela* tela;
 		
-		Peca* jogadorPecas[ 16 ];
-		Peca* computadorPecas[ 16 ];
+		Peca* jogadorPecas[ N_PECAS ];
+		Peca* computadorPecas[ N_PECAS ];
 
-		int compJogadasDominioCentro[4][4] = {
-			{ 3, 1, 3, 3 },
-			{ 6, 0, 5, 2 },
-			{ 5, 1, 5, 2 },
-			{ 1, 0, 2, 2 }
+		int jogadasDominioCentro[ N_JOGADAS_DOMINIO_CENTRO ][ 5 ] = {
+			{ 3, 1, 3, 3, JOGADA_CENTRO_NORMAL },
+			{ 6, 0, 5, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 4, 1, 4, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 1, 0, 2, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 0, 5, 1, 4, JOGADA_CENTRO_SE_NAO_CAPTURADA }
 		};
 				
 		JogadaLista* jogadas;
@@ -52,6 +53,9 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		int compJogadasCont = 0;
 		int compJogadaRepetidaCont = 0;
+
+		int jogadorJogadasCont = 0;
+		int jogadorJogadaRepetidaCont = 0;
 				
 		bool vezComputador = false;
 		bool compRoque = false;
@@ -111,9 +115,11 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		int isXequeMateOuEmpate( bool isComp );
-		int isXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
+		int isXequeMateOuEmpateOuXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
 
+		bool verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1, int posX2, int posY2 );
 		int isPosicaoValida( int posX, int posY );			
+
 		bool addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp );					
 				
 		Tela* getTela();
@@ -157,20 +163,24 @@ class Jogo : public Pecas, public JogoConstantes {
 		void deleta_pecas( Pecas* pecas );
 		
 		void deleta_pecas( Peca** vetor );
+		void deleta_pecas( Peca** vetor, int tam );
+
 		void deleta_jogadas( JogadaLista* lista );
 
 		bool isVezComputador();		
 		void setVezComputador( bool b );
-				
-		Peca* getUltimaPecaComputador();
-		Peca* getUltimaPecaJogador();
+
+		Peca* getCompOuJogadorUltimaPeca( bool isComp );
 
 		Peca* getUltimaPeca();
 		void setUltimaPeca( Peca* peca );
 
-		int getCompJogadaRepetidaCont();
-		void incCompJogadaRepetidaCont();
-		void zeraCompJogadaRepetidaCont();
+		int getJogadaRepetidaCont( bool isComp );
+		void incJogadaRepetidaCont( bool isComp );
+		void zeraJogadaRepetidaCont( bool isComp );
+
+		void incJogadasCont( bool isComp );
+		int getJogadasCont( bool isComp );
 
 		Peca* getJogadorJogadaPeca();
 		void setJogadorJogadaPeca( Peca* peca );
@@ -178,10 +188,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool isCompRoqueFeito();
 		bool isJogRoqueFeito();
 
-		void incCompJogadasCont();
-		int getCompJogadasCont();
-
-		int* getCompJogadaDominioCentro( int i );
+		int* getJogadaDominioCentro( int i );
 						
 		int getFIM();
 		void setFim( int fim );								

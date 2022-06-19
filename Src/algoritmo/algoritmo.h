@@ -37,7 +37,7 @@ class Algoritmo {
 	protected:
 		Jogo* jogo;
 
-		MiniMaxNo* minimax( MiniMaxNo* no, bool isComp, int nivel, float alpha, float beta );
+		MiniMaxNo* minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp );
 
 		float calculaPeso( Peca* peca );
 
@@ -45,12 +45,12 @@ class Algoritmo {
 		void efetuaJogadas( MiniMaxNo* no, Peca* jps[Jogo::N_PECAS], Peca* cps[Jogo::N_PECAS] );
 
 		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp );
-		float calculaGanhoOuPerda( Peca** jps, Peca** cps, bool isComp );
 
-		Peca* sorteiaPeca( Peca** vetor, Peca** jps, Peca** cps, bool isComp );
+		bool tentaDominioDoCentro( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
+		bool sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
+
+		Peca* sorteiaPeca( Peca** jps, Peca** cps, bool isComp );
 		Jogada* sorteiaPecaJogada( Peca* peca, Peca** jps, Peca** cps, bool isComp );
-		void sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
-		bool tentaDominioDoCentro( Peca** jps, Peca** cps, int* posX, int* posY, Jogada** jogada );
 
 
 	public:
@@ -58,7 +58,7 @@ class Algoritmo {
 
 		virtual ~Algoritmo() {}
 
-		void calculaMelhorJogada( int* posX, int* posY, Jogada** jogada );
+		void calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp );
 	
 };
 
