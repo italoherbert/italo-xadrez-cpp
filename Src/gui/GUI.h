@@ -42,7 +42,8 @@ class GUI {
 		Grafico* jogoGrafico = nullptr;
 		
 		int graficoTipo = ABERTURA_GRAFICO;
-	
+		TTF_Font* fonte = NULL;
+
 	public:
 		GUI();
 		
@@ -63,6 +64,7 @@ class GUI {
 		void setJogoGraficoListener( JogoGraficoListener* listener );
 		
 		SDL_Surface* getTela();
+		TTF_Font* getFonte();
 };
 
 #endif

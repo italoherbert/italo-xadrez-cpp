@@ -15,7 +15,9 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	Mix_Init( MIX_INIT_MID );
 	TTF_Init();
 
-	Mix_OpenAudio( 22050, AUDIO_S16SYS, 2, 1024 );	
+	Mix_OpenAudio( 22050, AUDIO_S16SYS, 2, 1024 );
+
+	fonte = TTF_OpenFont( "arial.ttf", 24 );
 	
 	janela = SDL_CreateWindow( titulo.c_str(), 
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
@@ -95,6 +97,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	
 	IMG_Quit();
 
+	TTF_CloseFont( fonte );
 	TTF_Quit();
 	
 	Mix_CloseAudio();	
@@ -146,4 +149,8 @@ void GUI::setJogoGraficoListener( JogoGraficoListener* listener ) {
 
 SDL_Surface* GUI::getTela() {
 	return tela;
+}
+
+TTF_Font* GUI::getFonte() {
+	return fonte;
 }

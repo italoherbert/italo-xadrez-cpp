@@ -15,12 +15,21 @@ class AberturaGrafico : public Grafico {
 		
 		SDL_Surface* aberturaIMG;
 
-		SDL_Color* corTexto = new SDL_Color;
-		SDL_Color* corFundo = new SDL_Color;
+		SDL_Color* opcaoTextoCor = new SDL_Color;
+		SDL_Color* opcaoFundoCor = new SDL_Color;
+		SDL_Color* opcaoTextoSobreCor = new SDL_Color;
+		SDL_Color* opcaoFundoSobreCor = new SDL_Color;
+		SDL_Color* opcaoBordaCor = new SDL_Color;
 		
-		SDL_Color* corTextoBTSobre = new SDL_Color;
-		SDL_Color* corFundoBTSobre = new SDL_Color;
+		SDL_Color* btnFundoCor = new SDL_Color;
+		SDL_Color* btnTextoCor = new SDL_Color;
+		SDL_Color* btnTextoSobreCor = new SDL_Color;
+		SDL_Color* btnFundoSobreCor = new SDL_Color;
+		SDL_Color* btnBordaCor = new SDL_Color;
 			
+		SDL_Rect* jogador1TextoRet = nullptr;
+		SDL_Rect* jogador2TextoRet = nullptr;
+
 		SDL_Rect* menuRet = nullptr;
 		SDL_Rect* opcoesTituloRet = nullptr;
 		SDL_Rect* jogadorOpcaoRet = nullptr;
@@ -39,22 +48,23 @@ class AberturaGrafico : public Grafico {
 		SDL_Color* computadorFundoOpcaoCor = new SDL_Color;
 		SDL_Color* jogarBTFundoOpcaoCor = new SDL_Color;
 
+		SDL_Color* textoCor = new SDL_Color;
+
 		int jogador1Tipo = DIFICIL;
 		int jogador2Tipo = DIFICIL;
 
-		char maxOpcaoTextDefaultStr[ 127 ];
 		char opcoesStr[ 127 ];
 		char jogarStr[ 127 ];
 		char humanoStr[ 127 ];
 		char facilStr[ 127 ];
 		char normalStr[ 127 ];
 		char dificilStr[ 127 ];
-
-		char fontePath[ 127 ];
+		char jogadorStr[ 127 ];
+		char computadorStr[ 127 ];
 
 		void desenhaMenu( SDL_Renderer* pintor );	
 		void desenhaTexto( SDL_Renderer* pintor, SDL_Rect* ret, char* rotulo, SDL_Color* cor );
-		void desenhaBTFundo( SDL_Renderer* pintor, SDL_Rect* ret, SDL_Color* cor );
+		void desenhaBTFundo( SDL_Renderer* pintor, SDL_Rect* ret, SDL_Color* cor, SDL_Color* bordaCor );
 		
 		bool isMouseEmBT( SDL_Rect* btFundoRet, int mouseX, int mouseY );
 
@@ -72,6 +82,9 @@ class AberturaGrafico : public Grafico {
 		const int MENSAGEM_FONTE_TAM = 24;
 
 		const int MENU_ABERTURA_ESP = 10;
+
+		const int MENU_ABERTURA_ESP_OP_H = 20;
+		const int MENU_ABERTURA_ESP_OP_ROTULO_W = 20;
 
 		const int MENU_ABERTURA_ESP_BT_H = 50;
 		const int MENU_ABERTURA_ESP_BT_V = 10;
