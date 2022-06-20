@@ -58,7 +58,7 @@ class Algoritmo {
 
 		virtual ~Algoritmo() {}
 
-		void calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp );
+		bool calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp );
 	
 };
 

@@ -1,14 +1,16 @@
 
-#include "jogo_driver_adapter.h"
 #include "consts.h"
+#include "driver_adapter.h"
 
 #include "grafico/abertura_grafico.h"
 
-JogoDriverAdapter::JogoDriverAdapter( GUI* gui ) {
+void DriverAdapter::setJogoEGUI( GUI* gui, Jogo* jogo ) {
 	this->gui = gui;
+	this->jogo = jogo;
 }
 
-int JogoDriverAdapter::getAberturaNivel( int nivel ) {
+
+int DriverAdapter::getAberturaNivel( int nivel ) {
 	switch( nivel ) {
 		case Jogo::NIVEL_JORADOR: return AberturaGrafico::HUMANO;
 		case Jogo::NIVEL_FACIL: return AberturaGrafico::FACIL;
@@ -18,11 +20,11 @@ int JogoDriverAdapter::getAberturaNivel( int nivel ) {
 	}
 }
 
-double JogoDriverAdapter::getFatorCelulaDIM() {
+double DriverAdapter::getFatorCelulaDIM() {
 	return Consts::FATOR_CELULA_DIM;
 }
 
-int JogoDriverAdapter::getTelaLargura() {
+int DriverAdapter::getTelaLargura() {
 	int l, a;
 	
 	gui->carregaTelaDIM( &l, &a );
@@ -30,10 +32,14 @@ int JogoDriverAdapter::getTelaLargura() {
 	return l;
 }
 
-int JogoDriverAdapter::getTelaAltura() {
+int DriverAdapter::getTelaAltura() {
 	int l, a;
 	
 	gui->carregaTelaDIM( &l, &a );
 	
 	return a;
+}
+
+bool DriverAdapter::isPausa() {
+	return jogo->isPausa();
 }

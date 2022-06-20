@@ -2,8 +2,6 @@
 #ifndef SISTEMA_H
 #define SISTEMA_H
 
-#include "jogo_driver_adapter.h"
-
 #include "logica/jogo.h"
 
 #include "gui/GUI.h"
@@ -19,6 +17,7 @@
 #include "controlador/GUI_Controlador.h"
 #include "controlador/abertura_grafico_controlador.h"
 #include "controlador/jogo_grafico_controlador.h"
+#include "driver_adapter.h"
 
 class GUI_Controlador;
 class AberturaGraficoControlador;
@@ -28,7 +27,7 @@ class Sistema {
 
 	private:
 		Jogo* jogo;
-		JogoDriverAdapter* jdrv;
+		DriverAdapter* drv;
 		GUI* gui;
 
 		JogoAudio* audio;
@@ -53,7 +52,7 @@ class Sistema {
 		void exec();
 
 		Jogo* getJogo();
-		JogoDriverAdapter* getJogoDriver();
+		DriverAdapter* getJogoDriver();
 
 		GUI* getGUI();
 		AberturaGrafico* getAberturaGrafico();

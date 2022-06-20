@@ -1,7 +1,8 @@
 
 #include "GUI.h"
 
-GUI::GUI() {
+GUI::GUI( GUI_Driver* drv ) {
+	this->drv = drv;
 	this->graficoTipo = ABERTURA_GRAFICO;
 }
 
@@ -38,7 +39,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	if ( listener != NULL )
 		listener->inicializou();		
 	
-	while( !fim ) {	
+	while( !fim ) {
 		switch ( graficoTipo ) {
 			case ABERTURA_GRAFICO:
 				aberturaGrafico->desenha( pintor );
@@ -49,7 +50,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 		}
 
 		if ( graficoTipo == JOGO_GRAFICO )
-			if ( jogoGraficoListener != NULL )
+			if ( jogoGraficoListener != NULL && !drv->isPausa() )
 				jogoGraficoListener->executando();
 
 		if ( listener != NULL ) {		
@@ -59,30 +60,34 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 						listener->janelaFechada();
 						fim = true;
 						break;
-					case SDL_MOUSEBUTTONDOWN:						
-						if ( graficoTipo == ABERTURA_GRAFICO ) {																			
-							if ( aberturaGraficoListener != NULL)		
-								aberturaGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );														
+					case SDL_MOUSEBUTTONDOWN:
+						if ( graficoTipo == ABERTURA_GRAFICO ) {
+							if ( aberturaGraficoListener != NULL)
+								aberturaGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );
 						} else if ( graficoTipo == JOGO_GRAFICO ) {
-							if ( jogoGraficoListener != NULL )
+							if ( jogoGraficoListener != NULL && !drv->isPausa() )
 								jogoGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );
 						}
 						break;
 					case SDL_MOUSEMOTION:
-						if ( graficoTipo == ABERTURA_GRAFICO ) {																			
+						if ( graficoTipo == ABERTURA_GRAFICO ) {
 							if ( aberturaGraficoListener != NULL)		
-								aberturaGraficoListener->mouseSobre( evento.motion.x, evento.motion.y );														
+								aberturaGraficoListener->mouseSobre( evento.motion.x, evento.motion.y );
 						}
 						break;
 					case SDL_KEYDOWN:
 						if ( graficoTipo == ABERTURA_GRAFICO ) {												
-							if ( aberturaGraficoListener != NULL)		
-								if ( evento.key.keysym.sym == SDLK_ESCAPE )
+							if ( aberturaGraficoListener != NULL )
+								if ( evento.key.keysym.scancode == SDL_SCANCODE_ESCAPE )
 									aberturaGraficoListener->teclaPressionada( JogoGraficoListener::TECLA_ESQ );						
 						} else if ( graficoTipo == JOGO_GRAFICO ) {
-							if ( jogoGraficoListener != NULL )		
-								if ( evento.key.keysym.sym == SDLK_ESCAPE )
+							if ( jogoGraficoListener != NULL ) {
+								if ( evento.key.keysym.scancode == SDL_SCANCODE_ESCAPE ) {
 									jogoGraficoListener->teclaPressionada( JogoGraficoListener::TECLA_ESQ );
+								} else if ( evento.key.keysym.scancode == SDL_SCANCODE_RETURN ) {
+									jogoGraficoListener->teclaPressionada( JogoGraficoListener::TECLA_ENTER );
+								}
+							}
 						}
 						break;						
 				}

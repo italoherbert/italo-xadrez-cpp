@@ -72,8 +72,6 @@ void Jogo::reinicia() {
 		//jogadorPecas[i]->setRemovida( i != 4 ? true : false );
 		//computadorPecas[i]->setRemovida( i > 7 ? true : false );
 	}
-	//computadorPecas[ 1 ]->setRemovida( true );
-	//computadorPecas[ 6 ]->setRemovida( true );
 
 	jogadas->limpaJogadas();
 
@@ -84,12 +82,14 @@ void Jogo::reinicia() {
 	
 	compRoque = false;
 	jogRoque = false;
+
 	audioLigado = true;
+	pausa = false;
 			
 	compJogadasCont = 0;
 	
 	jogadorNivel = NIVEL_NORMAL;
-	computadorNivel = NIVEL_DIFICIL;
+	computadorNivel = NIVEL_NORMAL;
 	fim = NAO_FIM;	
 }
 
@@ -216,7 +216,7 @@ int Jogo::isXequeMateOuEmpateOuXeque( Peca** jogPecas, Peca** compPecas, bool is
 		this->calculaJogadasPossiveis( lista, pecas, p->getPosX(), p->getPosY(), p->getTipo(), isComp, true );
 		this->filtraJogadas( lista, jogPecas, compPecas, p->getPosX(), p->getPosY(), isComp );
 
-		if ( lista->getTam() != 0 )
+		if ( lista->getTam() > 0 )
 			fim = false;
 
 		this->deleta_jogadas( lista );
@@ -533,8 +533,10 @@ JogadaLista* Jogo::getJogadasPossiveis() {
 	return jogadas;
 }
 
-int* Jogo::getJogadaDominioCentro( int i ) {
-	return jogadasDominioCentro[ i ];
+int* Jogo::getJogadaDominioCentro( int i, bool isComp ) {
+	if ( isComp )
+		return jogadasCompDominioCentro[ i ];
+	return jogadasJogadorDominioCentro[ i ];
 }
 
 bool Jogo::isCompRoqueFeito() {
@@ -712,6 +714,14 @@ void Jogo::setNivel( bool isComp,  int nivel ) {
 
 bool Jogo::isJogadorHumano() {
 	return jogadorNivel == NIVEL_JORADOR;
+}
+
+bool Jogo::isPausa() {
+	return pausa;
+}
+
+void Jogo::setPausa( bool pausar ) {
+	this->pausa = pausar;
 }
 
 JogoDriver* Jogo::getJogoDriver() {

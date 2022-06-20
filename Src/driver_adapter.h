@@ -3,15 +3,19 @@
 #define TELA_DRIVER_ADAPTER_H
 
 #include "gui/GUI.h"
+#include "gui/GUI_Driver.h"
+
+#include "logica/jogo.h"
 #include "logica/jogo_driver.h"
 
-class JogoDriverAdapter : public JogoDriver {
+class DriverAdapter : public JogoDriver, public GUI_Driver {
 	
 	private:
 		GUI* gui;
+		Jogo* jogo;
 		
 	public:
-		JogoDriverAdapter( GUI* gui );
+		void setJogoEGUI( GUI* gui, Jogo* jogo );
 		
 		int getTelaLargura();
 		int getTelaAltura();
@@ -19,6 +23,8 @@ class JogoDriverAdapter : public JogoDriver {
 		double getFatorCelulaDIM();
 
 		int getAberturaNivel( int nivel );
+
+		bool isPausa();
 	
 };
 

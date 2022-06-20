@@ -102,14 +102,23 @@ void JogoGraficoControlador::teclaPressionada( int tecla ) {
 			audio->reinicia();
 		
 			gui->reinicia();
+			jogoGrafico->getMensagemDesenho()->removeMensagem();
+		} else if ( tecla == TECLA_ENTER ) {
+			jogo->setPausa( !jogo->isPausa() );
+			if ( jogo->isPausa() ) {
+				std::string msg = "Pausa!";
+				jogoGrafico->getMensagemDesenho()->setMensagem( msg );
+			} else {
+				jogoGrafico->getMensagemDesenho()->removeMensagem();
+			}
 		}
 	} else {
 		jogo->reinicia();
 		audio->reinicia();
 
 		gui->reinicia();
+		jogoGrafico->getMensagemDesenho()->removeMensagem();
 	}		
-	jogoGrafico->getMensagemDesenho()->removeMensagem();
 }
 
 void JogoGraficoControlador::executando() {
@@ -123,11 +132,11 @@ void JogoGraficoControlador::executando() {
 	if ( jogo->getMovimento() == NULL ) {
 		this->processaMensagem();						
 
-		bool mov = jogo->getFIM() == Jogo::NAO_FIM;
+		bool mov = true;
 		if ( jogo->isJogadorHumano() )
 			mov = jogo->isVezComputador();
 
-		if ( mov ) {
+		if ( mov && jogo->getFIM() == Jogo::NAO_FIM ) {
 			Jogada* jogada;
 			int posX, posY;
 			
@@ -246,13 +255,12 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 			
 			if ( reiEmXeque ) {			
 				std::string msg = "Seu rei está em xeque!";
-				
 				jogoGrafico->getMensagemDesenho()->setMensagem( msg );
 			} else {
 				std::string msg = "Movimento inválido!";
-				
 				jogoGrafico->getMensagemDesenho()->setMensagem( msg );
 			}
+			isMensagemDelay = true;
 			
 			audio->setNumAudio( JogoAudio::AUDIO_JOGADA_INVALIDA );
 		}
@@ -286,7 +294,6 @@ void JogoGraficoControlador::verificaXequeEXequeMate( bool moveu ) {
 			audio->setNumAudio( JogoAudio::AUDIO_XEQUE );
 
 			std::string msg = "Xeque!";
-
 			jogoGrafico->getMensagemDesenho()->setMensagem( msg );
 			isMensagemDelay = true;											
 		}

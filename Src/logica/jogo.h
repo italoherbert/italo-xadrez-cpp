@@ -36,12 +36,20 @@ class Jogo : public Pecas, public JogoConstantes {
 		Peca* jogadorPecas[ N_PECAS ];
 		Peca* computadorPecas[ N_PECAS ];
 
-		int jogadasDominioCentro[ N_JOGADAS_DOMINIO_CENTRO ][ 5 ] = {
+		int jogadasCompDominioCentro[ N_JOGADAS_DOMINIO_CENTRO ][ 5 ] = {
 			{ 3, 1, 3, 3, JOGADA_CENTRO_NORMAL },
 			{ 6, 0, 5, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
 			{ 4, 1, 4, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
 			{ 1, 0, 2, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
-			{ 0, 5, 1, 4, JOGADA_CENTRO_SE_NAO_CAPTURADA }
+			{ 5, 0, 1, 4, JOGADA_CENTRO_SE_NAO_CAPTURADA }
+		};
+
+		int jogadasJogadorDominioCentro[ N_JOGADAS_DOMINIO_CENTRO ][ 5 ] = {
+			{ 3, 6, 3, 4, JOGADA_CENTRO_NORMAL },
+			{ 6, 7, 5, 5, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 4, 6, 4, 5, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 1, 7, 2, 5, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 5, 7, 1, 3, JOGADA_CENTRO_SE_NAO_CAPTURADA }
 		};
 				
 		JogadaLista* jogadas;
@@ -61,7 +69,9 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		bool compRoque = false;
 		bool jogRoque = false;
+
 		bool audioLigado = true;
+		bool pausa = false;
 		
 		int jogadorNivel = NIVEL_NORMAL;
 		int computadorNivel = NIVEL_DIFICIL;
@@ -174,6 +184,9 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool isVezComputador();		
 		void setVezComputador( bool b );
 
+		bool isPausa();
+		void setPausa( bool pausar );
+
 		Peca* getCompOuJogadorUltimaPeca( bool isComp );
 
 		Peca* getUltimaPeca();
@@ -192,7 +205,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool isCompRoqueFeito();
 		bool isJogRoqueFeito();
 
-		int* getJogadaDominioCentro( int i );
+		int* getJogadaDominioCentro( int i, bool isComp );
 						
 		int getFIM();
 		void setFim( int fim );								

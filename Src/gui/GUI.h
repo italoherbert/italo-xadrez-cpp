@@ -12,6 +12,7 @@
 #include "abertura_grafico_listener.h"
 #include "grafico.h"
 #include "GUI_Listener.h"
+#include "GUI_Driver.h"
 #include "jogo_grafico_listener.h"
 
 class GUI {
@@ -44,8 +45,10 @@ class GUI {
 		int graficoTipo = ABERTURA_GRAFICO;
 		TTF_Font* fonte = NULL;
 
+		GUI_Driver* drv;
+
 	public:
-		GUI();
+		GUI( GUI_Driver* drv );
 		
 		void reinicia();
 		

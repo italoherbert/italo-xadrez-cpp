@@ -8,7 +8,7 @@ MensagemDesenho::MensagemDesenho() {
 	this->mensagem.clear();
 }
 
-void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {	
+void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 	if ( this->mensagem.empty() )
 		return;
 
@@ -51,13 +51,13 @@ void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 	SDL_Color texto2_cor = { 0, 0, 0 };
 	SDL_Color texto_cor = { 255, 255, 255 };
 
-	SDL_Surface* texto2_sf = TTF_RenderText_Solid( fonte, mensagem.c_str(), texto2_cor );
+	SDL_Surface* texto2_sf = TTF_RenderText_Blended( fonte, mensagem.c_str(), texto2_cor );
 	SDL_Texture* txt2 = SDL_CreateTextureFromSurface( pintor, texto2_sf );
 	SDL_RenderCopy( pintor, txt2, NULL, &texto2_ret );
 	SDL_FreeSurface( texto2_sf );
 	SDL_DestroyTexture( txt2 );
 	
-	SDL_Surface* texto_sf = TTF_RenderText_Solid( fonte, mensagem.c_str(), texto_cor );
+	SDL_Surface* texto_sf = TTF_RenderText_Blended( fonte, mensagem.c_str(), texto_cor );
 	SDL_Texture* txt = SDL_CreateTextureFromSurface( pintor, texto_sf );
 	SDL_RenderCopy( pintor, txt, NULL, &texto_ret );
 	SDL_FreeSurface( texto_sf );

@@ -8,7 +8,7 @@ AberturaGraficoControlador::AberturaGraficoControlador( Sistema* sistema ) {
 void AberturaGraficoControlador::mousePressionado( int x, int y ) {
 	GUI* gui = sistema->getGUI();
 	Jogo* jogo = sistema->getJogo();
-	JogoDriverAdapter* jdrv = sistema->getJogoDriver();
+	DriverAdapter* jdrv = sistema->getJogoDriver();
 	AberturaGrafico* aberturaGrafico = sistema->getAberturaGrafico();
 
 	JogoAudio* audio = sistema->getJogoAudio();

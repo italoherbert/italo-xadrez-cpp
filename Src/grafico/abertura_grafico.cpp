@@ -263,7 +263,7 @@ void AberturaGrafico::desenhaTexto( SDL_Renderer* pintor, SDL_Rect* rect, char* 
 
 	SDL_Color cor2 = { cor->r, cor->g, cor->b };
 
-	SDL_Surface* texto_sf = TTF_RenderText_Solid( fonte, texto, cor2 );
+	SDL_Surface* texto_sf = TTF_RenderText_Blended( fonte, texto, cor2 );
 	SDL_Texture* tx = SDL_CreateTextureFromSurface( pintor, texto_sf );
 	SDL_RenderCopy( pintor, tx, NULL, texto_ret );
 	SDL_FreeSurface( texto_sf );

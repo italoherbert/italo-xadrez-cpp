@@ -6,6 +6,7 @@ class JogoGraficoListener {
 	
 	public:									 
 		const static int TECLA_ESQ = 1;		
+		const static int TECLA_ENTER = 2;
 	
 		virtual ~JogoGraficoListener() {}
 

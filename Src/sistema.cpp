@@ -2,10 +2,12 @@
 #include "sistema.h"
 
 Sistema::Sistema() {
-	this->gui = new GUI();
-	this->jdrv = new JogoDriverAdapter( gui );
+	this->drv = new DriverAdapter();
 
-	this->jogo = new Jogo( jdrv );
+	this->gui = new GUI( drv );
+	this->jogo = new Jogo( drv );
+
+	this->drv->setJogoEGUI( gui, jogo );
 
 	this->aberturaGrafico = new AberturaGrafico( gui );
 	this->jogoGrafico = new JogoGrafico( jogo, gui );
@@ -29,7 +31,7 @@ Sistema::Sistema() {
 
 Sistema::~Sistema() {
 	delete jogo;
-	delete jdrv;
+	delete drv;
 	delete aberturaGrafico;
 	delete jogoGrafico;
 	delete audio;
@@ -50,8 +52,8 @@ void Sistema::inicia() {
 	audio->reinicia();
 	gui->reinicia();
 
-	int graficoJogadorNivel = jdrv->getAberturaNivel( jogo->getNivel( false ) );
-	int graficoComputadorNivel = jdrv->getAberturaNivel( jogo->getNivel( true ) );
+	int graficoJogadorNivel = drv->getAberturaNivel( jogo->getNivel( false ) );
+	int graficoComputadorNivel = drv->getAberturaNivel( jogo->getNivel( true ) );
 
 	aberturaGrafico->setJogadorUmTipo( graficoJogadorNivel );
 	aberturaGrafico->setJogadorDoisTipo( graficoComputadorNivel );
@@ -71,8 +73,8 @@ Jogo* Sistema::getJogo() {
 	return jogo;
 }
 
-JogoDriverAdapter* Sistema::getJogoDriver() {
-	return jdrv;
+DriverAdapter* Sistema::getJogoDriver() {
+	return drv;
 }
 
 GUI* Sistema::getGUI() {
