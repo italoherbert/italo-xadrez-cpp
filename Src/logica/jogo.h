@@ -52,6 +52,9 @@ class Jogo : public Pecas, public JogoConstantes {
 			{ 5, 7, 1, 3, JOGADA_CENTRO_SE_NAO_CAPTURADA }
 		};
 				
+		int pretasVitoriasCont = 0;
+		int brancasVitoriasCont = 0;
+
 		JogadaLista* jogadas;
 		Peca* jogadaPeca = nullptr;
 		
@@ -221,9 +224,13 @@ class Jogo : public Pecas, public JogoConstantes {
 		void incNivel( bool isComp );
 
 		bool isJogadorHumano();
+
+		bool getVitoriasCont( bool isComp );
+		void incVitoriasCont( bool isComp );
 				
 		JogoDriver* getJogoDriver();
 
+		std::string getNivelString( int nivel );
 		std::string get_peca_str( int tipo );
 };
 

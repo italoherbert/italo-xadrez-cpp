@@ -27,11 +27,6 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 		gui->reinicia();
 	}
 
-	if ( jogo->getMovimento() != NULL )		
-		return;
-			
-	jogoGrafico->getMensagemDesenho()->removeMensagem();
-	
 	AudioLigadoDesenho* ald = jogoGrafico->getAudioLigadoDesenho();
 	if ( ald->isMouseEmAudioBT( x, y ) ) {
 		jogo->setAudioLigado( !jogo->isAudioLigado() );
@@ -40,7 +35,14 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 		} else {
 			audio->pauseMusica();
 		}		 
-	} else {
+	}
+
+	if ( jogo->getMovimento() != NULL )
+		return;
+
+	jogoGrafico->getMensagemDesenho()->removeMensagem();
+
+	if ( !jogo->isPausa() ) {
 		int tx = jogo->getTela()->getTabuleiroX();
 		int ty = jogo->getTela()->getTabuleiroY();
 		int td = jogo->getTela()->getTabuleiroDIM();

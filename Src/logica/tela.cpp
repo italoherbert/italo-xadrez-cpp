@@ -2,7 +2,6 @@
 
 #include <cmath>
 
-
 Tela::Tela( JogoDriver* driver ) {
 	this->driver = driver;
 }
@@ -12,7 +11,8 @@ int Tela::getTabuleiroX() {
 }
 
 int Tela::getTabuleiroY() {
-	return ( driver->getTelaAltura()  - this->getTabuleiroDIM() ) / 2;
+	int infoPAlt = driver->getInfoPainelAltura();
+	return ( driver->getTelaAltura() - infoPAlt / 2 - this->getTabuleiroDIM() ) / 2 + infoPAlt / 2;
 }
 
 int Tela::getTabuleiroDIM() {

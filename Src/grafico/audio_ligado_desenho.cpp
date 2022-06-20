@@ -8,8 +8,8 @@ void AudioLigadoDesenho::inicializa( GUI* gui ) {
 	int l, a;
 	gui->carregaTelaDIM( &l, &a );
 		
-	x = ( l - audioLigado->w ) / 2;
-	y = 0;
+	x = ( l - audioLigado->w ) - 25;
+	y = 10;
 	largura = audioLigado->w;
 	altura = audioLigado->h;	
 }

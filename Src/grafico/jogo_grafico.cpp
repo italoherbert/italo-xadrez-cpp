@@ -8,14 +8,16 @@ JogoGrafico::JogoGrafico( Jogo* jogo, GUI* gui ) {
 	this->jogo = jogo;
 	this->gui = gui;
 	
-	this->tabDesenho = new TabuleiroDesenho();
+	this->infoDesenho = new InfoDesenho();
+	this->tabuleiroDesenho = new TabuleiroDesenho();
 	this->pecaDesenho = new PecaDesenho();
 	this->mensagemDesenho = new MensagemDesenho();
 	this->audioLigadoDesenho = new AudioLigadoDesenho();
 }
 
 JogoGrafico::~JogoGrafico() {
-	delete tabDesenho;
+	delete infoDesenho;
+	delete tabuleiroDesenho;
 	delete pecaDesenho;
 	delete mensagemDesenho;
 	delete audioLigadoDesenho;
@@ -35,34 +37,35 @@ void JogoGrafico::desenha( SDL_Renderer* pintor ) {
 	SDL_SetRenderDrawColor( pintor, 255, 255, 255, SDL_ALPHA_OPAQUE );	
 	SDL_RenderClear( pintor );
 		
-	tabDesenho->desenha( jogo, gui, pintor );
+	infoDesenho->desenha( jogo, gui, pintor );
+	tabuleiroDesenho->desenha( jogo, gui, pintor );
 	
 	JogadaLista* cLista = jogo->getJogadasPossiveis();
 	int tam = cLista->getTam();	
 	
 	for( int i = 0; i < tam; i++ ) {
 		Jogada* jogada = cLista->getJogada( i );						
-		desenhaMarc( jogo, jogada->getPosX(), jogada->getPosY(), pintor );					
+		desenhaMarc( jogo, jogada->getPosX(), jogada->getPosY(), pintor );
 	}		
 	
 	Peca* jogadorJPeca = jogo->getJogadorJogadaPeca();
 	int jogsPossTam = jogo->getJogadasPossiveis()->getTam();
 	if ( jogadorJPeca != NULL && jogsPossTam > 0 )
-			desenhaMarc( jogo, jogadorJPeca->getPosX(), jogadorJPeca->getPosY(), pintor );			
+		desenhaMarc( jogo, jogadorJPeca->getPosX(), jogadorJPeca->getPosY(), pintor );
 	
 	for( int i = 0; i < Jogo::N_PECAS; i++ ) {
 		Peca* jogadorPeca = jogo->getJogadorPeca( i );
 		Peca* computadorPeca = jogo->getComputadorPeca( i );
 							
 		pecaDesenho->desenha( jogo, gui, pintor, jogadorPeca, PecaDesenho::COR_BRANCA );
-		pecaDesenho->desenha( jogo, gui, pintor, computadorPeca, PecaDesenho::COR_PRETA );								
+		pecaDesenho->desenha( jogo, gui, pintor, computadorPeca, PecaDesenho::COR_PRETA );
 	}				
 	
 	for( int i = 0; i < tam; i++ ) {
 		Jogada* jogada = cLista->getJogada( i );
 		if( jogada->getCaptura() != NULL )					
 			if ( jogada->getCaptura()->getTipo() != Jogo::REI )
-				pecaDesenho->desenha( jogo, gui, pintor, jogada->getCaptura(), PecaDesenho::COR_VERMELHA );						
+				pecaDesenho->desenha( jogo, gui, pintor, jogada->getCaptura(), PecaDesenho::COR_VERMELHA );
 	}
 	
 	mensagemDesenho->desenha( jogo, gui, pintor );
@@ -72,7 +75,7 @@ void JogoGrafico::desenha( SDL_Renderer* pintor ) {
 	SDL_RenderPresent( pintor );
 }
 
-void JogoGrafico::desenhaMarc( Jogo* jogo, int posX, int posY, SDL_Renderer* pintor ) {															
+void JogoGrafico::desenhaMarc( Jogo* jogo, int posX, int posY, SDL_Renderer* pintor ) {
 	int x = jogo->getTela()->getCelulaX( posX );
 	int y = jogo->getTela()->getCelulaY( posY );
 	int cdim = jogo->getTela()->getCelulaDIM();
@@ -94,3 +97,6 @@ AudioLigadoDesenho* JogoGrafico::getAudioLigadoDesenho() {
 	return this->audioLigadoDesenho;
 }
 
+InfoDesenho* JogoGrafico::getInfoDesenho() {
+	return this->infoDesenho;
+}

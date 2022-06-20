@@ -88,6 +88,9 @@ void Jogo::reinicia() {
 			
 	compJogadasCont = 0;
 	
+	pretasVitoriasCont = 0;
+	brancasVitoriasCont = 0;
+
 	jogadorNivel = NIVEL_NORMAL;
 	computadorNivel = NIVEL_NORMAL;
 	fim = NAO_FIM;	
@@ -702,7 +705,7 @@ void Jogo::incNivel( bool isComp ) {
 	} else {
 		if ( jogadorNivel < NIVEL_DIFICIL )
 			jogadorNivel++;
-		else jogadorNivel = NIVEL_JORADOR;
+		else jogadorNivel = NIVEL_HUMANO;
 	}
 }
 
@@ -712,8 +715,19 @@ void Jogo::setNivel( bool isComp,  int nivel ) {
 	else this->jogadorNivel = nivel;
 }
 
+bool Jogo::getVitoriasCont( bool isComp ) {
+	if ( isComp )
+		return pretasVitoriasCont;
+	return brancasVitoriasCont;
+}
+void Jogo::incVitoriasCont( bool isComp ) {
+	if ( isComp )
+		this->pretasVitoriasCont++;
+	else this->brancasVitoriasCont++;
+}
+
 bool Jogo::isJogadorHumano() {
-	return jogadorNivel == NIVEL_JORADOR;
+	return jogadorNivel == NIVEL_HUMANO;
 }
 
 bool Jogo::isPausa() {
@@ -726,6 +740,16 @@ void Jogo::setPausa( bool pausar ) {
 
 JogoDriver* Jogo::getJogoDriver() {
 	return drv;
+}
+
+std::string Jogo::getNivelString( int nivel ) {
+	switch( nivel ) {
+		case NIVEL_HUMANO: return "Humano";
+		case NIVEL_FACIL: return "Fácil";
+		case NIVEL_NORMAL: return "Normal";
+		case NIVEL_DIFICIL: return "Difícil";
+	}
+	return "";
 }
 
 std::string Jogo::get_peca_str( int tipo ) {

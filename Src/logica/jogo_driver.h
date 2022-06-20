@@ -12,6 +12,7 @@ class JogoDriver {
 		
 		virtual double getFatorCelulaDIM() = 0;
 	
+		virtual int getInfoPainelAltura() = 0;
 };
 
 #endif

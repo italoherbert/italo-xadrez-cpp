@@ -19,6 +19,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	Mix_OpenAudio( 22050, AUDIO_S16SYS, 2, 1024 );
 
 	fonte = TTF_OpenFont( "arial.ttf", 24 );
+	infoFonte = TTF_OpenFont( "arial.ttf", 18 );
 	
 	janela = SDL_CreateWindow( titulo.c_str(), 
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
@@ -62,10 +63,10 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 						break;
 					case SDL_MOUSEBUTTONDOWN:
 						if ( graficoTipo == ABERTURA_GRAFICO ) {
-							if ( aberturaGraficoListener != NULL)
+							if ( aberturaGraficoListener != NULL )
 								aberturaGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );
 						} else if ( graficoTipo == JOGO_GRAFICO ) {
-							if ( jogoGraficoListener != NULL && !drv->isPausa() )
+							if ( jogoGraficoListener != NULL )
 								jogoGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );
 						}
 						break;
@@ -102,6 +103,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	
 	IMG_Quit();
 
+	TTF_CloseFont( infoFonte );
 	TTF_CloseFont( fonte );
 	TTF_Quit();
 	
@@ -158,4 +160,8 @@ SDL_Surface* GUI::getTela() {
 
 TTF_Font* GUI::getFonte() {
 	return fonte;
+}
+
+TTF_Font* GUI::getInfoFonte() {
+	return infoFonte;
 }

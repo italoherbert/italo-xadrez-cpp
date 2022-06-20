@@ -5,6 +5,8 @@
 #include "gui/GUI.h"
 #include "gui/GUI_Driver.h"
 
+#include "grafico/jogo_grafico.h"
+
 #include "logica/jogo.h"
 #include "logica/jogo_driver.h"
 
@@ -13,13 +15,16 @@ class DriverAdapter : public JogoDriver, public GUI_Driver {
 	private:
 		GUI* gui;
 		Jogo* jogo;
+		JogoGrafico* jogoGrafico;
 		
 	public:
-		void setJogoEGUI( GUI* gui, Jogo* jogo );
+		void setJogoEGUI( GUI* gui, Jogo* jogo, JogoGrafico* jogoGrafico );
 		
 		int getTelaLargura();
 		int getTelaAltura();
 		
+		int getInfoPainelAltura();
+
 		double getFatorCelulaDIM();
 
 		int getAberturaNivel( int nivel );

@@ -4,7 +4,7 @@
 class JogoConstantes {
 
 	public:
-		const static int NIVEL_JORADOR = 1;
+		const static int NIVEL_HUMANO = 1;
 		const static int NIVEL_FACIL = 2;
 		const static int NIVEL_NORMAL = 3;
 		const static int NIVEL_DIFICIL = 4;

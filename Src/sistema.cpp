@@ -7,10 +7,10 @@ Sistema::Sistema() {
 	this->gui = new GUI( drv );
 	this->jogo = new Jogo( drv );
 
-	this->drv->setJogoEGUI( gui, jogo );
-
 	this->aberturaGrafico = new AberturaGrafico( gui );
 	this->jogoGrafico = new JogoGrafico( jogo, gui );
+
+	this->drv->setJogoEGUI( gui, jogo, jogoGrafico );
 
 	this->audio = new JogoAudio();
 

@@ -44,6 +44,7 @@ class GUI {
 		
 		int graficoTipo = ABERTURA_GRAFICO;
 		TTF_Font* fonte = NULL;
+		TTF_Font* infoFonte = NULL;
 
 		GUI_Driver* drv;
 
@@ -68,6 +69,7 @@ class GUI {
 		
 		SDL_Surface* getTela();
 		TTF_Font* getFonte();
+		TTF_Font* getInfoFonte();
 };
 
 #endif
