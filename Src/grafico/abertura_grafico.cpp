@@ -2,147 +2,144 @@
 #include "abertura_grafico.h"
 
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <cstring>
 
 AberturaGrafico::AberturaGrafico( GUI* gui ) {
 	this->gui = gui;
 	this->aberturaIMG = NULL;
 	
-	corTexto = { 255, 255, 255 };
-	corFundo = { 0, 0, 0 };
+	corTexto->r = 255;
+	corTexto->g = 255;
+	corTexto->b = 255;
+
+	corFundo->r = 0;
+	corFundo->g = 0;
+	corFundo->b = 0;
+
+	corTextoBTSobre->r = 255;
+	corTextoBTSobre->g = 255;
+	corTextoBTSobre->b = 255;
 	
-	corTextoBTSobre = { 255, 255, 255 };
-	corFundoBTSobre = { 0, 0, 200 };
+	corFundoBTSobre->r = 0;
+	corFundoBTSobre->g = 0;
+	corFundoBTSobre->b = 200;
+
+	strcpy( maxOpcaoTextDefaultStr, "##########" );
+	strcpy( opcoesStr, "Opções" );
+	strcpy( jogarStr, "Jogar" );
+	strcpy( humanoStr, "Humano" );
+	strcpy( facilStr, "Fácil" );
+	strcpy( normalStr, "Normal" );
+	strcpy( dificilStr, "Difícil" );
 }
 
 void AberturaGrafico::inicializa() {	
 	aberturaIMG = IMG_Load( "img/abertura.png" );
-	opcoesTextoRet.cor = corTexto;
-	
-	facilBT.texto.cor = corTexto;
-	normalBT.texto.cor = corTexto;
-	dificilBT.texto.cor = corTexto;
-	
-	facilBT.corFundo = corFundo;
-	normalBT.corFundo = corFundo;
-	dificilBT.corFundo = corFundo;
-	
-	char opcoesTxt[127];
+
+	int espacamento = MENU_ABERTURA_ESP;
 		
-	char facilBTRotulo[127];
-	char normalBTRotulo[127];
-	char dificilBTRotulo[127];
+	int espBT_H = MENU_ABERTURA_ESP_BT_H;
+	int espBT_V = MENU_ABERTURA_ESP_BT_V;
 	
-	strcpy( opcoesTxt, "Dificuldade" );
-	
-	strcpy( facilBTRotulo, "Facil" );
-	strcpy( normalBTRotulo, "Normal" );
-	strcpy( dificilBTRotulo, "Dificil" );
-				
-	TTF_Font* fonte = gui->getMensagemFonte();
-		
-	int espacamento = Consts::MENU_ABERTURA_ESP;
-		
-	int espBT_H = Consts::MENU_ABERTURA_ESP_BT_H;
-	int espBT_V = Consts::MENU_ABERTURA_ESP_BT_V;
-	
-	int larguraFundoTexto = Consts::MENU_ABERTURA_LARGURA_FUNDO_TEXTO;	
+	int larguraFundoTexto = MENU_ABERTURA_LARGURA_FUNDO_TEXTO;
 	
 	int x = espacamento;
 	int y = espacamento;
-		
+
+	TTF_Font* fonte = TTF_OpenFont( "BASKVILL.TTF", 24 );
+
 	int msg_l, msg_a;	
-	TTF_SizeText( fonte, opcoesTxt, &msg_l, &msg_a );
-				
-	strcpy( opcoesTextoRet.rotulo, opcoesTxt );	
-			
-	opcoesTextoRet.textoRet.x = x + ( ( larguraFundoTexto - msg_l ) / 2 );
-	opcoesTextoRet.textoRet.y = y + espBT_V;
-	opcoesTextoRet.textoRet.largura = msg_l;
-	opcoesTextoRet.textoRet.altura = msg_a;
-	
-	y += opcoesTextoRet.textoRet.altura + ( 2 * espacamento ) + ( 2 * espBT_V );		
-		
-	TTF_SizeText( fonte, facilBTRotulo, &msg_l, &msg_a );
-								
-	strcpy( facilBT.texto.rotulo, facilBTRotulo );	
-		
-	facilBT.texto.textoRet.x = x + espBT_H;
-	facilBT.texto.textoRet.y = y + espBT_V;
-	facilBT.texto.textoRet.largura = msg_l;
-	facilBT.texto.textoRet.altura  = msg_a;
-	facilBT.fundoRet.x = x;
-	facilBT.fundoRet.y = y;
-	facilBT.fundoRet.largura = larguraFundoTexto;
-	facilBT.fundoRet.altura = ( 2 * espBT_V ) + msg_a;			
-		
-	TTF_SizeText( fonte, normalBTRotulo, &msg_l, &msg_a );
-		
-	y += facilBT.fundoRet.altura + ( 2 * espacamento );		
-		
-	strcpy( normalBT.texto.rotulo, normalBTRotulo );		
-		
-	normalBT.texto.textoRet.x = x + espBT_H;
-	normalBT.texto.textoRet.y = y + espBT_V;
-	normalBT.texto.textoRet.largura = msg_l;
-	normalBT.texto.textoRet.altura  = msg_a;
-	normalBT.fundoRet.x = x;
-	normalBT.fundoRet.y = y;
-	normalBT.fundoRet.largura = larguraFundoTexto;
-	normalBT.fundoRet.altura = ( 2 * espBT_V ) + msg_a;
+	TTF_SizeText( fonte, opcoesStr, &msg_l, &msg_a );
 
-	TTF_SizeText( fonte, dificilBTRotulo, &msg_l, &msg_a );	
+	opcoesTituloRet = new SDL_Rect;
+	opcoesTituloRet->x = x + ( ( larguraFundoTexto - msg_l ) / 2 );
+	opcoesTituloRet->y = y + espBT_V;
+	opcoesTituloRet->w = msg_l;
+	opcoesTituloRet->h = msg_a;
+	
+	y += opcoesTituloRet->h + ( 2 * espacamento ) + ( 2 * espBT_V );
 		
-	y += normalBT.fundoRet.altura + ( 2 * espacamento );		
-	
-	strcpy( dificilBT.texto.rotulo, dificilBTRotulo );	
+	jogadorTextoOpcaoRet = new SDL_Rect;
+	jogadorTextoOpcaoRet->x = x + espBT_H;
+	jogadorTextoOpcaoRet->y = y + espBT_V;
+	jogadorTextoOpcaoRet->w = msg_l;
+	jogadorTextoOpcaoRet->h  = msg_a;
 
-	dificilBT.texto.textoRet.x = x + espBT_H;
-	dificilBT.texto.textoRet.y = y + espBT_V;
-	dificilBT.texto.textoRet.largura = msg_l;
-	dificilBT.texto.textoRet.altura  = msg_a;
-	dificilBT.fundoRet.x = x;
-	dificilBT.fundoRet.y = y;
-	dificilBT.fundoRet.largura = larguraFundoTexto;
-	dificilBT.fundoRet.altura = ( 2 * espBT_V ) + msg_a;
+	jogadorOpcaoRet = new SDL_Rect;
+	jogadorOpcaoRet->x = x;
+	jogadorOpcaoRet->y = y;
+	jogadorOpcaoRet->w = larguraFundoTexto;
+	jogadorOpcaoRet->h = ( 2 * espBT_V ) + msg_a;
+
+	y += jogadorOpcaoRet->h + ( 2 * espacamento );
+
+	computadorTextoOpcaoRet = new SDL_Rect;
+	computadorTextoOpcaoRet->x = x + espBT_H;
+	computadorTextoOpcaoRet->y = y + espBT_V;
+	computadorTextoOpcaoRet->w = msg_l;
+	computadorTextoOpcaoRet->h  = msg_a;
+
+	computadorOpcaoRet = new SDL_Rect;
+	computadorOpcaoRet->x = x;
+	computadorOpcaoRet->y = y;
+	computadorOpcaoRet->w = larguraFundoTexto;
+	computadorOpcaoRet->h = ( 2 * espBT_V ) + msg_a;
+		
+	y += computadorOpcaoRet->h + ( 2 * espacamento );
 	
-	y += dificilBT.fundoRet.altura + espacamento;		
+	jogarBTTextoOpcaoRet = new SDL_Rect;
+	jogarBTTextoOpcaoRet->x = x + espBT_H;
+	jogarBTTextoOpcaoRet->y = y + espBT_V;
+	jogarBTTextoOpcaoRet->w = msg_l;
+	jogarBTTextoOpcaoRet->h  = msg_a;
+
+	jogarBTOpcaoRet = new SDL_Rect;
+	jogarBTOpcaoRet->x = x;
+	jogarBTOpcaoRet->y = y;
+	jogarBTOpcaoRet->w = larguraFundoTexto;
+	jogarBTOpcaoRet->h = ( 2 * espBT_V ) + msg_a;
 	
-	menuRet.largura = ( 2 * espacamento ) + larguraFundoTexto;
-	menuRet.altura = y;
+	y += jogarBTOpcaoRet->h + espacamento;
+	
+	menuRet = new SDL_Rect;
+	menuRet->w = ( 2 * espacamento ) + larguraFundoTexto;
+	menuRet->h = y;
 			
 	int tela_l, tela_a;	
 	gui->carregaTelaDIM( &tela_l, &tela_a );	
 	
-	menuRet.x = ( tela_l - menuRet.largura ) / 2;
-	menuRet.y = 200;		
+	menuRet->x = ( tela_l - menuRet->w ) / 2;
+	menuRet->y = 200;
+
+	TTF_CloseFont( fonte );
 }
 
 void AberturaGrafico::finaliza() {
 	SDL_FreeSurface( aberturaIMG );
 }
 
-void AberturaGrafico::sobreNivel( int nivel ) {
-	facilBT.texto.cor = corTexto;
-	normalBT.texto.cor = corTexto;
-	dificilBT.texto.cor = corTexto;
+void AberturaGrafico::sobreOpcao( int opcao ) {
+	jogadorTextoOpcaoCor = corTexto;
+	computadorTextoOpcaoCor = corTexto;
+	jogarBTTextoOpcaoCor = corTexto;
 	
-	facilBT.corFundo = corFundo;
-	normalBT.corFundo = corFundo;
-	dificilBT.corFundo = corFundo;
+	jogadorFundoOpcaoCor = corFundo;
+	computadorFundoOpcaoCor = corFundo;
+	jogarBTFundoOpcaoCor = corFundo;
 	
-	switch( nivel ) {
-		case Jogo::NIVEL_FACIL:
-			facilBT.texto.cor = corTextoBTSobre;
-			facilBT.corFundo = corFundoBTSobre;
+	switch( opcao ) {
+		case OPCAO_SET_TIPO_JOGADOR:
+			jogadorTextoOpcaoCor = corTextoBTSobre;
+			jogadorFundoOpcaoCor = corFundoBTSobre;
 			break;
-		case Jogo::NIVEL_NORMAL:			
-			normalBT.texto.cor = corTextoBTSobre;
-			normalBT.corFundo = corFundoBTSobre;
+		case OPCAO_SET_TIPO_COMPUTADOR:
+			computadorTextoOpcaoCor = corTextoBTSobre;
+			computadorFundoOpcaoCor = corFundoBTSobre;
 			break;
-		case Jogo::NIVEL_DIFICIL:			
-			dificilBT.texto.cor = corTextoBTSobre;
-			dificilBT.corFundo = corFundoBTSobre;
+		case OPCAO_JOGAR:
+			jogarBTTextoOpcaoCor = corTextoBTSobre;
+			jogarBTFundoOpcaoCor = corFundoBTSobre;
 			break;		
 	}				
 }
@@ -155,15 +152,15 @@ void AberturaGrafico::desenha( SDL_Renderer* pintor ) {
 		int l, a;	
 		gui->carregaTelaDIM( &l, &a );
 	
-		SDL_Rect ret;
+		SDL_Rect* ret = new SDL_Rect;
 		
-	 	ret.x = ( l - aberturaIMG->w ) / 2;
-	 	ret.y = ( a - aberturaIMG->h ) / 2;
-	 	ret.w = aberturaIMG->w;
-	 	ret.h = aberturaIMG->h;
+	 	ret->x = ( l - aberturaIMG->w ) / 2;
+	 	ret->y = ( a - aberturaIMG->h ) / 2;
+	 	ret->w = aberturaIMG->w;
+	 	ret->h = aberturaIMG->h;
 						
 		SDL_Texture* tx = SDL_CreateTextureFromSurface( pintor, aberturaIMG );
-		SDL_RenderCopy( pintor, tx, NULL, &ret );
+		SDL_RenderCopy( pintor, tx, NULL, ret );
 		SDL_DestroyTexture( tx );
 	}	
 	
@@ -173,72 +170,91 @@ void AberturaGrafico::desenha( SDL_Renderer* pintor ) {
 
 }
 
-void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {			
-	this->desenhaTexto( pintor, opcoesTextoRet );	
+void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
+	this->desenhaTexto( pintor, opcoesTituloRet, opcoesStr, corTexto );
 	
-	this->desenhaBTFundo( pintor, facilBT );
-	this->desenhaBTFundo( pintor, normalBT );
-	this->desenhaBTFundo( pintor, dificilBT );
+	this->desenhaBTFundo( pintor, jogadorOpcaoRet, jogadorFundoOpcaoCor );
+	this->desenhaBTFundo( pintor, computadorOpcaoRet, computadorFundoOpcaoCor );
+	this->desenhaBTFundo( pintor, jogarBTOpcaoRet, jogarBTFundoOpcaoCor );
 	
-	this->desenhaTexto( pintor, facilBT.texto );
-	this->desenhaTexto( pintor, normalBT.texto );
-	this->desenhaTexto( pintor, dificilBT.texto );			
+	char* jogador1OpcaoTexto = this->getJogadorStringTipo( this->jogador1Tipo );
+	char* jogador2OpcaoTexto = this->getJogadorStringTipo( this->jogador2Tipo );
+
+	this->desenhaTexto( pintor, jogadorTextoOpcaoRet, jogador1OpcaoTexto, jogadorTextoOpcaoCor );
+	this->desenhaTexto( pintor, computadorTextoOpcaoRet, jogador2OpcaoTexto, computadorTextoOpcaoCor );
+	this->desenhaTexto( pintor, jogarBTOpcaoRet, jogarStr, jogarBTTextoOpcaoCor );
 }
 
-void AberturaGrafico::desenhaTexto( SDL_Renderer* pintor, AberturaTexto at ) {
-	TTF_Font* fonte = gui->getMensagemFonte();			
+void AberturaGrafico::desenhaTexto( SDL_Renderer* pintor, SDL_Rect* rect, char* texto, SDL_Color* cor ) {
+	TTF_Font* fonte = TTF_OpenFont( "BASKVILL.TTF", 24 );
 
-	char* rotulo = at.rotulo;
-	SDL_Color texto_cor = at.cor;
+	SDL_Rect* texto_ret = new SDL_Rect;
+	texto_ret->x = menuRet->x + rect->x;
+	texto_ret->y = menuRet->y + rect->y;
+	texto_ret->w = rect->w;
+	texto_ret->h = rect->h;
 
-	SDL_Rect texto_ret;	
-	texto_ret.x = menuRet.x + at.textoRet.x;
-	texto_ret.y = menuRet.y + at.textoRet.y;
-	texto_ret.w = at.textoRet.largura;
-	texto_ret.h = at.textoRet.altura;
+	SDL_Color cor2 = { cor->r, cor->g, cor->b };
 
-	SDL_Surface* texto_sf = TTF_RenderText_Solid( fonte, rotulo, texto_cor );
+	SDL_Surface* texto_sf = TTF_RenderText_Solid( fonte, texto, cor2 );
 	SDL_Texture* tx = SDL_CreateTextureFromSurface( pintor, texto_sf );
-	SDL_RenderCopy( pintor, tx, NULL, &texto_ret );
+	SDL_RenderCopy( pintor, tx, NULL, texto_ret );
 	SDL_FreeSurface( texto_sf );
 	SDL_DestroyTexture( tx );
+
+	TTF_CloseFont( fonte );
 }
 
-void AberturaGrafico::desenhaBTFundo( SDL_Renderer* pintor, AberturaBT bt ) {							
-	SDL_Rect fundo_ret;	
-	fundo_ret.x = menuRet.x + bt.fundoRet.x;
-	fundo_ret.y = menuRet.y + bt.fundoRet.y;
-	fundo_ret.w = bt.fundoRet.largura;
-	fundo_ret.h = bt.fundoRet.altura;
-	
-	SDL_Color fc = bt.corFundo;
-		
-	SDL_SetRenderDrawColor( pintor, fc.r, fc.g, fc.b, SDL_ALPHA_OPAQUE );
-	SDL_RenderFillRect( pintor, &fundo_ret );
-	
+void AberturaGrafico::desenhaBTFundo( SDL_Renderer* pintor, SDL_Rect* rect, SDL_Color* cor ) {
+
+	SDL_Rect* fundo_ret = new SDL_Rect;
+	fundo_ret->x = menuRet->x + rect->x;
+	fundo_ret->y = menuRet->y + rect->y;
+	fundo_ret->w = rect->w;
+	fundo_ret->h = rect->h;
+
+	SDL_SetRenderDrawColor( pintor, cor->r, cor->g, cor->b, SDL_ALPHA_OPAQUE );
+	SDL_RenderFillRect( pintor, fundo_ret );
+
 	SDL_SetRenderDrawColor( pintor, 255, 255, 255, SDL_ALPHA_OPAQUE );
-	SDL_RenderDrawRect( pintor, &fundo_ret );	
+	SDL_RenderDrawRect( pintor, fundo_ret );
 }
 
-bool AberturaGrafico::isMouseEmFacilBT( int mouseX, int mouseY ) {
-	return this->isMouseEmBT( facilBT.fundoRet, mouseX, mouseY );	
+bool AberturaGrafico::isMouseJogadorUmOpBT( int mouseX, int mouseY ) {
+	return this->isMouseEmBT( jogadorOpcaoRet, mouseX, mouseY );
 }
 
-bool AberturaGrafico::isMouseEmNormalBT( int mouseX, int mouseY ) {
-	return this->isMouseEmBT( normalBT.fundoRet, mouseX, mouseY );	
+bool AberturaGrafico::isMouseJogador2OpBT( int mouseX, int mouseY ) {
+	return this->isMouseEmBT( computadorOpcaoRet, mouseX, mouseY );
 }
 
-bool AberturaGrafico::isMouseEmDificilBT( int mouseX, int mouseY ) {
-	return this->isMouseEmBT( dificilBT.fundoRet, mouseX, mouseY );	
+bool AberturaGrafico::isMouseJogarBT( int mouseX, int mouseY ) {
+	return this->isMouseEmBT( jogarBTOpcaoRet, mouseX, mouseY );
 }
 
-bool AberturaGrafico::isMouseEmBT( AberturaRet btFundoRet, int mouseX, int mouseY )	{
-	int x1 = menuRet.x + btFundoRet.x;
-	int y1 = menuRet.y + btFundoRet.y;
-	int x2 = menuRet.x + btFundoRet.x + btFundoRet.largura;
-	int y2 = menuRet.y + btFundoRet.y + btFundoRet.altura;
+bool AberturaGrafico::isMouseEmBT( SDL_Rect* rect, int mouseX, int mouseY )	{
+	int x1 = menuRet->x + rect->x;
+	int y1 = menuRet->y + rect->y;
+	int x2 = menuRet->x + rect->x + rect->w;
+	int y2 = menuRet->y + rect->y + rect->h;
 	
 	return ( mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2 );	
 }
 
+char* AberturaGrafico::getJogadorStringTipo( int tipo ) {
+	switch( tipo ) {
+		case HUMANO:  return humanoStr;
+		case FACIL:   return facilStr;
+		case NORMAL:  return normalStr;
+		case DIFICIL: return dificilStr;
+	}
+	return NULL;
+}
 
+void AberturaGrafico::setJogadorUmTipo( int tipo ) {
+	jogador1Tipo = tipo;
+}
+
+void AberturaGrafico::setJogadorDoisTipo( int tipo ) {
+	jogador2Tipo = tipo;
+}

@@ -11,7 +11,12 @@
 class MensagemDesenho {
 	
 	private:
+		const int MENSAGEM_BORDA = 10;
+		const int MENSAGEM_FONTE_TAM = 24;
+
 		std::string mensagem;
+
+		char fontePath[ 127 ];
 	
 	public:
 		MensagemDesenho();

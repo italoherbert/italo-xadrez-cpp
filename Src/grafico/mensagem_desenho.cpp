@@ -1,8 +1,13 @@
+
 #include "mensagem_desenho.h"
+
+#include <cstring>
 
 MensagemDesenho::MensagemDesenho() {
 	this->mensagem = "";
 	this->mensagem.clear();
+
+	strcpy( fontePath, "BASKVILL.TTF" );
 }
 
 void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {	
@@ -14,7 +19,7 @@ void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 		
 	gui->carregaTelaDIM( &tela_l, &tela_a );
 	
-	TTF_Font* fonte = gui->getMensagemFonte();			
+	TTF_Font* fonte = TTF_OpenFont( fontePath, MENSAGEM_FONTE_TAM );
 	TTF_SizeText( fonte, mensagem.c_str(), &msg_l, &msg_a );
 		
 	int tx = jogo->getTela()->getTabuleiroX();
@@ -34,10 +39,10 @@ void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 	texto2_ret.h = texto_ret.h;
 	
 	SDL_Rect fundo_ret;
-	fundo_ret.x = texto_ret.x - Consts::MENSAGEM_BORDA;
-	fundo_ret.y = texto_ret.y - Consts::MENSAGEM_BORDA;
-	fundo_ret.w = texto_ret.w + ( 2 * Consts::MENSAGEM_BORDA );
-	fundo_ret.h = texto_ret.h + ( 2 * Consts::MENSAGEM_BORDA );		
+	fundo_ret.x = texto_ret.x - MENSAGEM_BORDA;
+	fundo_ret.y = texto_ret.y - MENSAGEM_BORDA;
+	fundo_ret.w = texto_ret.w + ( 2 * MENSAGEM_BORDA );
+	fundo_ret.h = texto_ret.h + ( 2 * MENSAGEM_BORDA );
 	
 	SDL_SetRenderDrawColor( pintor, 0, 0, 200, SDL_ALPHA_OPAQUE );
 	SDL_RenderFillRect( pintor, &fundo_ret );
@@ -59,6 +64,8 @@ void MensagemDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 	SDL_RenderCopy( pintor, txt, NULL, &texto_ret );
 	SDL_FreeSurface( texto_sf );
 	SDL_DestroyTexture( txt );
+
+	TTF_CloseFont( fonte );
 }
 
 void MensagemDesenho::setMensagem( std::string msg ) {

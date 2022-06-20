@@ -6,21 +6,20 @@
 #include "../grafico/audio_ligado_desenho.h"
 #include "../logica/jogada_roque.h"
 
-JogoGraficoControlador::JogoGraficoControlador( Jogo* jogo,
-		AlgoritmoGerenciador* algGer, Animacao* anim,
-		GUI* gui, JogoGrafico* jG, JogoAudio* audio ) {
-	this->jogo = jogo;
-	this->gui = gui;
-	this->jogoGrafico = jG;
-	this->audio = audio;
-	this->algGer = algGer;
-	this->animacao = anim;
+JogoGraficoControlador::JogoGraficoControlador( Sistema* sistema ) {
+	this->sistema = sistema;
+
 	this->pecaSelecionada = NULL;
-		
 	this->isMensagemDelay = false;	
 }
 
 void JogoGraficoControlador::mousePressionado( int x, int y ) {
+	Jogo* jogo = sistema->getJogo();
+	JogoAudio* audio = sistema->getJogoAudio();
+	GUI* gui = sistema->getGUI();
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+	Animacao* animacao = sistema->getAnimacao();
+
 	if ( jogo->getFIM() != Jogo::NAO_FIM ) {
 		jogo->reinicia();
 
@@ -91,7 +90,12 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 	}
 }
 
-void JogoGraficoControlador::teclaPressionada( int tecla ) {		
+void JogoGraficoControlador::teclaPressionada( int tecla ) {
+	Jogo* jogo = sistema->getJogo();
+	JogoAudio* audio = sistema->getJogoAudio();
+	GUI* gui = sistema->getGUI();
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
 	if ( jogo->getFIM() == Jogo::NAO_FIM ) {
 		if ( tecla == TECLA_ESQ ) {
 			jogo->reinicia();
@@ -109,6 +113,11 @@ void JogoGraficoControlador::teclaPressionada( int tecla ) {
 }
 
 void JogoGraficoControlador::executando() {
+	Jogo* jogo = sistema->getJogo();
+	JogoAudio* audio = sistema->getJogoAudio();
+	Animacao* animacao = sistema->getAnimacao();
+	AlgoritmoGerenciador* algGer = sistema->getAlgoritmoGerenciador();
+
 	audio->tocaAudio();
 
 	if ( jogo->getMovimento() == NULL ) {
@@ -210,6 +219,10 @@ void JogoGraficoControlador::executando() {
 }
 
 bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
+	Jogo* jogo = sistema->getJogo();
+	JogoAudio* audio = sistema->getJogoAudio();
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
 	Peca* peca = jogo->getPeca( posX, posY );
 	if ( peca != NULL ) {
 		JogadaLista* lista = jogo->getJogadasPossiveis();
@@ -249,6 +262,10 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 }
 
 void JogoGraficoControlador::verificaXequeEXequeMate( bool moveu ) {
+	Jogo* jogo = sistema->getJogo();
+	JogoAudio* audio = sistema->getJogoAudio();
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
 	int status = jogo->isXequeMateOuEmpate( true );
 	if ( status == Jogo::NAO_FIM )
 		status = jogo->isXequeMateOuEmpate( false );
@@ -285,6 +302,9 @@ void JogoGraficoControlador::verificaXequeEXequeMate( bool moveu ) {
 }
 
 void JogoGraficoControlador::processaMensagem() {
+	Jogo* jogo = sistema->getJogo();
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
 	if ( isMensagemDelay ) {
 		SDL_Delay( Consts::DELAY_MENSAGEM );
 

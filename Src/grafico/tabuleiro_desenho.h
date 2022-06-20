@@ -6,6 +6,9 @@
 
 class TabuleiroDesenho {
 	
+	private:
+		const int TABULEIRO_BORDA = 20;
+
 	public:		
 		void desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor );		
 	

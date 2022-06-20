@@ -5,6 +5,8 @@
 class AberturaGraficoListener {
 	
 	public:		
+		virtual ~AberturaGraficoListener() {}
+
 		virtual void mouseSobre( int x, int y ) = 0;
 		virtual void mousePressionado( int x, int y ) = 0;
 		virtual void teclaPressionada( int tecla ) = 0;

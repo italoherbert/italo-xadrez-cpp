@@ -15,13 +15,22 @@
 #include "jogo_grafico_listener.h"
 
 class GUI {
+
+	public:
+		const static int ABERTURA_GRAFICO = 1;
+		const static int JOGO_GRAFICO = 2;
+
+		const static int CURSOR_MAOZINHA = 2;
+		const static int CURSOR_SETA = 1;
+
+		const int DELAY = 30;
+		const int DELAY_MENSAGEM = 1500;
+
 	private:
 		SDL_Window* janela = nullptr;
 		SDL_Surface* tela = nullptr;
 		SDL_Renderer* pintor = nullptr;
-		
-		TTF_Font* mensagemFonte = nullptr;
-		
+
 		SDL_Cursor* cursorSeta = nullptr;
 		SDL_Cursor* cursorMaozinha = nullptr;
 		
@@ -35,12 +44,6 @@ class GUI {
 		int graficoTipo = ABERTURA_GRAFICO;
 	
 	public:
-		const static int ABERTURA_GRAFICO = 1;
-		const static int JOGO_GRAFICO = 2;
-		
-		const static int CURSOR_MAOZINHA = 2;
-		const static int CURSOR_SETA = 1;
-		
 		GUI();
 		
 		void reinicia();
@@ -60,7 +63,6 @@ class GUI {
 		void setJogoGraficoListener( JogoGraficoListener* listener );
 		
 		SDL_Surface* getTela();
-		TTF_Font* getMensagemFonte();		
 };
 
 #endif

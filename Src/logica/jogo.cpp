@@ -7,7 +7,9 @@
 #include "jogada_roque.h"
 #include "jogo_pecas.h"
 
-Jogo::Jogo( TelaDriver* drv ) {	
+Jogo::Jogo( JogoDriver* drv ) {	
+	this->drv = drv;
+
 	tela = new Tela( drv );				
 	jogadas = new JogadaLista();
 
@@ -79,7 +81,6 @@ void Jogo::reinicia() {
 	movimento = NULL;
 	
 	vezComputador = false;
-	jogadorHumano = false;
 	
 	compRoque = false;
 	jogRoque = false;
@@ -87,8 +88,8 @@ void Jogo::reinicia() {
 			
 	compJogadasCont = 0;
 	
-	nivelJogador = NIVEL_NORMAL;
-	nivelComputador = NIVEL_DIFICIL;
+	jogadorNivel = NIVEL_NORMAL;
+	computadorNivel = NIVEL_DIFICIL;
 	fim = NAO_FIM;	
 }
 
@@ -688,20 +689,33 @@ void Jogo::setMovimento( Movimento* movimento ) {
 }			
 
 int Jogo::getNivel( bool isComp ) {
-	return isComp ? nivelComputador : nivelJogador;
+	return isComp ? computadorNivel : jogadorNivel;
+}
+
+void Jogo::incNivel( bool isComp ) {
+	if ( isComp ) {
+		if ( computadorNivel < NIVEL_DIFICIL )
+			computadorNivel++;
+		else computadorNivel = NIVEL_FACIL;
+	} else {
+		if ( jogadorNivel < NIVEL_DIFICIL )
+			jogadorNivel++;
+		else jogadorNivel = NIVEL_JORADOR;
+	}
 }
 
 void Jogo::setNivel( bool isComp,  int nivel ) {
 	if ( isComp )
-		this->nivelComputador = nivel;
-	else this->nivelJogador = nivel;
+		this->computadorNivel = nivel;
+	else this->jogadorNivel = nivel;
 }
 
 bool Jogo::isJogadorHumano() {
-	return jogadorHumano;
+	return jogadorNivel == NIVEL_JORADOR;
 }
-void Jogo::setJogadorHumano( bool b ) {
-	this->jogadorHumano = b;
+
+JogoDriver* Jogo::getJogoDriver() {
+	return drv;
 }
 
 std::string Jogo::get_peca_str( int tipo ) {

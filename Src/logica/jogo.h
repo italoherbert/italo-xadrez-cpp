@@ -15,11 +15,11 @@
 #include "peca.h"
 #include "pecas.h"
 #include "tela.h"
-#include "tela_driver.h"
 #include "jogo_constantes.h"
 #include "peca_jogada_params.h"
 
 #include <string>
+#include "jogo_driver.h"
 
 class BispoPecaJogada;
 class CavaloPecaJogada;
@@ -58,14 +58,13 @@ class Jogo : public Pecas, public JogoConstantes {
 		int jogadorJogadaRepetidaCont = 0;
 				
 		bool vezComputador = false;
-		bool jogadorHumano = true;
 
 		bool compRoque = false;
 		bool jogRoque = false;
 		bool audioLigado = true;
 		
-		int nivelJogador = NIVEL_NORMAL;
-		int nivelComputador = NIVEL_DIFICIL;
+		int jogadorNivel = NIVEL_NORMAL;
+		int computadorNivel = NIVEL_DIFICIL;
 		int fim = 0;
 		
 		Movimento* movimento = nullptr;
@@ -77,8 +76,10 @@ class Jogo : public Pecas, public JogoConstantes {
 		BispoPecaJogada* bispoPecaJogada;
 		RainhaPecaJogada* rainhaPecaJogada;
 
+		JogoDriver* drv;
+
 	public:
-		Jogo( TelaDriver* drv );
+		Jogo( JogoDriver* drv );
 		~Jogo();
 		
 		void reinicia();
@@ -204,10 +205,12 @@ class Jogo : public Pecas, public JogoConstantes {
 				
 		int getNivel( bool isComp );
 		void setNivel( bool isComp, int nivel );
+		void incNivel( bool isComp );
 
 		bool isJogadorHumano();
-		void setJogadorHumano( bool b );
 				
+		JogoDriver* getJogoDriver();
+
 		std::string get_peca_str( int tipo );
 };
 

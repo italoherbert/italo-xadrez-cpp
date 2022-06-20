@@ -124,11 +124,9 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 		jogo->deleta_pecas( compPecas );
 		jogo->deleta_pecas( jogoPecas );
 
-		MiniMaxNo* local = NULL;
-
 		int tam = lista->getTam();
 		for( int j = 0; !fim && j < tam; j++ ) {
-			Jogada* jog = lista->getJogada( j );
+			Jogada* jog = lista->getJogada( j )->nova();
 
 			jogo->copia_pecas( jogPecas, compPecas );
 			this->efetuaJogadas( no, jogPecas, compPecas );
@@ -159,20 +157,16 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 			MiniMaxNo* no2 = this->minimax( filho, !isMaximizador, nivel-1, alpha, beta, !isComp );
 
 			if ( isMaximizador ){
-				if ( no2->peso > minimaxNo->peso ) {
+				if ( no2->peso > minimaxNo->peso )
 					minimaxNo = no2;
-					local = no2;
-				}
 
 				if ( minimaxNo->peso > alpha )
 					alpha = minimaxNo->peso;
 				if ( beta <= alpha )
 					fim = true;
 			} else {
-				if ( no2->peso < minimaxNo->peso ) {
+				if ( no2->peso < minimaxNo->peso )
 					minimaxNo = no2;
-					local = no2;
-				}
 
 				if ( minimaxNo->peso < beta )
 					beta = minimaxNo->peso;
@@ -180,10 +174,6 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 					fim = true;
 			}
 		}
-
-		if ( local != NULL)
-			local->jogada = local->jogada->nova();
-
 		jogo->deleta_jogadas( lista );
 	}
 
@@ -429,7 +419,7 @@ Peca* Algoritmo::sorteiaPeca( Peca** jps, Peca** cps,	bool isComp ) {
 	if ( vet_tam > 0 )
 		sorteada = vet[ (int)round( rand() % vet_tam ) ]->nova();
 
-	jogo->deleta_pecas( vet );
+	jogo->deleta_pecas( vet, vet_tam );
 
 	return sorteada;
 }

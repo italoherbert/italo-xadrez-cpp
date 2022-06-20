@@ -10,15 +10,13 @@ void GUI::reinicia() {
 }
 
 void GUI::executa( std::string titulo, int largura, int altura ) {
-	SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO );
+	SDL_Init( SDL_INIT_EVERYTHING );
 	IMG_Init( IMG_INIT_PNG );
-	TTF_Init();
 	Mix_Init( MIX_INIT_MID );
+	TTF_Init();
 
 	Mix_OpenAudio( 22050, AUDIO_S16SYS, 2, 1024 );	
 	
-	mensagemFonte = TTF_OpenFont( "BASKVILL.TTF", Consts::MENSAGEM_FONTE_TAM );
-
 	janela = SDL_CreateWindow( titulo.c_str(), 
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 		largura, altura, 
@@ -89,14 +87,15 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 			}
 		}
 
-		SDL_Delay( Consts::DELAY );			
+		SDL_Delay( DELAY );
 	}
 	
 	if ( listener != NULL )
 		listener->finalizando();
 	
-	TTF_CloseFont( mensagemFonte );
 	IMG_Quit();
+
+	TTF_Quit();
 	
 	Mix_CloseAudio();	
 	Mix_Quit();
@@ -147,8 +146,4 @@ void GUI::setJogoGraficoListener( JogoGraficoListener* listener ) {
 
 SDL_Surface* GUI::getTela() {
 	return tela;
-}
-
-TTF_Font* GUI::getMensagemFonte() {
-	return this->mensagemFonte;
 }

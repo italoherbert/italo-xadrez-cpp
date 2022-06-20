@@ -2,14 +2,14 @@
 #ifndef TELA_H
 #define TELA_H
 
-#include "tela_driver.h"
+#include "jogo_driver.h"
 
 class Tela {
 	private:
-		TelaDriver* driver;
+		JogoDriver* driver;
 		
 	public:
-		Tela( TelaDriver* driver );
+		Tela( JogoDriver* driver );
 		
 		int getTabuleiroX();
 		int getTabuleiroY();

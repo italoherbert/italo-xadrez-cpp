@@ -3,7 +3,7 @@
 #include <cmath>
 
 
-Tela::Tela( TelaDriver* driver ) {
+Tela::Tela( JogoDriver* driver ) {
 	this->driver = driver;
 }
 
