@@ -49,7 +49,11 @@ class Sistema {
 		void inicia();
 		void finaliza();
 
+		void reinicia();
+
 		void exec();
+
+		long tempo();
 
 		Jogo* getJogo();
 		DriverAdapter* getJogoDriver();

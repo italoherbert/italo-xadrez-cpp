@@ -12,6 +12,7 @@ class JogoConstantes {
 		const static int JOGADOR_VENCEU = 1;
 		const static int COMPUTADOR_VENCEU = 2;
 		const static int EMPATE = 3;
+		const static int REINICIAR = 4;
 		const static int NAO_FIM = 0;
 
 		const static int N_PECAS = 16;

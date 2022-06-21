@@ -1,6 +1,8 @@
 
 #include "sistema.h"
 
+#include <ctime>
+
 Sistema::Sistema() {
 	this->drv = new DriverAdapter();
 
@@ -65,8 +67,19 @@ void Sistema::finaliza() {
 	audio->finaliza();
 }
 
+void Sistema::reinicia() {
+	jogoGrafico->getMensagemDesenho()->removeMensagem();
+	jogo->reinicia();
+	audio->reinicia();
+	gui->reinicia();
+}
+
 void Sistema::exec() {
 	gui->executa( "Jogo de Xadrez", Consts::JANELA_LARGURA, Consts::JANELA_ALTURA );
+}
+
+long Sistema::tempo() {
+	return time( NULL );
 }
 
 Jogo* Sistema::getJogo() {

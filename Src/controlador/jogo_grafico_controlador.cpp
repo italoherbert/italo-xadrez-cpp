@@ -2,30 +2,24 @@
 #include "jogo_grafico_controlador.h"
 
 #include <cmath>
+#include <chrono>
+
+using namespace std::chrono;
 
 #include "../grafico/audio_ligado_desenho.h"
 #include "../logica/jogada_roque.h"
 
 JogoGraficoControlador::JogoGraficoControlador( Sistema* sistema ) {
 	this->sistema = sistema;
-
 	this->pecaSelecionada = NULL;
-	this->isMensagemDelay = false;	
+	this->reiniciarJogo = false;
 }
 
 void JogoGraficoControlador::mousePressionado( int x, int y ) {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
-	GUI* gui = sistema->getGUI();
 	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
 	Animacao* animacao = sistema->getAnimacao();
-
-	if ( jogo->getFIM() != Jogo::NAO_FIM ) {
-		jogo->reinicia();
-
-		audio->reinicia();
-		gui->reinicia();
-	}
 
 	AudioLigadoDesenho* ald = jogoGrafico->getAudioLigadoDesenho();
 	if ( ald->isMouseEmAudioBT( x, y ) ) {
@@ -37,18 +31,20 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 		}		 
 	}
 
+	if ( jogo->getStatus() != Jogo::NAO_FIM ) {
+		reiniciarJogo = true;
+		return;
+	}
+	if ( !jogo->isJogadorHumano() )
+		return;
 	if ( jogo->getMovimento() != NULL )
 		return;
-
-	jogoGrafico->getMensagemDesenho()->removeMensagem();
 
 	if ( !jogo->isPausa() ) {
 		int tx = jogo->getTela()->getTabuleiroX();
 		int ty = jogo->getTela()->getTabuleiroY();
 		int td = jogo->getTela()->getTabuleiroDIM();
 		int cd = jogo->getTela()->getCelulaDIM();			
-	
-		bool moveu = false;
 	
 		if( x >= tx && x < tx+td && y >= ty && y < ty+td ) {
 			int posX = ( x - tx ) / cd;
@@ -86,40 +82,28 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 					}
 				} 			
 			}
-							
-			this->verificaXequeEXequeMate( moveu );
 		}
 	}
 }
 
 void JogoGraficoControlador::teclaPressionada( int tecla ) {
 	Jogo* jogo = sistema->getJogo();
-	JogoAudio* audio = sistema->getJogoAudio();
-	GUI* gui = sistema->getGUI();
-	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
 
-	if ( jogo->getFIM() == Jogo::NAO_FIM ) {
+	if ( jogo->getStatus() == Jogo::NAO_FIM ) {
 		if ( tecla == TECLA_ESQ ) {
-			jogo->reinicia();
-			audio->reinicia();
-		
-			gui->reinicia();
-			jogoGrafico->getMensagemDesenho()->removeMensagem();
+			jogo->setStatus( Jogo::REINICIAR );
+
+			reiniciarJogo = true;
 		} else if ( tecla == TECLA_ENTER ) {
 			jogo->setPausa( !jogo->isPausa() );
 			if ( jogo->isPausa() ) {
-				std::string msg = "Pausa!";
-				jogoGrafico->getMensagemDesenho()->setMensagem( msg );
+				this->setMensagem( "Pausa!", NO_DELAY );
 			} else {
-				jogoGrafico->getMensagemDesenho()->removeMensagem();
+				this->removeMensagem();
 			}
 		}
 	} else {
-		jogo->reinicia();
-		audio->reinicia();
-
-		gui->reinicia();
-		jogoGrafico->getMensagemDesenho()->removeMensagem();
+		reiniciarJogo = true;
 	}		
 }
 
@@ -131,14 +115,33 @@ void JogoGraficoControlador::executando() {
 
 	audio->tocaAudio();
 
-	if ( jogo->getMovimento() == NULL ) {
-		this->processaMensagem();						
+	if ( mensagemTempoStart != NO_START ) {
+		long t = sistema->tempo();
+		if ( t >= mensagemTempoStart ) {
+			this->removeMensagem();
+			mensagemTempoStart = NO_START;
+		}
+	}
 
+	int status = this->verificaEProcessaXequeMate();
+
+	if ( status != Jogo::NAO_FIM ) {
+		if ( reiniciarJogo ) {
+			sistema->reinicia();
+			reiniciarJogo = false;
+			return;
+		} else {
+			if ( mensagemTempoStart == NO_START )
+				this->setMensagem( "Tecle ou clique para reiniciar.", NO_DELAY );
+		}
+	}
+
+	if ( jogo->getMovimento() == NULL ) {
 		bool mov = true;
 		if ( jogo->isJogadorHumano() )
 			mov = jogo->isVezComputador();
 
-		if ( mov && jogo->getFIM() == Jogo::NAO_FIM ) {
+		if ( mov && jogo->getStatus() == Jogo::NAO_FIM ) {
 			Jogada* jogada;
 			int posX, posY;
 			
@@ -222,9 +225,9 @@ void JogoGraficoControlador::executando() {
 				pecaSelecionada = NULL;	
 												
 				jogo->setMovimento( NULL );								
-			}																					 
-									
-			this->verificaXequeEXequeMate( moveu );						
+
+				this->verificaSeXeque();
+			}
 		}						
 	}
 }
@@ -232,7 +235,6 @@ void JogoGraficoControlador::executando() {
 bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
-	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
 
 	Peca* peca = jogo->getPeca( posX, posY );
 	if ( peca != NULL ) {
@@ -255,90 +257,90 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 				reiEmXeque = jogo->isCompReiEmXeque();
 			else reiEmXeque = jogo->isJogadorReiEmXeque();
 			
+			std::string msg;
 			if ( reiEmXeque ) {			
-				std::string msg = "Seu rei está em xeque!";
-				jogoGrafico->getMensagemDesenho()->setMensagem( msg );
+				msg = "Seu rei está em xeque!";
 			} else {
-				std::string msg = "Movimento inválido!";
-				jogoGrafico->getMensagemDesenho()->setMensagem( msg );
+				msg = "Movimento inválido!";
 			}
-			isMensagemDelay = true;
-			
 			audio->setNumAudio( JogoAudio::AUDIO_JOGADA_INVALIDA );
+			this->setMensagem( msg, MENSAGEM_DELAY );
 		}
 		return true;
 	}
 	return false;
 }
 
-void JogoGraficoControlador::verificaXequeEXequeMate( bool moveu ) {
+void JogoGraficoControlador::verificaSeXeque() {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
-	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
+	bool reiEmXeque = false;
+
+	if ( jogo->isVezComputador() )
+		reiEmXeque = jogo->isCompReiEmXeque();
+	else reiEmXeque = jogo->isJogadorReiEmXeque();
+
+	if ( reiEmXeque ) {
+		jogo->getJogadasPossiveis()->limpaJogadas();
+		jogo->setJogadorJogadaPeca( NULL );
+		pecaSelecionada = NULL;
+
+		audio->setNumAudio( JogoAudio::AUDIO_XEQUE );
+		this->setMensagem( "Xeque!", MENSAGEM_DELAY );
+	}
+}
+
+int JogoGraficoControlador::verificaEProcessaXequeMate() {
+	Jogo* jogo = sistema->getJogo();
+	JogoAudio* audio = sistema->getJogoAudio();
 
 	int status = jogo->isXequeMateOuEmpate( true );
 	if ( status == Jogo::NAO_FIM )
 		status = jogo->isXequeMateOuEmpate( false );
-	jogo->setFim( status );		
-	
-	if ( moveu && status == Jogo::NAO_FIM ) {			
-		bool reiEmXeque = false;
-		
-		if ( jogo->isVezComputador() )
-			reiEmXeque = jogo->isCompReiEmXeque();
-		else reiEmXeque = jogo->isJogadorReiEmXeque();
-				
-		if ( reiEmXeque ) {									
-			jogo->getJogadasPossiveis()->limpaJogadas();
-			jogo->setJogadorJogadaPeca( NULL );
-			pecaSelecionada = NULL;				
-			
-			audio->setNumAudio( JogoAudio::AUDIO_XEQUE );
+	jogo->setStatus( status );
 
-			std::string msg = "Xeque!";
-			jogoGrafico->getMensagemDesenho()->setMensagem( msg );
-			isMensagemDelay = true;											
-		}
-	}
-
-	if ( status == Jogo::JOGADOR_VENCEU ) {
-		audio->setNumAudio( JogoAudio::AUDIO_VENCEU );
-	} else if ( status == Jogo::COMPUTADOR_VENCEU ) {
-		audio->setNumAudio( JogoAudio::AUDIO_PERDEU );
-	} else if ( status == Jogo::EMPATE ) {
-		audio->setNumAudio( JogoAudio::AUDIO_EMPATOU );
-	}
-}
-
-void JogoGraficoControlador::processaMensagem() {
-	Jogo* jogo = sistema->getJogo();
-	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
-
-	if ( isMensagemDelay ) {
-		SDL_Delay( Consts::DELAY_MENSAGEM );
-
-		jogoGrafico->getMensagemDesenho()->removeMensagem();
-		isMensagemDelay = false;		
-	}
-
-	int status = jogo->getFIM();
 	if ( status != Jogo::NAO_FIM ) {
 		std::string mensagem = "";
-
+		int audioNum = JogoAudio::AUDIO_NENHUM;
 		switch( status ) {
 			case Jogo::JOGADOR_VENCEU:
-				mensagem = "Xeque mate, você ganhou!";
+				jogo->incVitoriasCont( false );
+				audioNum = JogoAudio::AUDIO_VENCEU;
+				mensagem = "Xeque mate, as brancas venceram!";
 				break;
 			case Jogo::COMPUTADOR_VENCEU:
-				mensagem = "Xeque mate, você perdeu!";
+				jogo->incVitoriasCont( true );
+				mensagem = "Xeque mate, as pretas venceram!";
+				audioNum = JogoAudio::AUDIO_PERDEU;
 				break;
 			case Jogo::EMPATE:
 				mensagem = "O jogo empatou!";
+				audioNum = JogoAudio::AUDIO_EMPATOU;
 				break;
 		}
 
-		if ( !mensagem.empty() )
-			jogoGrafico->getMensagemDesenho()->setMensagem( mensagem );
+		audio->setNumAudio( audioNum );
+		this->setMensagem( mensagem, FIM_JOGO_MENSAGEM_DELAY );
+	}
+	return status;
+}
+
+void JogoGraficoControlador::removeMensagem() {
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
+	mensagemTempoStart = NO_START;
+	jogoGrafico->getMensagemDesenho()->removeMensagem();
+}
+
+void JogoGraficoControlador::setMensagem( std::string mensagem, long delay ) {
+	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
+	jogoGrafico->getMensagemDesenho()->setMensagem( mensagem );
+	if ( delay == NO_DELAY ) {
+		mensagemTempoStart = NO_START;
+	} else {
+		mensagemTempoStart = sistema->tempo() + delay;
 	}
 }
 

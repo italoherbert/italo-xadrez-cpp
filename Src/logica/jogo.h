@@ -78,7 +78,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		
 		int jogadorNivel = NIVEL_NORMAL;
 		int computadorNivel = NIVEL_DIFICIL;
-		int fim = 0;
+		int status = 0;
 		
 		Movimento* movimento = nullptr;
 
@@ -210,8 +210,8 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		int* getJogadaDominioCentro( int i, bool isComp );
 						
-		int getFIM();
-		void setFim( int fim );								
+		int getStatus();
+		void setStatus( int status );
 								
 		Movimento* getMovimento();
 		void setMovimento( Movimento* movimento );

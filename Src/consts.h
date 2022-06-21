@@ -8,8 +8,6 @@ class Consts {
 		constexpr static double FATOR_CELULA_DIM = 0.1;
 		constexpr static int ANIM_RAIO_INC = 10;
 
-		constexpr static int DELAY_MENSAGEM = 1500;
-
 		constexpr static int JANELA_LARGURA = 640;
 		constexpr static int JANELA_ALTURA = 640;
 

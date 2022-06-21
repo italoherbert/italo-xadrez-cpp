@@ -93,7 +93,7 @@ void Jogo::reinicia() {
 
 	jogadorNivel = NIVEL_NORMAL;
 	computadorNivel = NIVEL_NORMAL;
-	fim = NAO_FIM;	
+	status = NAO_FIM;	
 }
 
 void Jogo::calculaJogadas( JogadaLista* lista, Pecas* pecas, bool isComp, bool isCaptura ) {
@@ -669,12 +669,12 @@ void Jogo::zeraJogadaRepetidaCont( bool isComp ) {
 	else jogadorJogadaRepetidaCont = 0;
 }
 
-int Jogo::getFIM() {
-	return fim;
+int Jogo::getStatus() {
+	return status;
 }
 
-void Jogo::setFim( int fim ) {
-	this->fim = fim;
+void Jogo::setStatus( int status ) {
+	this->status = status;
 }
 
 bool Jogo::isAudioLigado() {

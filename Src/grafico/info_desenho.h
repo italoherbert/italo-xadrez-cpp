@@ -10,8 +10,8 @@
 class InfoDesenho {
 
 	private:
-		std::string brancasNivelRotulo = "Pretas:";
-		std::string pretasNivelRotulo = "Brancas:";
+		std::string brancasNivelRotulo = "Brancas:";
+		std::string pretasNivelRotulo = "Pretas:";
 		std::string vitoriasRotulo = "Vitorias:";
 		std::string derrotasRotulo = "Derrotas:";
 
