@@ -127,6 +127,12 @@ void JogoGraficoControlador::executando() {
 
 	if ( status != Jogo::NAO_FIM ) {
 		if ( reiniciarJogo ) {
+			if ( status == Jogo::JOGADOR_VENCEU ) {
+				jogo->incVitoriasCont( false );
+			} else if ( status == Jogo::COMPUTADOR_VENCEU ) {
+				jogo->incVitoriasCont( true );
+			}
+
 			sistema->reinicia();
 			reiniciarJogo = false;
 			return;
