@@ -10,17 +10,6 @@ void DriverAdapter::setJogoEGUI( GUI* gui, Jogo* jogo, JogoGrafico* jogoGrafico 
 	this->jogoGrafico = jogoGrafico;
 }
 
-
-int DriverAdapter::getAberturaNivel( int nivel ) {
-	switch( nivel ) {
-		case Jogo::NIVEL_HUMANO: return AberturaGrafico::HUMANO;
-		case Jogo::NIVEL_FACIL: return AberturaGrafico::FACIL;
-		case Jogo::NIVEL_NORMAL: return AberturaGrafico::NORMAL;
-		case Jogo::NIVEL_DIFICIL: return AberturaGrafico::DIFICIL;
-		default: return 0;
-	}
-}
-
 int DriverAdapter::getInfoPainelAltura() {
 	return jogoGrafico->getInfoDesenho()->getPainelAltura();
 }

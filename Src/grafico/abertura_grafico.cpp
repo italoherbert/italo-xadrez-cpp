@@ -5,8 +5,9 @@
 #include <SDL2/SDL_ttf.h>
 #include <cstring>
 
-AberturaGrafico::AberturaGrafico( GUI* gui ) {
+AberturaGrafico::AberturaGrafico( GUI* gui, Jogo* jogo ) {
 	this->gui = gui;
+	this->jogo = jogo;
 	this->aberturaIMG = NULL;
 	
 	textoCor->r = 255;
@@ -123,8 +124,8 @@ void AberturaGrafico::desenha( SDL_Renderer* pintor ) {
 }
 
 void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
-	char* jogador1OpcaoTexto = this->getJogadorStringTipo( this->jogador1Tipo );
-	char* jogador2OpcaoTexto = this->getJogadorStringTipo( this->jogador2Tipo );
+	const char* jogadorOpcaoTexto = jogo->getNivelString( jogo->getNivel( false ) ).c_str();
+	const char* computadorOpcaoTexto = jogo->getNivelString( jogo->getNivel( true ) ).c_str();
 
 	int espacamento = MENU_ABERTURA_ESP;
 
@@ -161,7 +162,7 @@ void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
 	
 	y += opcoesTituloRet->h + espacamento + ( 2 * espBT_V );
 		
-	TTF_SizeText( fonte, jogador1OpcaoTexto, &msg_l, &msg_a );
+	TTF_SizeText( fonte, jogadorOpcaoTexto, &msg_l, &msg_a );
 
 	jogador1TextoRet = new SDL_Rect;
 	jogador1TextoRet->x = x + espOp_H;
@@ -183,7 +184,7 @@ void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
 
 	y += jogadorOpcaoRet->h + espacamento;
 
-	TTF_SizeText( fonte, jogador2OpcaoTexto, &msg_l, &msg_a );
+	TTF_SizeText( fonte, computadorOpcaoTexto, &msg_l, &msg_a );
 
 	jogador2TextoRet = new SDL_Rect;
 	jogador2TextoRet->x = x + espOp_H;
@@ -244,15 +245,15 @@ void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
 	this->desenhaTexto( pintor, opcoesTituloRet, opcoesStr, textoCor );
 
 	this->desenhaTexto( pintor, jogador1TextoRet, jogadorStr, textoCor );
-	this->desenhaTexto( pintor, jogadorTextoOpcaoRet, jogador1OpcaoTexto, jogadorTextoOpcaoCor );
+	this->desenhaTexto( pintor, jogadorTextoOpcaoRet, jogadorOpcaoTexto, jogadorTextoOpcaoCor );
 
 	this->desenhaTexto( pintor, jogador2TextoRet, computadorStr, textoCor );
-	this->desenhaTexto( pintor, computadorTextoOpcaoRet, jogador2OpcaoTexto, computadorTextoOpcaoCor );
+	this->desenhaTexto( pintor, computadorTextoOpcaoRet, computadorOpcaoTexto, computadorTextoOpcaoCor );
 
 	this->desenhaTexto( pintor, jogarBTTextoOpcaoRet, jogarStr, jogarBTTextoOpcaoCor );
 }
 
-void AberturaGrafico::desenhaTexto( SDL_Renderer* pintor, SDL_Rect* rect, char* texto, SDL_Color* cor ) {
+void AberturaGrafico::desenhaTexto( SDL_Renderer* pintor, SDL_Rect* rect, const char* texto, SDL_Color* cor ) {
 	TTF_Font* fonte = gui->getFonte();
 
 	SDL_Rect* texto_ret = new SDL_Rect;
@@ -305,20 +306,3 @@ bool AberturaGrafico::isMouseEmBT( SDL_Rect* rect, int mouseX, int mouseY )	{
 	return ( mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2 );	
 }
 
-char* AberturaGrafico::getJogadorStringTipo( int tipo ) {
-	switch( tipo ) {
-		case HUMANO:  return humanoStr;
-		case FACIL:   return facilStr;
-		case NORMAL:  return normalStr;
-		case DIFICIL: return dificilStr;
-	}
-	return NULL;
-}
-
-void AberturaGrafico::setJogadorUmTipo( int tipo ) {
-	jogador1Tipo = tipo;
-}
-
-void AberturaGrafico::setJogadorDoisTipo( int tipo ) {
-	jogador2Tipo = tipo;
-}

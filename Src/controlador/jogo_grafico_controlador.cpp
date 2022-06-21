@@ -35,6 +35,7 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 		reiniciarJogo = true;
 		return;
 	}
+
 	if ( !jogo->isJogadorHumano() )
 		return;
 	if ( jogo->getMovimento() != NULL )
@@ -123,7 +124,9 @@ void JogoGraficoControlador::executando() {
 		}
 	}
 
-	int status = this->verificaEProcessaXequeMate();
+	int status = jogo->getStatus();
+	if ( status == Jogo::NAO_FIM )
+		status = this->verificaEProcessaXequeMate();
 
 	if ( status != Jogo::NAO_FIM ) {
 		if ( reiniciarJogo ) {
@@ -141,6 +144,9 @@ void JogoGraficoControlador::executando() {
 				this->setMensagem( "Tecle ou clique para reiniciar.", NO_DELAY );
 		}
 	}
+
+	if ( jogo->isPausa() )
+		return;
 
 	if ( jogo->getMovimento() == NULL ) {
 		bool mov = true;

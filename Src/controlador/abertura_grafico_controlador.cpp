@@ -8,21 +8,14 @@ AberturaGraficoControlador::AberturaGraficoControlador( Sistema* sistema ) {
 void AberturaGraficoControlador::mousePressionado( int x, int y ) {
 	GUI* gui = sistema->getGUI();
 	Jogo* jogo = sistema->getJogo();
-	DriverAdapter* jdrv = sistema->getJogoDriver();
 	AberturaGrafico* aberturaGrafico = sistema->getAberturaGrafico();
 
 	JogoAudio* audio = sistema->getJogoAudio();
 
 	if ( aberturaGrafico->isMouseJogadorUmOpBT( x, y ) ) {
 		jogo->incNivel( false );
-		int nivel = jogo->getNivel( false );
-
-		aberturaGrafico->setJogadorUmTipo( jdrv->getAberturaNivel( nivel ) );
 	} else if ( aberturaGrafico->isMouseJogador2OpBT( x, y ) ) {
 		jogo->incNivel( true );
-		int nivel = jogo->getNivel( true );
-
-		aberturaGrafico->setJogadorDoisTipo( jdrv->getAberturaNivel( nivel ) );
 	} else if ( aberturaGrafico->isMouseJogarBT( x, y ) ) {
 		aberturaGrafico->sobreOpcao( AberturaGrafico::OPCAO_JOGAR );
 		

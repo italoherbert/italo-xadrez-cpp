@@ -51,7 +51,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 		}
 
 		if ( graficoTipo == JOGO_GRAFICO )
-			if ( jogoGraficoListener != NULL && !drv->isPausa() )
+			if ( jogoGraficoListener != NULL )
 				jogoGraficoListener->executando();
 
 		if ( listener != NULL ) {		

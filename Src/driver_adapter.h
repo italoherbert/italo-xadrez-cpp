@@ -26,7 +26,6 @@ class DriverAdapter : public JogoDriver, public GUI_Driver {
 		int getInfoPainelAltura();
 		double getFatorCelulaDIM();
 
-		int getAberturaNivel( int nivel );
 		bool isPausa();
 
 };

@@ -9,7 +9,7 @@ Sistema::Sistema() {
 	this->gui = new GUI( drv );
 	this->jogo = new Jogo( drv );
 
-	this->aberturaGrafico = new AberturaGrafico( gui );
+	this->aberturaGrafico = new AberturaGrafico( gui, jogo );
 	this->jogoGrafico = new JogoGrafico( jogo, gui );
 
 	this->drv->setJogoEGUI( gui, jogo, jogoGrafico );
@@ -53,12 +53,6 @@ void Sistema::inicia() {
 	jogo->reinicia();
 	audio->reinicia();
 	gui->reinicia();
-
-	int graficoJogadorNivel = drv->getAberturaNivel( jogo->getNivel( false ) );
-	int graficoComputadorNivel = drv->getAberturaNivel( jogo->getNivel( true ) );
-
-	aberturaGrafico->setJogadorUmTipo( graficoJogadorNivel );
-	aberturaGrafico->setJogadorDoisTipo( graficoComputadorNivel );
 }
 
 void Sistema::finaliza() {

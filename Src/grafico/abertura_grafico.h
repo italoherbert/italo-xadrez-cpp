@@ -12,6 +12,7 @@ class AberturaGrafico : public Grafico {
 
 	private:
 		GUI* gui;	
+		Jogo* jogo;
 		
 		SDL_Surface* aberturaIMG;
 
@@ -50,9 +51,6 @@ class AberturaGrafico : public Grafico {
 
 		SDL_Color* textoCor = new SDL_Color;
 
-		int jogador1Tipo = DIFICIL;
-		int jogador2Tipo = DIFICIL;
-
 		char opcoesStr[ 127 ];
 		char jogarStr[ 127 ];
 		char humanoStr[ 127 ];
@@ -62,8 +60,8 @@ class AberturaGrafico : public Grafico {
 		char jogadorStr[ 127 ];
 		char computadorStr[ 127 ];
 
-		void desenhaMenu( SDL_Renderer* pintor );	
-		void desenhaTexto( SDL_Renderer* pintor, SDL_Rect* ret, char* rotulo, SDL_Color* cor );
+		void desenhaMenu( SDL_Renderer* pintor );
+		void desenhaTexto( SDL_Renderer* pintor, SDL_Rect* ret, const char* rotulo, SDL_Color* cor );
 		void desenhaBTFundo( SDL_Renderer* pintor, SDL_Rect* ret, SDL_Color* cor, SDL_Color* bordaCor );
 		
 		bool isMouseEmBT( SDL_Rect* btFundoRet, int mouseX, int mouseY );
@@ -73,11 +71,6 @@ class AberturaGrafico : public Grafico {
 		const static int OPCAO_SET_TIPO_JOGADOR = 1;
 		const static int OPCAO_SET_TIPO_COMPUTADOR = 2;
 		const static int OPCAO_JOGAR = 3;
-
-		const static int HUMANO = 0;
-		const static int FACIL = 1;
-		const static int NORMAL = 2;
-		const static int DIFICIL = 3;
 
 		const int MENSAGEM_FONTE_TAM = 24;
 
@@ -91,22 +84,19 @@ class AberturaGrafico : public Grafico {
 
 		const int MENU_ABERTURA_LARGURA_FUNDO_TEXTO = 300;
 
-		AberturaGrafico( GUI* gui );
+		AberturaGrafico( GUI* gui, Jogo* jogo );
 		
 		void inicializa();
 		void finaliza();
 		
-		void desenha( SDL_Renderer* pintor ); 	
+		void desenha( SDL_Renderer* pintor );
 	
 		void sobreOpcao( int opcao );
-		char* getJogadorStringTipo( int tipo );
 	
 		bool isMouseJogadorUmOpBT( int mouseX, int mouseY );		
 		bool isMouseJogador2OpBT( int mouseX, int mouseY );		
 		bool isMouseJogarBT( int mouseX, int mouseY );					
 
-		void setJogadorUmTipo( int tipo );
-		void setJogadorDoisTipo( int tipo );
 };
 
 #endif

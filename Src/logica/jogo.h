@@ -17,9 +17,9 @@
 #include "tela.h"
 #include "jogo_constantes.h"
 #include "peca_jogada_params.h"
+#include "jogo_driver.h"
 
 #include <string>
-#include "jogo_driver.h"
 
 class BispoPecaJogada;
 class CavaloPecaJogada;
