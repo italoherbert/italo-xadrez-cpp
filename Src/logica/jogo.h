@@ -75,6 +75,7 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		bool audioLigado = true;
 		bool pausa = false;
+		bool fim = false;
 		
 		int jogadorNivel = NIVEL_NORMAL;
 		int computadorNivel = NIVEL_DIFICIL;
@@ -97,7 +98,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		
 		void reinicia();
 
-		void calculaJogadas( JogadaLista* lista, Pecas* pecas, bool isComp, bool isCaptura );
+		void calculaJogadas( JogadaLista* lista, Peca** jogPecas, Peca** compPecas, bool isComp, bool isCaptura );
 
 		void filtraJogadas(
 					JogadaLista* lista,
@@ -113,26 +114,24 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool move( int posX, int posY, int novaPosX, int novaPosY );
 		bool move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX, int novaPosY );
 			
-		bool isJogadorReiEmXeque();
-		bool isCompReiEmXeque();
-	
-		bool isCaptura( Peca** outras,
+		bool isCapturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp );
 		
-		Peca* pecaCaptura( Peca** outras,
+		Peca* capturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp );
 					
-		bool isCaptura( Peca** outras,
+		bool isCapturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp, bool incluirRei );
 	
-		Peca* pecaCaptura( Peca** outras,
+		Peca* capturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp, bool incluirRei );
 	
-	
+		bool isReiEmXeque( bool isComp );
 		bool isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		int isXequeMateOuEmpate( bool isComp );
-		int isXequeMateOuEmpateOuXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
+		int isXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
+		bool isPossivelXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		bool verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1, int posX2, int posY2 );
 		int isPosicaoValida( int posX, int posY );			
@@ -212,6 +211,9 @@ class Jogo : public Pecas, public JogoConstantes {
 						
 		int getStatus();
 		void setStatus( int status );
+
+		bool isFim();
+		void setFim( bool fim );
 								
 		Movimento* getMovimento();
 		void setMovimento( Movimento* movimento );

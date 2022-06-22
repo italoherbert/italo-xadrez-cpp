@@ -34,7 +34,7 @@ void JogoGrafico::finaliza() {
 }
 		
 void JogoGrafico::desenha( SDL_Renderer* pintor ) {
-	SDL_SetRenderDrawColor( pintor, 255, 255, 255, SDL_ALPHA_OPAQUE );	
+	SDL_SetRenderDrawColor( pintor, 225, 225, 225, SDL_ALPHA_OPAQUE );
 	SDL_RenderClear( pintor );
 		
 	infoDesenho->desenha( jogo, gui, pintor );

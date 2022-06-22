@@ -71,6 +71,9 @@ int InfoDesenho::desenhaInfo( GUI* gui, SDL_Renderer* pintor, const char* rotulo
 	SDL_FreeSurface( texto_sf );
 	SDL_DestroyTexture( tx );
 
+	delete brancasNivelRotuloRet;
+	delete brancasNivelInfoRet;
+
 	return x2 + msg_l + infoEsp;
 }
 

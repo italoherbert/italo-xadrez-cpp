@@ -19,7 +19,7 @@ class AlgoritmoGerenciador {
 		AlgoritmoGerenciador( Jogo* jogo );
 		virtual ~AlgoritmoGerenciador();
 
-		void calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp );
+		bool calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp );
 
 };
 

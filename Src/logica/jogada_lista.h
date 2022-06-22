@@ -8,7 +8,7 @@
 class JogadaLista {
 			
 	private:
-		Jogada* jogadas[ 36 ];		
+		Jogada* jogadas[ 100 ];
 		int jogadas_tam;
 			
 	public:

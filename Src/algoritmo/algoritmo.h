@@ -47,7 +47,7 @@ class Algoritmo {
 		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp );
 
 		bool tentaDominioDoCentro( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
-		bool sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
+		bool sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp, Peca* ultPecaEscolhida );
 
 		Peca* sorteiaPeca( Peca** jps, Peca** cps, bool isComp );
 		Jogada* sorteiaPecaJogada( Peca* peca, Peca** jps, Peca** cps, bool isComp );

@@ -51,14 +51,14 @@ class AberturaGrafico : public Grafico {
 
 		SDL_Color* textoCor = new SDL_Color;
 
-		char opcoesStr[ 127 ];
-		char jogarStr[ 127 ];
-		char humanoStr[ 127 ];
-		char facilStr[ 127 ];
-		char normalStr[ 127 ];
-		char dificilStr[ 127 ];
-		char jogadorStr[ 127 ];
-		char computadorStr[ 127 ];
+		const std::string opcoesStr = "Opções";
+		const std::string jogarStr = "Jogar";
+		const std::string humanoStr = "Humano";
+		const std::string facilStr = "Fácil";
+		const std::string normalStr = "Normal";
+		const std::string dificilStr = "Difícil";
+		const std::string jogadorStr = "Jogador:";
+		const std::string computadorStr = "Computador:";
 
 		void desenhaMenu( SDL_Renderer* pintor );
 		void desenhaTexto( SDL_Renderer* pintor, SDL_Rect* ret, const char* rotulo, SDL_Color* cor );

@@ -36,7 +36,7 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	SDL_Event evento;
 	
 	bool fim = false;		
-	
+
 	if ( listener != NULL )
 		listener->inicializou();		
 	

@@ -54,14 +54,13 @@ AberturaGrafico::AberturaGrafico( GUI* gui, Jogo* jogo ) {
 	btnBordaCor->g = 255;
 	btnBordaCor->b = 255;
 
-	strcpy( opcoesStr, "Opções" );
-	strcpy( jogarStr, "Jogar" );
-	strcpy( humanoStr, "Humano" );
-	strcpy( facilStr, "Fácil" );
-	strcpy( normalStr, "Normal" );
-	strcpy( dificilStr, "Difícil" );
-	strcpy( jogadorStr, " Jogador: " );
-	strcpy( computadorStr, " Computador: " );
+	jogadorTextoOpcaoCor = opcaoTextoCor;
+	computadorTextoOpcaoCor = opcaoTextoCor;
+	jogarBTTextoOpcaoCor = btnTextoCor;
+
+	jogadorFundoOpcaoCor = opcaoFundoCor;
+	computadorFundoOpcaoCor = opcaoFundoCor;
+	jogarBTFundoOpcaoCor = btnFundoCor;
 }
 
 void AberturaGrafico::inicializa() {	
@@ -120,7 +119,6 @@ void AberturaGrafico::desenha( SDL_Renderer* pintor ) {
 	this->desenhaMenu( pintor );
 
 	SDL_RenderPresent( pintor );
-
 }
 
 void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
@@ -143,13 +141,13 @@ void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
 	TTF_Font* fonte = gui->getFonte();
 
 	int jog_str_l,jog_str_a;
-	TTF_SizeText( fonte, jogadorStr, &jog_str_l, &jog_str_a );
+	TTF_SizeText( fonte, jogadorStr.c_str(), &jog_str_l, &jog_str_a );
 
 	int comp_str_l, comp_str_a;
-	TTF_SizeText( fonte, computadorStr, &comp_str_l, &comp_str_a );
+	TTF_SizeText( fonte, computadorStr.c_str(), &comp_str_l, &comp_str_a );
 
 	int msg_l, msg_a;
-	TTF_SizeText( fonte, opcoesStr, &msg_l, &msg_a );
+	TTF_SizeText( fonte, opcoesStr.c_str(), &msg_l, &msg_a );
 
 	menuRet = new SDL_Rect;
 	menuRet->w = ( 2 * espacamento ) + larguraFundoTexto;
@@ -206,7 +204,7 @@ void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
 		
 	y += computadorOpcaoRet->h + ( espacamento );
 	
-	TTF_SizeText( fonte, jogarStr, &msg_l, &msg_a );
+	TTF_SizeText( fonte, jogarStr.c_str(), &msg_l, &msg_a );
 
 	int jogarBT_X =  ( menuRet->w -( msg_l + ( 2 * espBT_H ) ) ) / 2;
 
@@ -242,15 +240,15 @@ void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
 	this->desenhaBTFundo( pintor, computadorOpcaoRet, computadorFundoOpcaoCor, opcaoBordaCor );
 	this->desenhaBTFundo( pintor, jogarBTOpcaoRet, jogarBTFundoOpcaoCor, btnBordaCor );
 
-	this->desenhaTexto( pintor, opcoesTituloRet, opcoesStr, textoCor );
+	this->desenhaTexto( pintor, opcoesTituloRet, opcoesStr.c_str(), textoCor );
 
-	this->desenhaTexto( pintor, jogador1TextoRet, jogadorStr, textoCor );
+	this->desenhaTexto( pintor, jogador1TextoRet, jogadorStr.c_str(), textoCor );
 	this->desenhaTexto( pintor, jogadorTextoOpcaoRet, jogadorOpcaoTexto, jogadorTextoOpcaoCor );
 
-	this->desenhaTexto( pintor, jogador2TextoRet, computadorStr, textoCor );
+	this->desenhaTexto( pintor, jogador2TextoRet, computadorStr.c_str(), textoCor );
 	this->desenhaTexto( pintor, computadorTextoOpcaoRet, computadorOpcaoTexto, computadorTextoOpcaoCor );
 
-	this->desenhaTexto( pintor, jogarBTTextoOpcaoRet, jogarStr, jogarBTTextoOpcaoCor );
+	this->desenhaTexto( pintor, jogarBTTextoOpcaoRet, jogarStr.c_str(), jogarBTTextoOpcaoCor );
 }
 
 void AberturaGrafico::desenhaTexto( SDL_Renderer* pintor, SDL_Rect* rect, const char* texto, SDL_Color* cor ) {

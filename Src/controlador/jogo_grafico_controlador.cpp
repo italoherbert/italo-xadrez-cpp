@@ -12,7 +12,7 @@ using namespace std::chrono;
 JogoGraficoControlador::JogoGraficoControlador( Sistema* sistema ) {
 	this->sistema = sistema;
 	this->pecaSelecionada = NULL;
-	this->reiniciarJogo = false;
+	this->mensagemDelay = -1;
 }
 
 void JogoGraficoControlador::mousePressionado( int x, int y ) {
@@ -32,7 +32,7 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 	}
 
 	if ( jogo->getStatus() != Jogo::NAO_FIM ) {
-		reiniciarJogo = true;
+		jogo->setFim( true );
 		return;
 	}
 
@@ -93,8 +93,7 @@ void JogoGraficoControlador::teclaPressionada( int tecla ) {
 	if ( jogo->getStatus() == Jogo::NAO_FIM ) {
 		if ( tecla == TECLA_ESQ ) {
 			jogo->setStatus( Jogo::REINICIAR );
-
-			reiniciarJogo = true;
+			jogo->setFim( true );
 		} else if ( tecla == TECLA_ENTER ) {
 			jogo->setPausa( !jogo->isPausa() );
 			if ( jogo->isPausa() ) {
@@ -104,7 +103,7 @@ void JogoGraficoControlador::teclaPressionada( int tecla ) {
 			}
 		}
 	} else {
-		reiniciarJogo = true;
+		jogo->setFim( true );
 	}		
 }
 
@@ -116,20 +115,15 @@ void JogoGraficoControlador::executando() {
 
 	audio->tocaAudio();
 
-	if ( mensagemTempoStart != NO_START ) {
-		long t = sistema->tempo();
-		if ( t >= mensagemTempoStart ) {
-			this->removeMensagem();
-			mensagemTempoStart = NO_START;
-		}
+	if ( mensagemDelay != NO_DELAY ) {
+		SDL_Delay( mensagemDelay );
+		this->removeMensagem();
+		mensagemDelay = NO_DELAY;
 	}
 
 	int status = jogo->getStatus();
-	if ( status == Jogo::NAO_FIM )
-		status = this->verificaEProcessaXequeMate();
-
 	if ( status != Jogo::NAO_FIM ) {
-		if ( reiniciarJogo ) {
+		if ( jogo->isFim() ) {
 			if ( status == Jogo::JOGADOR_VENCEU ) {
 				jogo->incVitoriasCont( false );
 			} else if ( status == Jogo::COMPUTADOR_VENCEU ) {
@@ -137,11 +131,10 @@ void JogoGraficoControlador::executando() {
 			}
 
 			sistema->reinicia();
-			reiniciarJogo = false;
+			jogo->setFim( false );
 			return;
 		} else {
-			if ( mensagemTempoStart == NO_START )
-				this->setMensagem( "Tecle ou clique para reiniciar.", NO_DELAY );
+			this->setMensagem( "Tecle ou clique para reiniciar.", NO_DELAY );
 		}
 	}
 
@@ -158,10 +151,12 @@ void JogoGraficoControlador::executando() {
 			int posX, posY;
 			
 			bool isComp = jogo->isVezComputador();
-			algGer->calculaMelhorJogada( &posX, &posY, &jogada, isComp );
 
-			Peca* peca = jogo->getPeca( posX, posY );			
-			jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );
+			bool calculouJogada = algGer->calculaMelhorJogada( &posX, &posY, &jogada, isComp );
+			if ( calculouJogada ) {
+				Peca* peca = jogo->getPeca( posX, posY );
+				jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );
+			}
 		}
 	} else {		
 		Movimento* movimento = jogo->getMovimento();					
@@ -238,7 +233,9 @@ void JogoGraficoControlador::executando() {
 												
 				jogo->setMovimento( NULL );								
 
-				this->verificaSeXeque();
+				status = this->verificaEProcessaXequeMate();
+				if ( status == Jogo::NAO_FIM )
+					this->verificaSeXeque();
 			}
 		}						
 	}
@@ -264,10 +261,7 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 		jogo->deleta_pecas( compPecas );
 
 		if ( lista->getTam() == 0 ) {
-			bool reiEmXeque = false;
-			if ( isComp )
-				reiEmXeque = jogo->isCompReiEmXeque();
-			else reiEmXeque = jogo->isJogadorReiEmXeque();
+			bool reiEmXeque = jogo->isReiEmXeque( jogPecas, compPecas, isComp );
 			
 			std::string msg;
 			if ( reiEmXeque ) {			
@@ -283,15 +277,11 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 	return false;
 }
 
-void JogoGraficoControlador::verificaSeXeque() {
+bool JogoGraficoControlador::verificaSeXeque() {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
 
-	bool reiEmXeque = false;
-
-	if ( jogo->isVezComputador() )
-		reiEmXeque = jogo->isCompReiEmXeque();
-	else reiEmXeque = jogo->isJogadorReiEmXeque();
+	bool reiEmXeque = jogo->isReiEmXeque( jogo->isVezComputador() );
 
 	if ( reiEmXeque ) {
 		jogo->getJogadasPossiveis()->limpaJogadas();
@@ -300,7 +290,10 @@ void JogoGraficoControlador::verificaSeXeque() {
 
 		audio->setNumAudio( JogoAudio::AUDIO_XEQUE );
 		this->setMensagem( "Xeque!", MENSAGEM_DELAY );
+		return true;
 	}
+
+	return false;
 }
 
 int JogoGraficoControlador::verificaEProcessaXequeMate() {
@@ -340,20 +333,13 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 
 void JogoGraficoControlador::removeMensagem() {
 	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
-
-	mensagemTempoStart = NO_START;
 	jogoGrafico->getMensagemDesenho()->removeMensagem();
 }
 
 void JogoGraficoControlador::setMensagem( std::string mensagem, long delay ) {
 	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
-
 	jogoGrafico->getMensagemDesenho()->setMensagem( mensagem );
-	if ( delay == NO_DELAY ) {
-		mensagemTempoStart = NO_START;
-	} else {
-		mensagemTempoStart = sistema->tempo() + delay;
-	}
+	mensagemDelay = delay;
 }
 
 

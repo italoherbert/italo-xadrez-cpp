@@ -13,7 +13,7 @@ AlgoritmoGerenciador::~AlgoritmoGerenciador() {
 	delete this->minimaxAlgoritmo;
 }
 
-void AlgoritmoGerenciador::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp ) {
-	minimaxAlgoritmo->calculaMelhorJogada( posX, posY, jogada, isComp );
+bool AlgoritmoGerenciador::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp ) {
+	return minimaxAlgoritmo->calculaMelhorJogada( posX, posY, jogada, isComp );
 }
 

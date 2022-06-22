@@ -53,7 +53,7 @@ void PecaDesenho::carregaIMGs() {
 	
 	reiPreto = IMG_Load( "img/rei-preto.png" );			
 	reiBranco = IMG_Load( "img/rei-branco.png" );			
-	reiVermelho = IMG_Load( "img/rei-vermelho.png" );				
+	reiVermelho = IMG_Load( "img/rei-vermelho.png" );
 }
 
 void PecaDesenho::liberaIMGs() {

@@ -12,14 +12,12 @@ class JogoGraficoControlador : public JogoGraficoListener {
 		const long NO_START = -1;
 
 		const long NO_DELAY = -1;
-		const long MENSAGEM_DELAY = 2;
-		const long FIM_JOGO_MENSAGEM_DELAY = 4;
+		const long MENSAGEM_DELAY = 1500;
+		const long FIM_JOGO_MENSAGEM_DELAY = 4000;
 
 		Peca* pecaSelecionada = nullptr;
-		long mensagemTempoStart = -1;
+		long mensagemDelay = -1;
 		
-		bool reiniciarJogo = false;
-
 		Sistema* sistema;
 		
 		bool selecionaPeca( int posX, int posY, bool isComp );
@@ -28,7 +26,7 @@ class JogoGraficoControlador : public JogoGraficoListener {
 		void setMensagem( std::string mensagem, long delay );
 		void removeMensagem();
 		
-		void verificaSeXeque();
+		bool verificaSeXeque();
 		int verificaEProcessaXequeMate();
 
 	public:
