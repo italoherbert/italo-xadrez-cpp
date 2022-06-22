@@ -156,6 +156,9 @@ void JogoGraficoControlador::executando() {
 			if ( calculouJogada ) {
 				Peca* peca = jogo->getPeca( posX, posY );
 				jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );
+			} else {
+				SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_INFORMATION, "Erro", "Loop infinito.", NULL );
+				jogo->setFim( true );
 			}
 		}
 	} else {		

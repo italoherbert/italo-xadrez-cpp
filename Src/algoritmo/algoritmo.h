@@ -39,12 +39,8 @@ class Algoritmo {
 
 		MiniMaxNo* minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp );
 
-		float calculaPeso( Peca* peca );
-
 		void limpaMiniMaxArvore( MiniMaxNo* no );
 		void efetuaJogadas( MiniMaxNo* no, Peca* jps[Jogo::N_PECAS], Peca* cps[Jogo::N_PECAS] );
-
-		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp );
 
 		bool tentaDominioDoCentro( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
 		bool sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp, Peca* ultPecaEscolhida );
@@ -52,6 +48,9 @@ class Algoritmo {
 		Peca* sorteiaPeca( Peca** jps, Peca** cps, bool isComp );
 		Jogada* sorteiaPecaJogada( Peca* peca, Peca** jps, Peca** cps, bool isComp );
 
+		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp );
+
+		float calculaPeso( Peca* peca );
 
 	public:
 		Algoritmo( Jogo* jogo );

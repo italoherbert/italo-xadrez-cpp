@@ -111,8 +111,9 @@ class Jogo : public Pecas, public JogoConstantes {
 				int posX, int posY, int tipo, bool isComp, bool isCaptura );
 
 		bool move( int posX, int posY, int novaPosX, int novaPosY );
+
 		bool move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX, int novaPosY );
-			
+
 		bool isCapturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp );
 		
@@ -134,6 +135,8 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		bool verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1, int posX2, int posY2 );
 		int isPosicaoValida( int posX, int posY );			
+
+		bool isSomenteORei( Peca** pecas );
 
 		bool addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp );					
 				

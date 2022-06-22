@@ -147,20 +147,17 @@ int Jogo::isXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp ) 
 				return COMPUTADOR_VENCEU;
 			return JOGADOR_VENCEU;
 		}
-		if ( isComp == vezComputador )
+		if ( isComp != vezComputador )
 			return EMPATE;
 	}
 	return NAO_FIM;
 }
 
 bool Jogo::isPossivelXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp ) {
-	Peca* reiP = this->getPecaRei( !isComp );
-
 	Peca* jps[ N_PECAS ];
 	Peca* cps[ N_PECAS ];
 
-	this->copia_pecas( jps, cps, jogPecas, compPecas );
-
+	Peca* reiP = this->getPecaRei( isComp ? jogPecas : compPecas );
 	for( int i = -1; i <= 1; i++ ) {
 		for( int j = -1; j <= 1; j++ ) {
 			if ( i == 0 && j == 0 )
@@ -168,6 +165,11 @@ bool Jogo::isPossivelXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool 
 
 			int x = reiP->getPosX() + i;
 			int y = reiP->getPosY() + j;
+
+			if ( !this->isPosicaoValida( x, y ) )
+				continue;
+
+			this->copia_pecas( jps, cps, jogPecas, compPecas );
 
 			this->move( jps, cps, reiP->getPosX(), reiP->getPosY(), x, y );
 
@@ -177,12 +179,11 @@ bool Jogo::isPossivelXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool 
 				return false;
 			}
 
-			this->move( jps, cps, x, y, reiP->getPosX(), reiP->getPosY() );
+			this->deleta_pecas( jps );
+			this->deleta_pecas( cps );
 		}
 	}
 
-	this->deleta_pecas( jps );
-	this->deleta_pecas( cps );
 
 	return true;
 }
@@ -222,6 +223,18 @@ bool Jogo::isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 	}
 
 	return false;
+}
+
+bool Jogo::isSomenteORei( Peca** pecas ) {
+	for( int i = 0; i < N_PECAS; i++ ) {
+		Peca* p = this->getPeca( pecas, i );
+		if ( p == NULL )
+			continue;
+
+		if ( p->getTipo() != REI )
+			return false;
+	}
+	return true;
 }
 
 bool Jogo::isCapturaOutraPeca( Peca** outras,
