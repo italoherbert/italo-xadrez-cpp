@@ -49,10 +49,6 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 		*posX = no->posX;
 		*posY = no->posY;
 
-		if ( no->jogada == NULL ) {
-			cout << *posX << "  " << *posY << "     " << no->peso << endl;
-		}
-
 		if ( no->jogada != NULL ) {
 			*jogada = no->jogada->nova();
 			jogadaMinimaxEncontrada = true;
@@ -89,23 +85,26 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 
 	int status = Jogo::NAO_FIM;
 
-	bool possivelXequeMateOuEmpate = jogo->isPossivelXequeMateOuEmpate( jogPecas, compPecas, !isComp );
+	bool possivelXequeMateOuEmpate = jogo->isPossivelXequeMateOuEmpate( jogPecas, compPecas, isComp );
 	if ( possivelXequeMateOuEmpate )
-		status = jogo->isXequeMateOuEmpate( jogPecas, compPecas, !isComp );
+		status = jogo->isXequeMateOuEmpate( jogPecas, compPecas, isComp );
 
 	jogo->deleta_pecas( jogPecas );
 	jogo->deleta_pecas( compPecas );
 
 	if ( nivel <= 0 || status != Jogo::NAO_FIM ) {
-		if ( status == Jogo::EMPATE ) {
-			no->peso = ( isComp ? -nivel : nivel ) * 100;
-		} else {
-			if ( isComp ) {
-				if ( status == Jogo::COMPUTADOR_VENCEU )
-					no->peso = nivel * 1000;
+		if ( status != Jogo::NAO_FIM ) {
+			if ( status == Jogo::EMPATE ) {
+				no->peso = ( isComp ? -nivel : nivel ) * 100;
 			} else {
-				if ( status == Jogo::JOGADOR_VENCEU )
-					no->peso = -nivel * 1000;
+				no->peso = nivel * 1000;
+				if ( status == Jogo::JOGADOR_VENCEU ) {
+					if ( isComp )
+						no->peso *= -1.0;
+				} else if ( status == Jogo::COMPUTADOR_VENCEU ){
+					if ( !isComp )
+						no->peso *= -1.0;
+				}
 			}
 		}
 		return no;
@@ -169,8 +168,10 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 			}
 
 			MiniMaxNo* no2 = this->minimax( filho, !isMaximizador, nivel-1, alpha, beta, !isComp );
+			if ( no2->jogada == NULL )
+				continue;
 
-			if ( isMaximizador ){
+			if ( isMaximizador ) {
 				if ( no2->peso > minimaxNo->peso )
 					minimaxNo = no2;
 
@@ -208,7 +209,7 @@ float Algoritmo::move( Peca** jps, Peca** cps, Peca* p, Jogada* jog, bool isComp
 			return this->calculaPeso( capturada );
 
 	if ( jogo->isReiEmXeque( jps, cps, !isComp ) )
-		return 1.2;
+		return 0.8;
 
 	return 0;
 }

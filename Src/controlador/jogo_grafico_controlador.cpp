@@ -257,9 +257,6 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 		jogo->calculaJogadasPossiveis( lista, jogo, posX, posY, peca->getTipo(), isComp, false );
 		jogo->filtraJogadas( lista, jogPecas, compPecas, posX, posY, isComp );
 		
-		jogo->deleta_pecas( jogPecas );
-		jogo->deleta_pecas( compPecas );
-
 		if ( lista->getTam() == 0 ) {
 			bool reiEmXeque = jogo->isReiEmXeque( jogPecas, compPecas, isComp );
 			
@@ -272,6 +269,10 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 			audio->setNumAudio( JogoAudio::AUDIO_JOGADA_INVALIDA );
 			this->setMensagem( msg, MENSAGEM_DELAY );
 		}
+
+		jogo->deleta_pecas( jogPecas );
+		jogo->deleta_pecas( compPecas );
+
 		return true;
 	}
 	return false;
@@ -320,6 +321,7 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 				audioNum = JogoAudio::AUDIO_PERDEU;
 				break;
 			case Jogo::EMPATE:
+				jogo->incEmpatesCont();
 				mensagem = "O jogo empatou!";
 				audioNum = JogoAudio::AUDIO_EMPATOU;
 				break;

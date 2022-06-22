@@ -2,7 +2,8 @@
 #ifndef TABULEIRO_DESENHO_H
 #define TABULEIRO_DESENHO_H
 
-#include "desenho.h"
+#include "../gui/GUI.h"
+#include "../logica/Jogo.h"
 
 class TabuleiroDesenho {
 	

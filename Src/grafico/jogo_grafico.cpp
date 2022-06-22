@@ -13,6 +13,8 @@ JogoGrafico::JogoGrafico( Jogo* jogo, GUI* gui ) {
 	this->pecaDesenho = new PecaDesenho();
 	this->mensagemDesenho = new MensagemDesenho();
 	this->audioLigadoDesenho = new AudioLigadoDesenho();
+
+	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
 }
 
 JogoGrafico::~JogoGrafico() {

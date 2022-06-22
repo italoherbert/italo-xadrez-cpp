@@ -6,7 +6,6 @@
 
 #include "../gui/GUI.h"
 #include "../logica/jogo.h"
-#include "desenho.h"
 
 class PecaDesenho {
 	

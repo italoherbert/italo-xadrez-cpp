@@ -54,6 +54,7 @@ class Jogo : public Pecas, public JogoConstantes {
 				
 		int pretasVitoriasCont = 0;
 		int brancasVitoriasCont = 0;
+		int empatesCont = 0;
 
 		JogadaLista* jogadas;
 		Peca* jogadaPeca = nullptr;
@@ -97,8 +98,6 @@ class Jogo : public Pecas, public JogoConstantes {
 		~Jogo();
 		
 		void reinicia();
-
-		void calculaJogadas( JogadaLista* lista, Peca** jogPecas, Peca** compPecas, bool isComp, bool isCaptura );
 
 		void filtraJogadas(
 					JogadaLista* lista,
@@ -229,6 +228,9 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		bool getVitoriasCont( bool isComp );
 		void incVitoriasCont( bool isComp );
+
+		bool getEmpatesCont();
+		void incEmpatesCont();
 				
 		JogoDriver* getJogoDriver();
 

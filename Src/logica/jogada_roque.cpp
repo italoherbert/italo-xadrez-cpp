@@ -11,6 +11,11 @@ JogadaRoque::JogadaRoque( int reiPosX, int reiPosY, int torrePosX, int torrePosY
 	this->torre = torre;		
 }
 
+JogadaRoque::~JogadaRoque() {
+	delete rei;
+	delete torre;
+}
+
 JogadaRoque* JogadaRoque::nova() {
 	Jogada* jog = Jogada::nova();	
 	int posX = jog->getPosX();
