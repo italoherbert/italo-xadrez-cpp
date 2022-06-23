@@ -175,6 +175,10 @@ void JogoGraficoControlador::executando() {
 			peca->setAnimPosX( 0 );
 			peca->setAnimPosY( 0 );
 
+			bool isComp = jogo->isVezComputador();
+
+			PecaMov* pmov = new PecaMov( posX, posY, jogada->getPosX(), jogada->getPosY(), isComp );
+
 			bool moveu;	
 						
 			if( jogada->getTipo() == Jogada::ROQUE ) {						
@@ -219,7 +223,8 @@ void JogoGraficoControlador::executando() {
 						audio->setNumAudio( JogoAudio::AUDIO_COMP_JOGOU );				
 					else audio->setNumAudio( JogoAudio::AUDIO_JOG_JOGOU );				
 				}
-			
+
+				jogo->setUltimoMov( pmov );
 				jogo->setVezComputador( !jogo->isVezComputador() );
 								
 				peca->setMoveuContador( peca->getMoveuContador() + 1 );							
@@ -227,9 +232,8 @@ void JogoGraficoControlador::executando() {
 				if( peca->getTipo() == Jogo::PEAO )
 					if( jogada->getPosY() == 0 || jogada->getPosY() == 7 )
 						peca->setTipo( Jogo::RAINHA );						
-					
-				jogo->setUltimaPeca( peca );
-							
+
+
 				jogo->getJogadasPossiveis()->limpaJogadas();
 				jogo->setJogadorJogadaPeca( NULL );
 				pecaSelecionada = NULL;	
@@ -261,7 +265,7 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 		jogo->filtraJogadas( lista, jogPecas, compPecas, posX, posY, isComp );
 		
 		if ( lista->getTam() == 0 ) {
-			bool reiEmXeque = jogo->isReiEmXeque( jogPecas, compPecas, isComp );
+			bool reiEmXeque = jogo->isOutroReiEmXeque( jogPecas, compPecas, !isComp );
 			
 			std::string msg;
 			if ( reiEmXeque ) {			
@@ -285,7 +289,7 @@ bool JogoGraficoControlador::verificaSeXeque() {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
 
-	bool reiEmXeque = jogo->isReiEmXeque( jogo->isVezComputador() );
+	bool reiEmXeque = jogo->isReiEmXeque( !jogo->isVezComputador() );
 
 	if ( reiEmXeque ) {
 		jogo->getJogadasPossiveis()->limpaJogadas();
@@ -304,9 +308,9 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
 
-	int status = jogo->isXequeMateOuEmpate( true );
+	int status = jogo->isEstaEmXequeMateOuEmpate( true );
 	if ( status == Jogo::NAO_FIM )
-		status = jogo->isXequeMateOuEmpate( false );
+		status = jogo->isEstaEmXequeMateOuEmpate( false );
 	jogo->setStatus( status );
 
 	if ( status != Jogo::NAO_FIM ) {
@@ -324,6 +328,7 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 				audioNum = JogoAudio::AUDIO_PERDEU;
 				break;
 			case Jogo::EMPATE:
+				cout << jogo->getEmpatesCont()<< endl;
 				jogo->incEmpatesCont();
 				mensagem = "O jogo empatou!";
 				audioNum = JogoAudio::AUDIO_EMPATOU;

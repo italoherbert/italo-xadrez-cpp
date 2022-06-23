@@ -14,6 +14,7 @@
 #include "movimento.h"
 #include "peca.h"
 #include "pecas.h"
+#include "peca_mov.h"
 #include "tela.h"
 #include "jogo_constantes.h"
 #include "peca_jogada_params.h"
@@ -59,9 +60,9 @@ class Jogo : public Pecas, public JogoConstantes {
 		JogadaLista* jogadas;
 		Peca* jogadaPeca = nullptr;
 		
-		Peca* ultPeca = nullptr;
-		Peca* ultPecaComp = nullptr;
-		Peca* ultPecaJog = nullptr;
+		PecaMov* ultPecaMov = nullptr;
+		PecaMov* ultCompPecaMov = nullptr;
+		PecaMov* ultJogadorPecaMov = nullptr;
 
 		int compJogadasCont = 0;
 		int compJogadaRepetidaCont = 0;
@@ -127,11 +128,11 @@ class Jogo : public Pecas, public JogoConstantes {
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp, bool incluirRei );
 	
 		bool isReiEmXeque( bool isComp );
-		bool isReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
+		bool isOutroReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
 
-		int isXequeMateOuEmpate( bool isComp );
-		int isXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
-		bool isPossivelXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
+		int isEstaEmXequeMateOuEmpate( bool isComp );
+		int isEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
+		bool isPossivelEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		bool verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1, int posX2, int posY2 );
 		int isPosicaoValida( int posX, int posY );			
@@ -191,10 +192,9 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool isPausa();
 		void setPausa( bool pausar );
 
-		Peca* getCompOuJogadorUltimaPeca( bool isComp );
-
-		Peca* getUltimaPeca();
-		void setUltimaPeca( Peca* peca );
+		PecaMov* getUltimoMov();
+		PecaMov* getUltimoMov( bool isComp );
+		void setUltimoMov( PecaMov* pecaMov );
 
 		int getJogadaRepetidaCont( bool isComp );
 		void incJogadaRepetidaCont( bool isComp );

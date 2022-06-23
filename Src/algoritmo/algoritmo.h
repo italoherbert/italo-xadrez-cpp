@@ -19,6 +19,9 @@ typedef struct MiniMaxNo {
 	int posX;
 	int posY;
 	float peso;
+	int nivel;
+	bool terminal;
+	bool venceu;
 	struct MiniMaxNo* pai;
 	struct MiniMaxNoLista* filhos;
 }MinMaxNo;
@@ -43,12 +46,12 @@ class Algoritmo {
 		void efetuaJogadas( MiniMaxNo* no, Peca* jps[Jogo::N_PECAS], Peca* cps[Jogo::N_PECAS] );
 
 		bool tentaDominioDoCentro( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );
-		bool sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp, Peca* ultPecaEscolhida );
+		bool sorteiaJogada( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp, PecaMov* ultMov );
 
 		Peca* sorteiaPeca( Peca** jps, Peca** cps, bool isComp );
 		Jogada* sorteiaPecaJogada( Peca* peca, Peca** jps, Peca** cps, bool isComp );
 
-		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp );
+		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp, int nivel, bool* terminal, bool* venceu );
 
 		float calculaPeso( Peca* peca );
 
