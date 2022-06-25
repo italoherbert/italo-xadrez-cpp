@@ -18,7 +18,7 @@ class Jogada {
 		const static int EN_PASSANT = 3;
 		
 		Jogada( int posX, int posY, Peca* captura, int tipo );
-		~Jogada();
+		virtual ~Jogada();
 
 		Jogada* nova();
 

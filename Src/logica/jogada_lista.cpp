@@ -27,12 +27,14 @@ void JogadaLista::addJogada( Jogada* jogada ) {
 	jogadas[ jogadas_tam++ ] = jogada;
 }
 
-void JogadaLista::zeraTamContador() {
+void JogadaLista::deletaTodasAsJogadas() {
+	for( int i = 0; i < jogadas_tam; i++ )
+		delete jogadas[ i ];
 	jogadas_tam = 0;
 }
 
 void JogadaLista::setTo( JogadaLista* lista ) {
-	lista->zeraTamContador();
+	lista->deletaTodasAsJogadas();
 	for( int i = 0; i < jogadas_tam; i++ ) {
 		int posX = jogadas[i]->getPosX();
 		int posY = jogadas[i]->getPosY();

@@ -42,7 +42,7 @@ class Algoritmo {
 
 		MiniMaxNo* minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp );
 
-		void limpaMiniMaxArvore( MiniMaxNo* no );
+		void limpaMiniMaxArvore( MiniMaxNo** no );
 		void efetuaJogadas( MiniMaxNo* no, Peca* jps[Jogo::N_PECAS], Peca* cps[Jogo::N_PECAS] );
 
 		bool tentaDominioDoCentro( int* posX, int* posY, Jogada** jogada, Peca** jps, Peca** cps, bool isComp );

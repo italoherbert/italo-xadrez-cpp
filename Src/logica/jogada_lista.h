@@ -19,7 +19,7 @@ class JogadaLista {
 		void addJogada( int posX, int posY, Peca* captura );
 		void addJogada( Jogada* jogada );	
 		
-		void zeraTamContador();
+		void deletaTodasAsJogadas();
 		
 		void setTo( JogadaLista* lista );
 		

@@ -73,7 +73,7 @@ void Jogo::reinicia() {
 		//computadorPecas[i]->setRemovida( i > 7 ? true : false );
 	}
 
-	jogadas->zeraTamContador();
+	jogadas->deletaTodasAsJogadas();
 
 	ultPecaMov = nullptr;
 	ultCompPecaMov = nullptr;
@@ -214,8 +214,8 @@ int Jogo::isEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isC
 		if ( lista->getTam() > 0 )
 			fim = false;
 
-		this->deleta_jogadas( lista );
-		this->deleta_pecas( pecas );
+		delete lista;
+		delete pecas;
 	}
 
 	if ( fim ) {
@@ -255,16 +255,16 @@ bool Jogo::isOutroReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 			Jogada* jogada = lista->getJogada( j );
 			if( jogada->getCaptura() != NULL ) {
 				if ( jogada->getCaptura()->getTipo() == REI ) {
-					this->deleta_jogadas( lista );
-					this->deleta_pecas( jogoPecas );
+					delete lista;
+					delete jogoPecas;
 
 					return true;
 				}
 			}
 		}
 
-		this->deleta_jogadas( lista );
-		this->deleta_pecas( jogoPecas );
+		delete lista;
+		delete jogoPecas;
 	}
 
 	return false;
@@ -346,15 +346,15 @@ Peca* Jogo::capturaOutraPeca( Peca** outras,
 				Jogada* jogada = lista->getJogada( j );			
 				
 				if ( jogada->getPosX() == posX && jogada->getPosY() == posY ) {									
-					this->deleta_jogadas( lista );
-					this->deleta_pecas( jpecas );
+					delete lista;
+					delete jpecas;
 						
 					return peca;
 				}
 			}			
 			
-			this->deleta_jogadas( lista );
-			this->deleta_pecas( jpecas );
+			delete lista;
+			delete jpecas;
 		}	
 	
 	}
@@ -362,17 +362,17 @@ Peca* Jogo::capturaOutraPeca( Peca** outras,
 	return NULL;				
 }
 
-bool Jogo::verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1, int posX2, int posY2 ) {
-	Peca* peca = this->getPeca( jps, cps, posX1, posY1 );
+bool Jogo::verificaSeJogadaValida( Peca** jogPecas, Peca** compPecas, int posX1, int posY1, int posX2, int posY2 ) {
+	Peca* peca = this->getPeca( jogPecas, compPecas, posX1, posY1 );
 	if ( peca == NULL )
 		return false;
 
 	JogadaLista* lista = new JogadaLista();
 	JogoPecas* jogoPecas = new JogoPecas( this );
-	jogoPecas->setPecas( jps, cps );
+	jogoPecas->setPecas( jogPecas, compPecas );
 
 	this->calculaJogadasPossiveis( lista, jogoPecas, peca->getPosX(), peca->getPosY(), peca->getTipo(), peca->isDeComp(), false );
-	this->filtraJogadas( lista, jps, cps, peca->getPosX(), peca->getPosY(), peca->isDeComp() );
+	this->filtraJogadas( lista, jogPecas, compPecas, peca->getPosX(), peca->getPosY(), peca->isDeComp() );
 
 	int tam = lista->getTam();
 
@@ -383,8 +383,8 @@ bool Jogo::verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1,
 			valida = true;
 	}
 
-	this->deleta_jogadas( lista );
-	this->deleta_pecas( jogoPecas );
+	delete lista;
+	delete jogoPecas;
 
 	return valida;
 }
@@ -434,11 +434,8 @@ void Jogo::filtraJogadas(
 
 		this->move( jps, cps, posX, posY, jogada->getPosX(), jogada->getPosY() );
 
-		if ( !this->isOutroReiEmXeque( jps, cps, !isComp ) ) {
-			jogadas->addJogada( jogada );
-		} else {
-			delete jogada;
-		}
+		if ( !this->isOutroReiEmXeque( jps, cps, !isComp ) )
+			jogadas->addJogada( jogada->nova() );
 
 		this->deleta_pecas( jps );
 		this->deleta_pecas( cps );
@@ -446,7 +443,7 @@ void Jogo::filtraJogadas(
 
 	jogadas->setTo( lista );
 
-	this->deleta_jogadas( jogadas );
+	delete jogadas;
 }
 
 bool Jogo::addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp ) {					
@@ -666,30 +663,13 @@ void Jogo::deleta_pecas() {
 	this->deleta_pecas( computadorPecas );
 }
 
-void Jogo::deleta_pecas( Pecas* pecas ) {
-	if ( pecas != NULL ) {
-		delete pecas;
-		pecas = NULL;
-	}
-}
-
-void Jogo::deleta_jogadas( JogadaLista* lista ) {
-	if ( lista != NULL ) {
-		delete lista;
-		lista = NULL;
-	}	
-}
-
 void Jogo::deleta_pecas( Peca** vetor ) {
 	this->deleta_pecas( vetor, N_PECAS );
 }
 
 void Jogo::deleta_pecas( Peca** vetor, int tam ) {
-	if ( vetor != NULL ) {
-		for( int i = 0; i < tam; i++ )
-			if ( vetor[i] != NULL )
-				delete vetor[i];
-	}
+	for( int i = 0; i < tam; i++ )
+		delete vetor[i];
 }
 
 PecaMov* Jogo::getUltimoMov( bool isComp ) {

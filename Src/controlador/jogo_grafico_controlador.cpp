@@ -55,7 +55,7 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 				Peca* p = jogo->getPeca( posX, posY );
 				if ( p != NULL ) {
 					if ( !p->isIgual( pecaSelecionada ) && p->isDeComp() == jogo->isVezComputador() ) {
-						jogo->getJogadasPossiveis()->zeraTamContador();
+						jogo->getJogadasPossiveis()->deletaTodasAsJogadas();
 						jogo->setJogadorJogadaPeca( NULL );
 						pecaSelecionada = NULL;
 					}
@@ -77,7 +77,7 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 					if ( jogada != NULL ) {				
 						jogo->setMovimento( animacao->criaMovimentos( jogada, pecaSelecionada ) );	
 					} else {
-						jogo->getJogadasPossiveis()->zeraTamContador();
+						jogo->getJogadasPossiveis()->deletaTodasAsJogadas();
 						jogo->setJogadorJogadaPeca( NULL );
 						pecaSelecionada = NULL;	
 					}
@@ -186,7 +186,7 @@ void JogoGraficoControlador::executando() {
 
 			peca->setMoveuContador( peca->getMoveuContador() + 1 );
 
-			jogo->getJogadasPossiveis()->zeraTamContador();
+			jogo->getJogadasPossiveis()->deletaTodasAsJogadas();
 			jogo->setJogadorJogadaPeca( NULL );
 			pecaSelecionada = NULL;
 
@@ -206,7 +206,7 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 	Peca* peca = jogo->getPeca( posX, posY );
 	if ( peca != NULL ) {
 		JogadaLista* lista = jogo->getJogadasPossiveis();
-		lista->zeraTamContador();
+		lista->deletaTodasAsJogadas();
 			
 		Peca* jogPecas[ Jogo::N_PECAS ];
 		Peca* compPecas[ Jogo::N_PECAS ];
@@ -243,7 +243,7 @@ bool JogoGraficoControlador::verificaSeXeque() {
 	bool reiEmXeque = jogo->isOutroReiEmXeque( !jogo->isVezComputador() );
 
 	if ( reiEmXeque ) {
-		jogo->getJogadasPossiveis()->zeraTamContador();
+		jogo->getJogadasPossiveis()->deletaTodasAsJogadas();
 		jogo->setJogadorJogadaPeca( NULL );
 		pecaSelecionada = NULL;
 
