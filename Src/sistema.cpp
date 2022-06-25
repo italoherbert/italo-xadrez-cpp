@@ -72,8 +72,12 @@ void Sistema::reinicia() {
 	gui->reinicia();
 }
 
-void Sistema::exec() {
-	gui->executa( "Jogo de Xadrez", Consts::JANELA_LARGURA, Consts::JANELA_ALTURA );
+void Sistema::execGUI() {
+	gui->execGUI( "Jogo de Xadrez", Consts::JANELA_LARGURA, Consts::JANELA_ALTURA );
+}
+
+void Sistema::execJogo( void* id ) {
+	gui->execJogo( id );
 }
 
 long Sistema::tempo() {

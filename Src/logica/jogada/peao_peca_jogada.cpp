@@ -99,7 +99,7 @@ void PeaoPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 				Peca* compPecaDir = pecas->getComputadorPeca( posX+1, posY );
 				if ( compPecaDir != NULL )
 					if ( compPecaDir->getTipo() == Jogo::PEAO && compPecaDir->getMoveuContador() == 1 )
-						if ( pecas->getPeca( posX+1, posY - 1 ) == NULL )
+						if ( pecas->getPeca( posX+1, posY-1 ) == NULL )
 							lista->addJogada( new JogadaEnPassant( posX+1, posY-1, compPecaDir ) );
 			}
 		}

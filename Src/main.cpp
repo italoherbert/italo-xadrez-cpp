@@ -3,9 +3,19 @@
 
 #include <SDL2/SDL.h>
 
-int main(int argc, char** argv) {		
-	Sistema* sistema = new Sistema();
-	sistema->exec();
+#include <windows.h>
+#include <process.h>
+
+Sistema * sistema = new Sistema();
+
+void execJogo( void* id ) {
+	sistema->execJogo( id );
+}
+
+int main(int argc, char** argv) {
+	_beginthread( execJogo, 0, (void*)"Thread 0" );
+
+	sistema->execGUI();
 
 	return 0;
 }

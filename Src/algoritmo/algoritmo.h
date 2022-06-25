@@ -53,6 +53,7 @@ class Algoritmo {
 
 		float move( Peca**, Peca**, Peca* p, Jogada* jogada, bool isComp, int nivel, bool* terminal, bool* venceu );
 
+		float somaPesos( Peca** jps, Peca** cps, bool isComp );
 		float calculaPeso( Peca* peca );
 
 	public:

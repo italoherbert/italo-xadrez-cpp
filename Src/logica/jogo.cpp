@@ -99,13 +99,13 @@ bool Jogo::move( int posX, int posY, int novaPosX, int novaPosY ) {
 	return this->move( jogadorPecas, computadorPecas, posX, posY, novaPosX, novaPosY );
 }
 
-bool Jogo::move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX, int novaPosY ) {
-	Peca* novaPos = this->getPeca( pecas1, pecas2, novaPosX, novaPosY );	
+bool Jogo::move( Peca** jogPecas, Peca** compPecas, int posX, int posY, int novaPosX, int novaPosY ) {
+	Peca* novaPos = this->getPeca( jogPecas, compPecas, novaPosX, novaPosY );	
 	
 	if ( novaPos != NULL )
 		novaPos->setRemovida( true );	
 	
-	Peca* peca = this->getPeca( pecas1, pecas2, posX, posY );
+	Peca* peca = this->getPeca( jogPecas, compPecas, posX, posY );
 								
 	if ( peca != NULL ) {		
 		peca->setPosX( novaPosX );
@@ -114,6 +114,49 @@ bool Jogo::move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX,
 	}
 	
 	return false;
+}
+
+void Jogo::move2( Peca* p, Jogada* jog ) {
+	this->move2( jogadorPecas, computadorPecas, p, jog );
+}
+
+void Jogo::move2( Peca** jogPecas, Peca** compPecas, Peca* p, Jogada* jogada ) {
+	p->setAnimPosX( 0 );
+	p->setAnimPosY( 0 );
+
+	if( jogada->getTipo() == Jogada::ROQUE ) {
+		JogadaRoque* jr = (JogadaRoque*)jogada;
+
+		Peca* rei = jr->getRei();
+		Peca* torre = jr->getTorre();
+		int reiPosX = jr->getReiPosX();
+		int reiPosY = jr->getReiPosY();
+		int torrePosX = jr->getTorrePosX();
+		int torrePosY = jr->getTorrePosY();
+
+		this->registraRoque( p->isDeComp() );
+
+		Peca* pTorre = this->getPeca( jogPecas, compPecas, torre->getPosX(), torre->getPosY() );
+		pTorre->setAnimPosX( 0 );
+		pTorre->setAnimPosY( 0 );
+
+		this->move( jogPecas, compPecas, rei->getPosX(), rei->getPosY(), reiPosX, reiPosY );
+		this->move( jogPecas, compPecas, torre->getPosX(), torre->getPosY(), torrePosX, torrePosY );
+	} else if ( jogada->getTipo() == Jogada::EN_PASSANT ){
+		int capPosX = jogada->getCaptura()->getPosX();
+		int capPosY = jogada->getCaptura()->getPosY();
+
+		Peca* capturada = this->getPeca( jogPecas, compPecas, capPosX, capPosY );
+		capturada->setRemovida( true );
+
+		this->move( jogPecas, compPecas, p->getPosX(), p->getPosY(), jogada->getPosX(), jogada->getPosY() );
+	} else {
+		this->move( jogPecas, compPecas, p->getPosX(), p->getPosY(), jogada->getPosX(), jogada->getPosY() );
+	}
+
+	if( p->getTipo() == Jogo::PEAO )
+		if( jogada->getPosY() == 0 || jogada->getPosY() == 7 )
+			p->setTipo( Jogo::RAINHA );
 }
 
 bool Jogo::isPossivelEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp ) {
@@ -146,7 +189,6 @@ bool Jogo::isPossivelEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas,
 			this->deleta_pecas( cps );
 		}
 	}
-
 
 	return true;
 }
@@ -190,6 +232,11 @@ int Jogo::isEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isC
 	return NAO_FIM;
 }
 
+
+bool Jogo::isOutroReiEmXeque( bool isComp ) {
+	return this->isOutroReiEmXeque( jogadorPecas, computadorPecas, isComp );
+}
+
 bool Jogo::isOutroReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 	for( int i = 0; i < N_PECAS; i++ ) {
 		Peca* peca = ( isComp ? compPecas[ i ] : jogPecas[ i ] );
@@ -221,10 +268,6 @@ bool Jogo::isOutroReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp ) {
 	}
 
 	return false;
-}
-
-bool Jogo::isReiEmXeque( bool isComp ) {
-	return this->isOutroReiEmXeque( jogadorPecas, computadorPecas, isComp );
 }
 
 bool Jogo::isSomenteORei( Peca** pecas ) {
@@ -346,8 +389,8 @@ bool Jogo::verificaSeJogadaValida( Peca** jps, Peca** cps, int posX1, int posY1,
 	return valida;
 }
 
-void Jogo::calculaJogadasPossiveis( JogadaLista* lista, Pecas* pecas, int posX, int posY, int tipo, bool isComp, bool isCaptura ) {
-	PecaJogadaParams* params = new PecaJogadaParams( this, lista, pecas, posX, posY, isComp, isCaptura );
+void Jogo::calculaJogadasPossiveis( JogadaLista* lista, Pecas* pecas, int posX, int posY, int tipo, bool isComp, bool inclurRoque ) {
+	PecaJogadaParams* params = new PecaJogadaParams( this, lista, pecas, posX, posY, isComp, inclurRoque );
 	switch( tipo ) {
 		case Jogo::PEAO:
 			peaoPecaJogada->calculaJogadasPossiveis( params );
@@ -525,6 +568,16 @@ Peca* Jogo::getPecaBispoEsq( Peca** vetor ) {
 
 Peca* Jogo::getPecaBispoDir( Peca** vetor ) {
 	Peca* p = vetor[ PECA_BISPO_DIR_INDICE ];
+	return ( p->isRemovida() ? NULL : p );
+}
+
+Peca* Jogo::getPecaTorreEsq( Peca** vetor ) {
+	Peca* p = vetor[ PECA_TORRE_ESQ_INDICE ];
+	return ( p->isRemovida() ? NULL : p );
+}
+
+Peca* Jogo::getPecaTorreDir( Peca** vetor ) {
+	Peca* p = vetor[ PECA_TORRE_DIR_INDICE ];
 	return ( p->isRemovida() ? NULL : p );
 }
 

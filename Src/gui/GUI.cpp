@@ -10,7 +10,7 @@ void GUI::reinicia() {
 	this->setGraficoTipo( ABERTURA_GRAFICO );
 }
 
-void GUI::executa( std::string titulo, int largura, int altura ) {
+void GUI::execGUI( std::string titulo, int largura, int altura ) {
 	SDL_Init( SDL_INIT_EVERYTHING );
 	IMG_Init( IMG_INIT_PNG );
 	Mix_Init( MIX_INIT_MID );
@@ -35,12 +35,10 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	
 	SDL_Event evento;
 	
-	bool fim = false;		
-
 	if ( listener != NULL )
 		listener->inicializou();		
 	
-	while( !fim ) {
+	while( !drv->isFim() ) {
 		switch ( graficoTipo ) {
 			case ABERTURA_GRAFICO:
 				aberturaGrafico->desenha( pintor );
@@ -50,16 +48,12 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 				break;
 		}
 
-		if ( graficoTipo == JOGO_GRAFICO )
-			if ( jogoGraficoListener != NULL )
-				jogoGraficoListener->executando();
-
 		if ( listener != NULL ) {		
 			while( SDL_PollEvent( &evento ) != 0 ) {
 				switch( evento.type ) {
 					case SDL_QUIT:					
 						listener->janelaFechada();
-						fim = true;
+						drv->setFim( true );
 						break;
 					case SDL_MOUSEBUTTONDOWN:
 						if ( graficoTipo == ABERTURA_GRAFICO ) {
@@ -113,6 +107,16 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	SDL_DestroyRenderer( pintor );
 	SDL_DestroyWindow( janela );
 	SDL_Quit();	
+}
+
+void GUI::execJogo( void* id ) {
+	while( !drv->isFim() ) {
+		if ( graficoTipo == JOGO_GRAFICO )
+			if ( jogoGraficoListener != NULL )
+				jogoGraficoListener->executando();
+
+		SDL_Delay( DELAY );
+	}
 }
 
 void GUI::setCursorTipo( int tipo ) {

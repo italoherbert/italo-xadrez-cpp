@@ -53,7 +53,8 @@ class GUI {
 		
 		void reinicia();
 		
-		void executa( std::string titulo, int largura, int altura );
+		void execGUI( std::string titulo, int largura, int altura );
+		void execJogo( void* id );
 
 		void carregaTelaDIM( int* largura, int* altura );
 

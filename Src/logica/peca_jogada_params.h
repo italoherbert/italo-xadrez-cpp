@@ -16,7 +16,7 @@ class PecaJogadaParams {
 		int posX;
 		int posY;
 		bool isComp;
-		bool isCaptura;				
+		bool isIncluirRoque;				
 		
 		Pecas* pecas;
 					
@@ -25,14 +25,14 @@ class PecaJogadaParams {
 				Jogo* jogo,
 				JogadaLista* lista,
 				Pecas* pecas,
-				int posX, int posY, bool isComp, bool isCaptura );
+				int posX, int posY, bool isComp, bool incluirRoque );
 
 		Jogo* getJogo();
 		JogadaLista* getJogadas();
 		int getPosX();
 		int getPosY();
 		bool getIsComp();
-		bool getIsCaptura();
+		bool getIsIncluirRoque();
 	
 		Pecas* getPecas();
 	

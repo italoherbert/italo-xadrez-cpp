@@ -12,8 +12,7 @@ JogadaLista::JogadaLista() {
 
 JogadaLista::~JogadaLista() {
 	for( int i = 0; i < jogadas_tam; i++ )
-		if ( jogadas[ i ] != NULL )
-			delete jogadas[ i ];
+		delete jogadas[ i ];
 }
 
 void JogadaLista::addJogada( int posX, int posY, Peca* captura, int tipo ) {
@@ -29,8 +28,10 @@ void JogadaLista::addJogada( Jogada* jogada ) {
 }
 
 void JogadaLista::limpaJogadas() {
-	for( int i = 0; i < jogadas_tam; i++ )
+	for( int i = 0; i < jogadas_tam; i++ ) {
+		delete jogadas[ i ];
 		jogadas[ i ] = NULL;
+	}
 	jogadas_tam = 0;
 }
 

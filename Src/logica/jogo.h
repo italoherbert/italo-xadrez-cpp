@@ -42,7 +42,8 @@ class Jogo : public Pecas, public JogoConstantes {
 			{ 6, 0, 5, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
 			{ 4, 1, 4, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
 			{ 1, 0, 2, 2, JOGADA_CENTRO_SE_NAO_CAPTURADA },
-			{ 5, 0, 1, 4, JOGADA_CENTRO_SE_NAO_CAPTURADA }
+			{ 5, 0, 1, 4, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 4, 0, 6, 0, JOGADA_CENTRO_SE_NAO_CAPTURADA }
 		};
 
 		int jogadasJogadorDominioCentro[ N_JOGADAS_DOMINIO_CENTRO ][ 5 ] = {
@@ -50,7 +51,8 @@ class Jogo : public Pecas, public JogoConstantes {
 			{ 6, 7, 5, 5, JOGADA_CENTRO_SE_NAO_CAPTURADA },
 			{ 4, 6, 4, 5, JOGADA_CENTRO_SE_NAO_CAPTURADA },
 			{ 1, 7, 2, 5, JOGADA_CENTRO_SE_NAO_CAPTURADA },
-			{ 5, 7, 1, 3, JOGADA_CENTRO_SE_NAO_CAPTURADA }
+			{ 5, 7, 1, 3, JOGADA_CENTRO_SE_NAO_CAPTURADA },
+			{ 4, 7, 6, 7, JOGADA_CENTRO_SE_NAO_CAPTURADA }
 		};
 				
 		int pretasVitoriasCont = 0;
@@ -79,8 +81,8 @@ class Jogo : public Pecas, public JogoConstantes {
 		bool pausa = false;
 		bool fim = false;
 		
-		int jogadorNivel = NIVEL_NORMAL;
-		int computadorNivel = NIVEL_DIFICIL;
+		int jogadorNivel = NIVEL_HUMANO;
+		int computadorNivel = NIVEL_NORMAL;
 		int status = 0;
 		
 		Movimento* movimento = nullptr;
@@ -93,6 +95,9 @@ class Jogo : public Pecas, public JogoConstantes {
 		RainhaPecaJogada* rainhaPecaJogada;
 
 		JogoDriver* drv;
+
+		bool move( int posX, int posY, int novaPosX, int novaPosY );
+		bool move( Peca** jogPecas, Peca** compPecas, int posX, int posY, int novaPosX, int novaPosY );
 
 	public:
 		Jogo( JogoDriver* drv );
@@ -111,9 +116,8 @@ class Jogo : public Pecas, public JogoConstantes {
 				Pecas* pecas,
 				int posX, int posY, int tipo, bool isComp, bool isCaptura );
 
-		bool move( int posX, int posY, int novaPosX, int novaPosY );
-
-		bool move( Peca** pecas1, Peca** pecas2, int posX, int posY, int novaPosX, int novaPosY );
+		void move2( Peca* p, Jogada* jog );
+		void move2( Peca** jogPecas, Peca** compPecas, Peca* p, Jogada* jogada );
 
 		bool isCapturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp );
@@ -127,7 +131,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		Peca* capturaOutraPeca( Peca** outras,
 					Peca** jogPecas, Peca** compPecas, int posX, int posY, bool isComp, bool incluirRei );
 	
-		bool isReiEmXeque( bool isComp );
+		bool isOutroReiEmXeque( bool isComp );
 		bool isOutroReiEmXeque( Peca** jogPecas, Peca** compPecas, bool isComp );
 
 		int isEstaEmXequeMateOuEmpate( bool isComp );
@@ -152,6 +156,8 @@ class Jogo : public Pecas, public JogoConstantes {
 		Peca* getPecaCavaloDir( Peca** vetor );
 		Peca* getPecaBispoEsq( Peca** vetor );
 		Peca* getPecaBispoDir( Peca** vetor );
+		Peca* getPecaTorreEsq( Peca** vetor );
+		Peca* getPecaTorreDir( Peca** vetor );
 
 		Peca* getJogadorPeca( int indice );
 		Peca* getComputadorPeca( int indice );

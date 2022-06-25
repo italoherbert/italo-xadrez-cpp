@@ -20,23 +20,26 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 	raiz->filhos = NULL;
 	raiz->jogada = NULL;
 	raiz->terminal = false;
+	raiz->venceu = false;
 
 	int nivel = jogo->getNivel( isComp );
 
 	MiniMaxNo* no = this->minimax( raiz, true, nivel, INT32_MIN, INT32_MAX, isComp );
 
-
 	bool tentativaDominioCentro = false;
 	bool sorteou = false;
+
+	while( no->pai->pai != NULL  )
+		no = no->pai;
 
 	if ( no->peso == 0 ) {
 		jogo->copia_pecas( jogPecas, compPecas );
 
-		tentativaDominioCentro = this->tentaDominioDoCentro( posX, posY, jogada, jogPecas, compPecas, isComp );
-		if ( !tentativaDominioCentro ) {
+		//tentativaDominioCentro = this->tentaDominioDoCentro( posX, posY, jogada, jogPecas, compPecas, isComp );
+		//if ( !tentativaDominioCentro ) {
 			PecaMov* ultMov = jogo->getUltimoMov( isComp );
 			sorteou = this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, isComp, ultMov );
-		}
+		//}
 
 		jogo->deleta_pecas( jogPecas );
 		jogo->deleta_pecas( compPecas );
@@ -44,8 +47,6 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 
 	bool jogadaMinimaxEncontrada = false;
 	if ( !tentativaDominioCentro && !sorteou ) {
-		while( no->pai->pai != NULL  )
-			no = no->pai;
 		*posX = no->posX;
 		*posY = no->posY;
 		*jogada = no->jogada->nova();
@@ -58,26 +59,36 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 	if ( jogadaMinimaxEncontrada ) {
 		Peca* escolhida = jogo->getPeca( *posX, *posY );
 
+		bool sortear = false;
+
 		PecaMov* ultMov = jogo->getUltimoMov( isComp );
 		if ( ultMov != nullptr ) {
 			if ( ( jogo->getJogadaRepetidaCont( isComp )+1 ) % 3 == 0 ) {
-				if ( ultMov->getX2() == escolhida->getPosX() &&
-						ultMov->getY2() == escolhida->getPosY() &&
-						ultMov->getX1() == (*jogada)->getPosX() &&
-						ultMov->getY1() == (*jogada)->getPosY() ) {
-
-					jogo->copia_pecas( jogPecas, compPecas );
-
-					this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, isComp, ultMov );
-					jogo->zeraJogadaRepetidaCont( isComp );
-
-					jogo->deleta_pecas( jogPecas );
-					jogo->deleta_pecas( compPecas );
+				if (  ultMov->getX2() == escolhida->getPosX() && ultMov->getY2() == escolhida->getPosY() ) {
+					if ( ultMov->getX1() == (*jogada)->getPosX() &&	ultMov->getY1() == (*jogada)->getPosY() ) {
+						sortear = true;
+					} else {
+						jogo->incJogadaRepetidaCont( isComp );
+					}
 				} else {
-					jogo->incJogadaRepetidaCont( isComp );
+					if ( ( jogo->getJogadaRepetidaCont( isComp )+1 ) % 3 == 0 ) {
+						sortear = true;
+					} else {
+						jogo->incJogadaRepetidaCont( isComp );
+					}
 				}
 			} else {
 				jogo->incJogadaRepetidaCont( isComp );
+			}
+
+			if ( sortear ) {
+				jogo->copia_pecas( jogPecas, compPecas );
+
+				this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, isComp, ultMov );
+				jogo->zeraJogadaRepetidaCont( isComp );
+
+				jogo->deleta_pecas( jogPecas );
+				jogo->deleta_pecas( compPecas );
 			}
 		}
 
@@ -90,15 +101,15 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 }
 
 MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp ) {
-	if ( nivel <= 0 || no->terminal ) {
+	if ( nivel <= 0 || no->terminal )
 		return no;
-	}
 
 	MiniMaxNo* minimaxNo = new MiniMaxNo;
 	minimaxNo->peso = isMaximizador ? INT32_MIN : INT32_MAX;
 	minimaxNo->pai = no;
 	minimaxNo->jogada = NULL;
 	minimaxNo->terminal = false;
+	minimaxNo->venceu = false;
 
 	bool fim = false;
 	for( int i = 0; !fim && !jogo->isFim() && i < Jogo::N_PECAS; i++ ) {
@@ -115,8 +126,10 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 		JogoPecas* jogoPecas = new JogoPecas( jogo );
 		jogoPecas->setPecas( jogPecas, compPecas );
 
-		jogo->calculaJogadasPossiveis( lista, jogoPecas, p->getPosX(), p->getPosY(), p->getTipo(), isComp, false );
+		jogo->calculaJogadasPossiveis( lista, jogoPecas, p->getPosX(), p->getPosY(), p->getTipo(), isComp, true );
 		jogo->filtraJogadas( lista, jogPecas, compPecas, p->getPosX(), p->getPosY(), isComp );
+
+		bool isCapturadaAntesMov = jogo->isCapturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, p->getPosX(), p->getPosY(), !isComp );
 
 		jogo->deleta_pecas( jogPecas );
 		jogo->deleta_pecas( compPecas );
@@ -131,7 +144,20 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 
 			bool terminal = false;
 			bool venceu = false;
+
 			float peso = this->move( jogPecas, compPecas, p, jog, isComp, nivel, &terminal, &venceu );
+
+			if ( no->pai == NULL ) {
+				if ( jogo->isOutroReiEmXeque( jogPecas, compPecas, isComp ) )
+					peso += 0.001 - p->getJogadaCont() * 0.0001;
+
+				if ( isCapturadaAntesMov )
+				peso += this->calculaPeso( p );
+
+				bool isCapturadaAposMov = jogo->isCapturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, jog->getPosX(), jog->getPosY(), !isComp );
+				if ( isCapturadaAposMov )
+					peso -= this->calculaPeso( p );
+			}
 
 			jogo->deleta_pecas( jogPecas );
 			jogo->deleta_pecas( compPecas );
@@ -140,7 +166,7 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 			filho->jogada = jog;
 			filho->posX = p->getPosX();
 			filho->posY = p->getPosY();
-			filho->peso = peso;
+			filho->peso = no->peso + ( isMaximizador ? peso : -peso );
 			filho->nivel = nivel;
 			filho->terminal = terminal;
 			filho->venceu = venceu;
@@ -157,14 +183,13 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 				no->filhos = novo;
 			}
 
-			if ( filho->venceu ) {
+			if ( venceu ) {
 				minimaxNo = filho;
 				fim = true;
+				continue;
 			}
 
 			MiniMaxNo* no2 = this->minimax( filho, !isMaximizador, nivel-1, alpha, beta, !isComp );
-			no2->peso += isMaximizador ? peso : -peso;
-
 			if ( isMaximizador ) {
 				if ( no2->peso > minimaxNo->peso )
 					minimaxNo = no2;
@@ -183,6 +208,7 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 					fim = true;
 			}
 		}
+
 		jogo->deleta_jogadas( lista );
 		delete p;
 	}
@@ -196,33 +222,10 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 float Algoritmo::move( Peca** jps, Peca** cps, Peca* p, Jogada* jog,
 		bool isComp, int nivel,	bool* terminal, bool* venceu ) {
 
-	float antesMovCapturavelPeso = 0;
-	float aposMoveCapturavelPeso = 0;
-	float capturadaPeso = 0;
-
-	bool isAntesMovCapturavel = jogo->isCapturaOutraPeca(
-			( isComp ? jps : cps ), jps, cps, p->getPosX(), p->getPosY(), !isComp );
-
-	if ( isAntesMovCapturavel )
-		antesMovCapturavelPeso = this->calculaPeso( p ) * 0.1;
-
-	jogo->move( jps, cps, p->getPosX(), p->getPosY(), jog->getPosX(), jog->getPosY() );
-	if ( jog->getTipo() == Jogada::EN_PASSANT ) {
-		Peca* capP = jogo->getPeca( jps, cps, jog->getCaptura()->getPosX(), jog->getCaptura()->getPosY() );
-		capP->setRemovida( true );
-	} else if ( jog->getTipo() == Jogada::ROQUE ) {
-		JogadaRoque* jr = (JogadaRoque*)jog;
-		int novoTorreX;
-		if ( jr->getTorrePosX() > jr->getReiPosX() )
-			novoTorreX = jog->getPosX()-1;
-		else novoTorreX = jog->getPosX()+1;
-
-		jogo->move( jps, cps, jr->getTorrePosX(),  jr->getTorrePosY(), novoTorreX, jr->getTorrePosY() );
-	}
+	jogo->move2( jps, cps, p, jog );
 
 	*venceu = false;
-
-	float xequeMatePeso = 0;
+	*terminal = false;
 
 	int status = Jogo::NAO_FIM;
 
@@ -231,40 +234,47 @@ float Algoritmo::move( Peca** jps, Peca** cps, Peca* p, Jogada* jog,
 		status = jogo->isEstaEmXequeMateOuEmpate( jps, cps, !isComp );
 
 	if ( status != Jogo::NAO_FIM ) {
+		*terminal = true;
 		if ( isComp ) {
-			if ( status == Jogo::COMPUTADOR_VENCEU )
+			if ( status == Jogo::COMPUTADOR_VENCEU ) {
 				*venceu = true;
+				return ( Jogo::NIVEL_DIFICIL - nivel ) * 1000;
+			}
 		} else {
-			if ( status == Jogo::JOGADOR_VENCEU )
+			if ( status == Jogo::JOGADOR_VENCEU ) {
 				*venceu = true;
+				return ( Jogo::NIVEL_DIFICIL - nivel ) * 1000;
+			}
 		}
 	}
 
-	bool isAposMovCapturavel = jogo->isCapturaOutraPeca(
-			( isComp ? jps : cps ), jps, cps, jog->getPosX(), jog->getPosY(), !isComp );
-
-	if ( isAposMovCapturavel )
-		aposMoveCapturavelPeso = this->calculaPeso( p );
-
+	float capturadaPeso = 0;
 	Peca* capturada = jog->getCaptura();
 	if ( capturada != NULL )
 		if ( capturada->getTipo() != Jogo::REI )
 			capturadaPeso = this->calculaPeso( capturada );
 
-	float xequePeso = 0;
-	if ( jogo->isOutroReiEmXeque( jps, cps, isComp ) )
-		xequePeso = 0.8 - p->getJogadaCont() * 0.001;
+	return capturadaPeso;
+}
 
-	float peaoPeso = 0;
-	if ( p->getTipo() == Jogo::PEAO )
-		peaoPeso = p->getJogadaCont() > 10 ? 0.05 : 0;
+float Algoritmo::somaPesos( Peca** jps, Peca** cps, bool isComp ) {
+	float soma1 = 0;
+	float soma2 = 0;
+	for( int i = 0; i < Jogo::N_PECAS; i++ ) {
+		Peca* p = jogo->getPeca( isComp ? cps : jps, i );
+		if ( p == NULL )
+			continue;
+		soma1 = this->calculaPeso( p );
+	}
 
-	float roquePeso = 0;
-	if ( jog->getTipo() == Jogada::ROQUE )
-		roquePeso += 0.06;
+	for( int i = 0; i < Jogo::N_PECAS; i++ ) {
+		Peca* p = jogo->getPeca( isComp ? jps : cps, i );
+		if ( p == NULL )
+			continue;
+		soma2 = this->calculaPeso( p );
+	}
 
-	return antesMovCapturavelPeso - aposMoveCapturavelPeso +
-				capturadaPeso + xequePeso + xequeMatePeso + peaoPeso;
+	return soma1 - soma2;
 }
 
 void Algoritmo::limpaMiniMaxArvore( MiniMaxNo* no ) {
@@ -307,9 +317,8 @@ void Algoritmo::efetuaJogadas( MiniMaxNo* no, Peca** jps, Peca** cps) {
 		if ( raiz->no->pai != NULL ) {
 			int posX = raiz->no->posX;
 			int posY = raiz->no->posY;
-			int novaPosX = raiz->no->jogada->getPosX();
-			int novaPosY = raiz->no->jogada->getPosY();
-			jogo->move( jps, cps, posX, posY, novaPosX, novaPosY );
+			Peca* p = jogo->getPeca( jogPecas,  compPecas, posX, posY );
+			jogo->move2( jps, cps, p, raiz->no->jogada );
 		}
 
 		MiniMaxNoLista* aux = raiz;
@@ -488,11 +497,23 @@ bool Algoritmo::tentaDominioDoCentro( int* posX, int* posY, Jogada** jogada, Pec
 						continue;
 				}
 
-				Peca* p2 = jogo->getPeca( jps, px2, py2 );
-
 				*posX = px1;
 				*posY = py1;
-				*jogada = new Jogada( px2, py2, p2, Jogada::NORMAL );
+
+				if ( p->getTipo() == Jogo::REI && abs( px2 - p->getPosX() ) > 1 ) {
+					Peca* rei = jogo->getPecaRei( isComp ? compPecas : jogPecas );
+					if ( px2 > p->getPosX() ) {
+						Peca* torre = jogo->getPecaTorreDir( isComp ? compPecas : jogPecas );
+						*jogada = new JogadaRoque( 6, rei->getPosY(), 5, torre->getPosY(), NULL, rei, torre );
+					} else {
+						Peca* torre = jogo->getPecaTorreEsq( isComp ? compPecas : jogPecas );
+						*jogada = new JogadaRoque( 2, rei->getPosY(), 3, torre->getPosY(), NULL, rei, torre );
+					}
+				} else {
+					Peca* p2 = jogo->getPeca( jps, px2, py2 );
+					*jogada = new Jogada( px2, py2, p2, Jogada::NORMAL );
+				}
+
 				jogou = true;
 			}
 		}

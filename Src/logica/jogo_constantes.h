@@ -16,7 +16,7 @@ class JogoConstantes {
 		const static int NAO_FIM = 0;
 
 		const static int N_PECAS = 16;
-		const static int N_JOGADAS_DOMINIO_CENTRO = 5;
+		const static int N_JOGADAS_DOMINIO_CENTRO = 6;
 
 		const static int JOGADA_CENTRO_NORMAL = 1;
 		const static int JOGADA_CENTRO_SE_NAO_CAPTURADA = 2;
@@ -35,9 +35,8 @@ class JogoConstantes {
 		const static int PECA_CAVALO_DIR_INDICE = 6;
 		const static int PECA_BISPO_ESQ_INDICE = 2;
 		const static int PECA_BISPO_DIR_INDICE = 5;
-
-		const static int TORRE_ESQ_INDICE = 0;
-		const static int TORRE_DIR_INDICE = 7;
+		const static int PECA_TORRE_ESQ_INDICE = 0;
+		const static int PECA_TORRE_DIR_INDICE = 7;
 
 };
 

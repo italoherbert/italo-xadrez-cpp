@@ -28,7 +28,6 @@ int DriverAdapter::getTelaLargura() {
 
 int DriverAdapter::getTelaAltura() {
 	int l, a;
-	
 	gui->carregaTelaDIM( &l, &a );
 	
 	return a;
@@ -36,4 +35,12 @@ int DriverAdapter::getTelaAltura() {
 
 bool DriverAdapter::isPausa() {
 	return jogo->isPausa();
+}
+
+bool DriverAdapter::isFim() {
+	return jogo->isFim();
+}
+
+void DriverAdapter::setFim( bool fim ) {
+	jogo->setFim( fim );
 }

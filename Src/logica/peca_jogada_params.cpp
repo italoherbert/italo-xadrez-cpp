@@ -8,7 +8,7 @@ PecaJogadaParams::PecaJogadaParams( Jogo* jogo, JogadaLista* lista, Pecas* pecas
 	this->posX = posX;
 	this->posY = posY;
 	this->isComp = isComp;
-	this->isCaptura = isCaptura;
+	this->isIncluirRoque = isCaptura;
 }
 
 Jogo* PecaJogadaParams::getJogo() {
@@ -31,8 +31,8 @@ bool PecaJogadaParams::getIsComp() {
 	return isComp;
 }
 
-bool PecaJogadaParams::getIsCaptura() {
-	return isCaptura;
+bool PecaJogadaParams::getIsIncluirRoque() {
+	return isIncluirRoque;
 }
 
 Pecas* PecaJogadaParams::getPecas() {

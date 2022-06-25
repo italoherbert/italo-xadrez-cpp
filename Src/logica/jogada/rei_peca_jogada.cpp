@@ -10,7 +10,7 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 	int posX = params->getPosX();
 	int posY = params->getPosY();
 	bool isComp = params->getIsComp();
-	bool isCaptura = params->getIsCaptura();
+	bool incluirRoque = params->getIsIncluirRoque();
 	Pecas* pecas = params->getPecas();
 	
 	Peca* peca = pecas->getPeca( posX, posY );
@@ -27,7 +27,7 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 		}
 	}			
 		
-	if ( peca->getMoveuContador() == 0 && !isCaptura ) {
+	if ( peca->getMoveuContador() == 0 && !incluirRoque ) {
 		Peca* jogPecas[ JogoConstantes::N_PECAS ];
 		Peca* compPecas[ JogoConstantes::N_PECAS ];
 			

@@ -51,7 +51,8 @@ class Sistema {
 
 		void reinicia();
 
-		void exec();
+		void execGUI();
+		void execJogo( void* id );
 
 		long tempo();
 

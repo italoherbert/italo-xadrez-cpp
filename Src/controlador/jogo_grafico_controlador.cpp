@@ -119,6 +119,7 @@ void JogoGraficoControlador::executando() {
 		SDL_Delay( mensagemDelay );
 		this->removeMensagem();
 		mensagemDelay = NO_DELAY;
+		return;
 	}
 
 	int status = jogo->getStatus();
@@ -169,81 +170,37 @@ void JogoGraficoControlador::executando() {
 			int posX = movimento->getMovimento1()->getPeca()->getPosX();
 			int posY = movimento->getMovimento1()->getPeca()->getPosY();
 
-			Jogada* jogada = movimento->getJogada();
-
-			Peca* peca = jogo->getPeca( posX, posY );
-			peca->setAnimPosX( 0 );
-			peca->setAnimPosY( 0 );
-
 			bool isComp = jogo->isVezComputador();
+
+			Jogada* jogada = movimento->getJogada();
+			Peca* peca = jogo->getPeca( posX, posY );
 
 			PecaMov* pmov = new PecaMov( posX, posY, jogada->getPosX(), jogada->getPosY(), isComp );
 
-			bool moveu;	
-						
-			if( jogada->getTipo() == Jogada::ROQUE ) {						
-				JogadaRoque* jr = (JogadaRoque*)jogada;
+			jogo->move2( peca, jogada );
 
-				Peca* rei = jr->getRei();
-				Peca* torre = jr->getTorre();						
-				int reiPosX = jr->getReiPosX();
-				int reiPosY = jr->getReiPosY();
-				int torrePosX = jr->getTorrePosX();
-				int torrePosY = jr->getTorrePosY();
-				
-				Peca* pTorre = jogo->getPeca( torre->getPosX(), torre->getPosY() );
-				pTorre->setAnimPosX( 0 );
-				pTorre->setAnimPosY( 0 );																		
-																										
-				jogo->move( rei->getPosX(), rei->getPosY(), reiPosX, reiPosY );																												
-				jogo->move( torre->getPosX(), torre->getPosY(), torrePosX, torrePosY );																				
-				
-				jogo->registraRoque( peca->isDeComp() );				
-				
-				moveu = true;
-			} else if ( jogada->getTipo() == Jogada::EN_PASSANT ){
-				int capPosX = jogada->getCaptura()->getPosX();
-				int capPosY = jogada->getCaptura()->getPosY();
-
-				Peca* capturada = jogo->getPeca( capPosX, capPosY );
-				capturada->setRemovida( true );
-
-				jogo->move( posX, posY, jogada->getPosX(), jogada->getPosY() );
-
-				moveu = true;
+			if ( jogada->getCaptura() != NULL ) {
+				audio->setNumAudio( JogoAudio::AUDIO_CAPTURA );
 			} else {
-				moveu = jogo->move( posX, posY, jogada->getPosX(), jogada->getPosY() );
+				if ( jogo->isVezComputador() )
+					audio->setNumAudio( JogoAudio::AUDIO_COMP_JOGOU );
+				else audio->setNumAudio( JogoAudio::AUDIO_JOG_JOGOU );
 			}
-																				
-			if ( moveu ) {
-				if ( jogada->getCaptura() != NULL ) {
-					audio->setNumAudio( JogoAudio::AUDIO_CAPTURA );
-				} else {										
-					if ( jogo->isVezComputador() )			
-						audio->setNumAudio( JogoAudio::AUDIO_COMP_JOGOU );				
-					else audio->setNumAudio( JogoAudio::AUDIO_JOG_JOGOU );				
-				}
 
-				jogo->setUltimoMov( pmov );
-				jogo->setVezComputador( !jogo->isVezComputador() );
-								
-				peca->setMoveuContador( peca->getMoveuContador() + 1 );							
-						
-				if( peca->getTipo() == Jogo::PEAO )
-					if( jogada->getPosY() == 0 || jogada->getPosY() == 7 )
-						peca->setTipo( Jogo::RAINHA );						
+			jogo->setUltimoMov( pmov );
+			jogo->setVezComputador( !jogo->isVezComputador() );
 
+			peca->setMoveuContador( peca->getMoveuContador() + 1 );
 
-				jogo->getJogadasPossiveis()->limpaJogadas();
-				jogo->setJogadorJogadaPeca( NULL );
-				pecaSelecionada = NULL;	
-												
-				jogo->setMovimento( NULL );								
+			jogo->getJogadasPossiveis()->limpaJogadas();
+			jogo->setJogadorJogadaPeca( NULL );
+			pecaSelecionada = NULL;
 
-				status = this->verificaEProcessaXequeMate();
-				if ( status == Jogo::NAO_FIM )
-					this->verificaSeXeque();
-			}
+			jogo->setMovimento( NULL );
+
+			status = this->verificaEProcessaXequeMate();
+			if ( status == Jogo::NAO_FIM )
+				this->verificaSeXeque();
 		}						
 	}
 }
@@ -289,7 +246,7 @@ bool JogoGraficoControlador::verificaSeXeque() {
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
 
-	bool reiEmXeque = jogo->isReiEmXeque( !jogo->isVezComputador() );
+	bool reiEmXeque = jogo->isOutroReiEmXeque( !jogo->isVezComputador() );
 
 	if ( reiEmXeque ) {
 		jogo->getJogadasPossiveis()->limpaJogadas();
