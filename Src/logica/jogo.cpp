@@ -441,7 +441,7 @@ void Jogo::filtraJogadas(
 		this->deleta_pecas( cps );
 	}
 
-	jogadas->setTo( lista );
+	jogadas->copiaPara( lista );
 
 	delete jogadas;
 }
@@ -453,7 +453,7 @@ bool Jogo::addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool
 	} else {
 		if ( isComp ) {
 			if ( !peca->isDeComp() )				
-				lista->addJogada( posX, posY, peca );				
+				lista->addJogada( posX, posY, peca );
 		} else {
 			if ( peca->isDeComp() )
 				lista->addJogada( posX, posY, peca );

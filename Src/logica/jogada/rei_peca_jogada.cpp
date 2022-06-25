@@ -1,6 +1,7 @@
 #include "rei_peca_jogada.h"
 
 #include <cstdlib>
+#include <iostream>
 
 #include "../jogada_roque.h"
 
@@ -86,7 +87,7 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 								if( isCap == false ) {
 									isCap = jogo->isCapturaOutraPeca( compPecas, jogPecas, compPecas, 3, 7, true );
 									if ( isCap == false )
-										lista->addJogada( new JogadaRoque( 2, 7, 3, 7, NULL, peca, torreEsq ) );				
+										lista->addJogada( new JogadaRoque( 2, 7, 3, 7, NULL, peca, torreEsq ) );
 								}													
 							}												
 						}
@@ -102,16 +103,15 @@ void ReiPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 							if( isCap == false ) {
 								isCap = jogo->isCapturaOutraPeca( compPecas, jogPecas, compPecas, 6, 7, true );
 								if ( isCap == false )
-									lista->addJogada( new JogadaRoque( 6, 7, 5, 7, NULL, peca, torreDir ) );								
+									lista->addJogada( new JogadaRoque( 6, 7, 5, 7, NULL, peca, torreDir ) );
 							}
 						}					
 					}
 				}
-			}				
-			
-			jogo->deleta_pecas( jogPecas );
-			jogo->deleta_pecas( compPecas );
+			}
 		}
+		jogo->deleta_pecas( jogPecas );
+		jogo->deleta_pecas( compPecas );
 	}	
 }
 

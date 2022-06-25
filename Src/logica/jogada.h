@@ -20,7 +20,7 @@ class Jogada {
 		Jogada( int posX, int posY, Peca* captura, int tipo );
 		virtual ~Jogada();
 
-		Jogada* nova();
+		virtual Jogada* nova();
 
 		int getPosX();
 		int getPosY();

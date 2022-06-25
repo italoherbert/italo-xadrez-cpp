@@ -441,7 +441,7 @@ Jogada* Algoritmo::sorteiaPecaJogada( Peca* peca, Peca* jps[ Jogo::N_PECAS ], Pe
 
 	Jogada* jog = NULL;
 	if ( lista2->getTam() > 0 ) {
-		jog = lista2->getJogada( (int)round( rand() % lista2->getTam() ) );
+		jog = lista2->getJogada( (int)round( rand() % lista2->getTam() ) )->nova();
 	} else if ( lista->getTam() > 0 ){
 		jog = lista->getJogada( (int)round( rand() % lista->getTam() ) )->nova();
 	}

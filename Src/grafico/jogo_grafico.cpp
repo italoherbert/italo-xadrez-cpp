@@ -42,8 +42,15 @@ void JogoGrafico::desenha( SDL_Renderer* pintor ) {
 	infoDesenho->desenha( jogo, gui, pintor );
 	tabuleiroDesenho->desenha( jogo, gui, pintor );
 	
-	JogadaLista* cLista = jogo->getJogadasPossiveis();
-	int tam = cLista->getTam();	
+	JogadaLista* cLista = new JogadaLista;
+	jogo->getJogadasPossiveis()->copiaPara( cLista );
+
+	Peca* jps[ Jogo::N_PECAS ];
+	Peca* cps[ Jogo::N_PECAS ];
+
+	jogo->copia_pecas( jps, cps );
+
+	int tam = cLista->getTam();
 	
 	for( int i = 0; i < tam; i++ ) {
 		Jogada* jogada = cLista->getJogada( i );						
@@ -55,12 +62,16 @@ void JogoGrafico::desenha( SDL_Renderer* pintor ) {
 	if ( jogadorJPeca != NULL && jogsPossTam > 0 )
 		desenhaMarc( jogo, jogadorJPeca->getPosX(), jogadorJPeca->getPosY(), pintor );
 	
+
+
 	for( int i = 0; i < Jogo::N_PECAS; i++ ) {
-		Peca* jogadorPeca = jogo->getJogadorPeca( i );
-		Peca* computadorPeca = jogo->getComputadorPeca( i );
+		Peca* jogadorPeca = jps[ i ];
+		Peca* computadorPeca = cps[ i ];
 							
-		pecaDesenho->desenha( jogo, gui, pintor, jogadorPeca, PecaDesenho::COR_BRANCA );
-		pecaDesenho->desenha( jogo, gui, pintor, computadorPeca, PecaDesenho::COR_PRETA );
+		if ( !jogadorPeca->isRemovida() )
+			pecaDesenho->desenha( jogo, gui, pintor, jogadorPeca, PecaDesenho::COR_BRANCA );
+		if ( !computadorPeca->isRemovida() )
+			pecaDesenho->desenha( jogo, gui, pintor, computadorPeca, PecaDesenho::COR_PRETA );
 	}				
 	
 	for( int i = 0; i < tam; i++ ) {

@@ -149,10 +149,11 @@ void JogoGraficoControlador::executando() {
 
 			bool calculouJogada = algGer->calculaMelhorJogada( &posX, &posY, &jogada, isComp );
 			if ( calculouJogada ) {
-				Peca* peca = jogo->getPeca( posX, posY );
-				jogo->setMovimento( animacao->criaMovimentos( jogada, peca ) );
+				Peca* novaPeca = jogo->getPeca( posX, posY )->nova();
+				Jogada* novaJog = jogada->nova();
+				jogo->setMovimento( animacao->criaMovimentos( novaJog, novaPeca ) );
 			} else {
-				SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_INFORMATION, "Erro", "Loop infinito.", NULL );
+				cout << "Erro no cálculo da melhor jogada." << endl;
 				jogo->setFim( true );
 			}
 		}

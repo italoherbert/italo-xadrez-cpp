@@ -21,7 +21,7 @@ class JogadaLista {
 		
 		void deletaTodasAsJogadas();
 		
-		void setTo( JogadaLista* lista );
+		void copiaPara( JogadaLista* lista );
 		
 		int getTam();
 		

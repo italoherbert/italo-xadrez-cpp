@@ -1,6 +1,7 @@
 #include "jogada_lista.h"
 
 #include <cstdlib>
+#include <iostream>
 
 #include "jogada.h"
 #include "jogada_roque.h"
@@ -33,7 +34,7 @@ void JogadaLista::deletaTodasAsJogadas() {
 	jogadas_tam = 0;
 }
 
-void JogadaLista::setTo( JogadaLista* lista ) {
+void JogadaLista::copiaPara( JogadaLista* lista ) {
 	lista->deletaTodasAsJogadas();
 	for( int i = 0; i < jogadas_tam; i++ ) {
 		int posX = jogadas[i]->getPosX();

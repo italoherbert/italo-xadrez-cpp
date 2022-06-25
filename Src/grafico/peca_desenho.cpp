@@ -4,9 +4,6 @@
 
 
 void PecaDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor, Peca* peca, int corTipo ) {
-	if ( peca->isRemovida() )
-		return;
-		
 	SDL_Surface* imagem = this->getPecaIMG( peca->getTipo(), corTipo );			
 				
 	SDL_Rect ret;
