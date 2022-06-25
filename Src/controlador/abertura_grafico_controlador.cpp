@@ -23,6 +23,8 @@ void AberturaGraficoControlador::mousePressionado( int x, int y ) {
 		gui->setCursorTipo( GUI::CURSOR_SETA );
 		gui->setGraficoTipo( GUI::JOGO_GRAFICO );
 	}
+
+	gui->repinta();
 }
 
 void AberturaGraficoControlador::mouseSobre( int x, int y ) {
@@ -44,6 +46,8 @@ void AberturaGraficoControlador::mouseSobre( int x, int y ) {
 	if ( mouseEm )		
 		gui->setCursorTipo( GUI::CURSOR_MAOZINHA );
 	else gui->setCursorTipo( GUI::CURSOR_SETA );
+
+	gui->repinta();
 }
 
 void AberturaGraficoControlador::teclaPressionada( int tecla ) {

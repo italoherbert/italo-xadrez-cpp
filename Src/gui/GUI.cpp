@@ -8,6 +8,7 @@ GUI::GUI( GUI_Driver* drv ) {
 
 void GUI::reinicia() {
 	this->setGraficoTipo( ABERTURA_GRAFICO );
+	this->repinta();
 }
 
 void GUI::execGUI( std::string titulo, int largura, int altura ) {
@@ -39,15 +40,19 @@ void GUI::execGUI( std::string titulo, int largura, int altura ) {
 		listener->inicializou();		
 	
 	fim = false;
+	repintar = true;
 
 	while( !fim ) {
-		switch ( graficoTipo ) {
-			case ABERTURA_GRAFICO:
-				aberturaGrafico->desenha( pintor );
-				break;
-			case JOGO_GRAFICO:
-				jogoGrafico->desenha( pintor );
-				break;
+		if ( repintar ) {
+			switch ( graficoTipo ) {
+				case ABERTURA_GRAFICO:
+					aberturaGrafico->desenha( pintor );
+					break;
+				case JOGO_GRAFICO:
+					jogoGrafico->desenha( pintor );
+					break;
+			}
+			repintar = false;
 		}
 
 		if ( listener != NULL ) {		
@@ -119,6 +124,10 @@ void GUI::execJogo( void* id ) {
 
 		SDL_Delay( DELAY );
 	}
+}
+
+void GUI::repinta() {
+	this->repintar = true;
 }
 
 void GUI::setCursorTipo( int tipo ) {

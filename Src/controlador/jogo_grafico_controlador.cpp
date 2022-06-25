@@ -17,6 +17,7 @@ JogoGraficoControlador::JogoGraficoControlador( Sistema* sistema ) {
 
 void JogoGraficoControlador::mousePressionado( int x, int y ) {
 	Jogo* jogo = sistema->getJogo();
+	GUI* gui = sistema->getGUI();
 	JogoAudio* audio = sistema->getJogoAudio();
 	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
 	Animacao* animacao = sistema->getAnimacao();
@@ -81,14 +82,16 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 						jogo->setJogadorJogadaPeca( NULL );
 						pecaSelecionada = NULL;	
 					}
-				} 			
+				}
 			}
 		}
 	}
+	gui->repinta();
 }
 
 void JogoGraficoControlador::teclaPressionada( int tecla ) {
 	Jogo* jogo = sistema->getJogo();
+	GUI* gui = sistema->getGUI();
 
 	if ( jogo->getStatus() == Jogo::NAO_FIM ) {
 		if ( tecla == TECLA_ESQ ) {
@@ -105,9 +108,11 @@ void JogoGraficoControlador::teclaPressionada( int tecla ) {
 	} else {
 		jogo->setFim( true );
 	}		
+	gui->repinta();
 }
 
 void JogoGraficoControlador::executando() {
+	GUI* gui = sistema->getGUI();
 	Jogo* jogo = sistema->getJogo();
 	JogoAudio* audio = sistema->getJogoAudio();
 	Animacao* animacao = sistema->getAnimacao();
@@ -198,6 +203,8 @@ void JogoGraficoControlador::executando() {
 				this->verificaSeXeque();
 		}						
 	}
+
+	gui->repinta();
 }
 
 bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
@@ -293,14 +300,21 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 }
 
 void JogoGraficoControlador::removeMensagem() {
+	GUI* gui = sistema->getGUI();
 	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
 	jogoGrafico->getMensagemDesenho()->removeMensagem();
+	gui->repinta();
 }
 
 void JogoGraficoControlador::setMensagem( std::string mensagem, long delay ) {
+	GUI* gui = sistema->getGUI();
 	JogoGrafico* jogoGrafico = sistema->getJogoGrafico();
+
 	jogoGrafico->getMensagemDesenho()->setMensagem( mensagem );
 	mensagemDelay = delay;
+
+	gui->repinta();
 }
 
 

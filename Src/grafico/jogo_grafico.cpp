@@ -86,6 +86,10 @@ void JogoGrafico::desenha( SDL_Renderer* pintor ) {
 	audioLigadoDesenho->desenha( jogo, gui, pintor );
 	
 	SDL_RenderPresent( pintor );
+
+	jogo->deleta_pecas( jps );
+	jogo->deleta_pecas( cps );
+	delete cLista;
 }
 
 void JogoGrafico::desenhaMarc( Jogo* jogo, int posX, int posY, SDL_Renderer* pintor ) {

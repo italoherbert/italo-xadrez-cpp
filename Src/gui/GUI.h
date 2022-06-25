@@ -49,11 +49,13 @@ class GUI {
 		GUI_Driver* drv;
 
 		bool fim = false;
+		bool repintar = false;
 
 	public:
 		GUI( GUI_Driver* drv );
 		
 		void reinicia();
+		void repinta();
 		
 		void execGUI( std::string titulo, int largura, int altura );
 		void execJogo( void* id );
