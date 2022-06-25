@@ -27,17 +27,13 @@ void JogadaLista::addJogada( Jogada* jogada ) {
 	jogadas[ jogadas_tam++ ] = jogada;
 }
 
-void JogadaLista::limpaJogadas() {
-	for( int i = 0; i < jogadas_tam; i++ ) {
-		delete jogadas[ i ];
-		jogadas[ i ] = NULL;
-	}
+void JogadaLista::zeraTamContador() {
 	jogadas_tam = 0;
 }
 
 void JogadaLista::setTo( JogadaLista* lista ) {
-	lista->limpaJogadas();
-	for( int i = 0; i < jogadas_tam; i++ ) {	
+	lista->zeraTamContador();
+	for( int i = 0; i < jogadas_tam; i++ ) {
 		int posX = jogadas[i]->getPosX();
 		int posY = jogadas[i]->getPosY();
 		Peca* captura = jogadas[i]->getCaptura();

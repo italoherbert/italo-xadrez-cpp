@@ -48,6 +48,8 @@ class GUI {
 
 		GUI_Driver* drv;
 
+		bool fim = false;
+
 	public:
 		GUI( GUI_Driver* drv );
 		

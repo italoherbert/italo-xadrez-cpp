@@ -8,12 +8,10 @@
 class JogadaLista {
 			
 	private:
-		Jogada* jogadas[ 100 ];
+		Jogada* jogadas[ 200 ];
 		int jogadas_tam;
 			
 	public:
-		const static int MAX_CELULAS = 36;
-		
 		JogadaLista();
 		~JogadaLista();
 	
@@ -21,7 +19,7 @@ class JogadaLista {
 		void addJogada( int posX, int posY, Peca* captura );
 		void addJogada( Jogada* jogada );	
 		
-		void limpaJogadas();
+		void zeraTamContador();
 		
 		void setTo( JogadaLista* lista );
 		

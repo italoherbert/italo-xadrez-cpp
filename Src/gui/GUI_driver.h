@@ -7,8 +7,6 @@ class GUI_Driver {
 		virtual ~GUI_Driver() {}
 
 		virtual bool isPausa() = 0;
-		virtual bool isFim() = 0;
-		virtual void setFim( bool fim ) = 0;
 
 };
 

@@ -36,11 +36,3 @@ int DriverAdapter::getTelaAltura() {
 bool DriverAdapter::isPausa() {
 	return jogo->isPausa();
 }
-
-bool DriverAdapter::isFim() {
-	return jogo->isFim();
-}
-
-void DriverAdapter::setFim( bool fim ) {
-	jogo->setFim( fim );
-}

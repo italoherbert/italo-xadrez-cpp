@@ -55,7 +55,7 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 				Peca* p = jogo->getPeca( posX, posY );
 				if ( p != NULL ) {
 					if ( !p->isIgual( pecaSelecionada ) && p->isDeComp() == jogo->isVezComputador() ) {
-						jogo->getJogadasPossiveis()->limpaJogadas();
+						jogo->getJogadasPossiveis()->zeraTamContador();
 						jogo->setJogadorJogadaPeca( NULL );
 						pecaSelecionada = NULL;
 					}
@@ -77,7 +77,7 @@ void JogoGraficoControlador::mousePressionado( int x, int y ) {
 					if ( jogada != NULL ) {				
 						jogo->setMovimento( animacao->criaMovimentos( jogada, pecaSelecionada ) );	
 					} else {
-						jogo->getJogadasPossiveis()->limpaJogadas();
+						jogo->getJogadasPossiveis()->zeraTamContador();
 						jogo->setJogadorJogadaPeca( NULL );
 						pecaSelecionada = NULL;	
 					}
@@ -192,7 +192,7 @@ void JogoGraficoControlador::executando() {
 
 			peca->setMoveuContador( peca->getMoveuContador() + 1 );
 
-			jogo->getJogadasPossiveis()->limpaJogadas();
+			jogo->getJogadasPossiveis()->zeraTamContador();
 			jogo->setJogadorJogadaPeca( NULL );
 			pecaSelecionada = NULL;
 
@@ -212,7 +212,7 @@ bool JogoGraficoControlador::selecionaPeca( int posX, int posY, bool isComp ) {
 	Peca* peca = jogo->getPeca( posX, posY );
 	if ( peca != NULL ) {
 		JogadaLista* lista = jogo->getJogadasPossiveis();
-		lista->limpaJogadas();
+		lista->zeraTamContador();
 			
 		Peca* jogPecas[ Jogo::N_PECAS ];
 		Peca* compPecas[ Jogo::N_PECAS ];
@@ -249,7 +249,7 @@ bool JogoGraficoControlador::verificaSeXeque() {
 	bool reiEmXeque = jogo->isOutroReiEmXeque( !jogo->isVezComputador() );
 
 	if ( reiEmXeque ) {
-		jogo->getJogadasPossiveis()->limpaJogadas();
+		jogo->getJogadasPossiveis()->zeraTamContador();
 		jogo->setJogadorJogadaPeca( NULL );
 		pecaSelecionada = NULL;
 
@@ -275,17 +275,20 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 		int audioNum = JogoAudio::AUDIO_NENHUM;
 		switch( status ) {
 			case Jogo::JOGADOR_VENCEU:
+				cout << "BRANCAS= " << jogo->getVitoriasCont( false ) << "  ";
 				jogo->incVitoriasCont( false );
+				cout << jogo->getVitoriasCont( false ) << endl;
 				audioNum = JogoAudio::AUDIO_VENCEU;
 				mensagem = "Xeque mate, as brancas venceram!";
 				break;
 			case Jogo::COMPUTADOR_VENCEU:
+				cout << "PRETAS: " << jogo->getVitoriasCont( true ) << "  ";
 				jogo->incVitoriasCont( true );
+				cout << jogo->getVitoriasCont( true ) << endl;
 				mensagem = "Xeque mate, as pretas venceram!";
 				audioNum = JogoAudio::AUDIO_PERDEU;
 				break;
 			case Jogo::EMPATE:
-				cout << jogo->getEmpatesCont()<< endl;
 				jogo->incEmpatesCont();
 				mensagem = "O jogo empatou!";
 				audioNum = JogoAudio::AUDIO_EMPATOU;

@@ -27,8 +27,6 @@ class DriverAdapter : public JogoDriver, public GUI_Driver {
 		double getFatorCelulaDIM();
 
 		bool isPausa();
-		bool isFim();
-		void setFim( bool fim );
 };
 
 #endif

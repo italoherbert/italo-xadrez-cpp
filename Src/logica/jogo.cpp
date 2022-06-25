@@ -73,7 +73,7 @@ void Jogo::reinicia() {
 		//computadorPecas[i]->setRemovida( i > 7 ? true : false );
 	}
 
-	jogadas->limpaJogadas();
+	jogadas->zeraTamContador();
 
 	ultPecaMov = nullptr;
 	ultCompPecaMov = nullptr;
@@ -428,13 +428,17 @@ void Jogo::filtraJogadas(
 
 	int tam = lista->getTam();
 	for( int i = 0; i < tam; i++ ) {
+		Jogada* jogada = lista->getJogada( i );
+
 		this->copia_pecas( jps, cps, jogPecas, compPecas );
 
-		Jogada* jogada = lista->getJogada( i );
 		this->move( jps, cps, posX, posY, jogada->getPosX(), jogada->getPosY() );
 
-		if ( !this->isOutroReiEmXeque( jps, cps, !isComp ) )
+		if ( !this->isOutroReiEmXeque( jps, cps, !isComp ) ) {
 			jogadas->addJogada( jogada );
+		} else {
+			delete jogada;
+		}
 
 		this->deleta_pecas( jps );
 		this->deleta_pecas( cps );
@@ -456,7 +460,7 @@ bool Jogo::addJogada( JogadaLista* lista, Pecas* pecas, int posX, int posY, bool
 		} else {
 			if ( peca->isDeComp() )
 				lista->addJogada( posX, posY, peca );
-		}				
+		}
 		return true;	
 	}	
 	return false;
@@ -783,7 +787,7 @@ void Jogo::setNivel( bool isComp,int nivel ) {
 	else this->jogadorNivel = nivel;
 }
 
-bool Jogo::getVitoriasCont( bool isComp ) {
+int Jogo::getVitoriasCont( bool isComp ) {
 	if ( isComp )
 		return pretasVitoriasCont;
 	return brancasVitoriasCont;
@@ -791,11 +795,11 @@ bool Jogo::getVitoriasCont( bool isComp ) {
 
 void Jogo::incVitoriasCont( bool isComp ) {
 	if ( isComp )
-		this->pretasVitoriasCont++;
-	else this->brancasVitoriasCont++;
+		pretasVitoriasCont++;
+	else brancasVitoriasCont++;
 }
 
-bool Jogo::getEmpatesCont() {
+int Jogo::getEmpatesCont() {
 	return empatesCont;
 }
 

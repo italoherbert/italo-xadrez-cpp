@@ -17,17 +17,8 @@ JogadaRoque::~JogadaRoque() {
 }
 
 JogadaRoque* JogadaRoque::nova() {
-	Jogada* jog = Jogada::nova();	
-	int posX = jog->getPosX();
-	int posY = jog->getPosY();
-	
-	Peca* captura = NULL;
-	if ( jog->getCaptura() != NULL )
-		captura = jog->getCaptura()->nova();
-	
 	Peca* pRei = rei->nova();
 	Peca* pTorre = torre->nova();
-					
  	return new JogadaRoque( posX, posY, torrePosX, torrePosY, captura, pRei, pTorre );	
 }
 

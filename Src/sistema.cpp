@@ -67,6 +67,7 @@ void Sistema::finaliza() {
 
 void Sistema::reinicia() {
 	jogoGrafico->getMensagemDesenho()->removeMensagem();
+
 	jogo->reinicia();
 	audio->reinicia();
 	gui->reinicia();

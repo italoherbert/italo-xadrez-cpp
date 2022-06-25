@@ -5,7 +5,7 @@
 #include "peca.h"
 
 class Jogada {
-	private:
+	protected:
 		int posX;
 		int posY;
 		Peca* captura;

@@ -55,8 +55,8 @@ class Jogo : public Pecas, public JogoConstantes {
 			{ 4, 7, 6, 7, JOGADA_CENTRO_SE_NAO_CAPTURADA }
 		};
 				
-		int pretasVitoriasCont = 0;
-		int brancasVitoriasCont = 0;
+		int pretasVitoriasCont = 1;
+		int brancasVitoriasCont = 1;
 		int empatesCont = 0;
 
 		JogadaLista* jogadas;
@@ -235,10 +235,10 @@ class Jogo : public Pecas, public JogoConstantes {
 
 		bool isJogadorHumano();
 
-		bool getVitoriasCont( bool isComp );
+		int getVitoriasCont( bool isComp );
 		void incVitoriasCont( bool isComp );
 
-		bool getEmpatesCont();
+		int getEmpatesCont();
 		void incEmpatesCont();
 				
 		JogoDriver* getJogoDriver();
