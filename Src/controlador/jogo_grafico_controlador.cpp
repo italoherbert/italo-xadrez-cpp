@@ -125,12 +125,6 @@ void JogoGraficoControlador::executando() {
 	int status = jogo->getStatus();
 	if ( status != Jogo::NAO_FIM ) {
 		if ( jogo->isFim() ) {
-			if ( status == Jogo::JOGADOR_VENCEU ) {
-				jogo->incVitoriasCont( false );
-			} else if ( status == Jogo::COMPUTADOR_VENCEU ) {
-				jogo->incVitoriasCont( true );
-			}
-
 			sistema->reinicia();
 			jogo->setFim( false );
 			return;
@@ -275,16 +269,12 @@ int JogoGraficoControlador::verificaEProcessaXequeMate() {
 		int audioNum = JogoAudio::AUDIO_NENHUM;
 		switch( status ) {
 			case Jogo::JOGADOR_VENCEU:
-				cout << "BRANCAS= " << jogo->getVitoriasCont( false ) << "  ";
 				jogo->incVitoriasCont( false );
-				cout << jogo->getVitoriasCont( false ) << endl;
 				audioNum = JogoAudio::AUDIO_VENCEU;
 				mensagem = "Xeque mate, as brancas venceram!";
 				break;
 			case Jogo::COMPUTADOR_VENCEU:
-				cout << "PRETAS: " << jogo->getVitoriasCont( true ) << "  ";
 				jogo->incVitoriasCont( true );
-				cout << jogo->getVitoriasCont( true ) << endl;
 				mensagem = "Xeque mate, as pretas venceram!";
 				audioNum = JogoAudio::AUDIO_PERDEU;
 				break;
