@@ -1,4 +1,3 @@
-
 #ifndef PECAS_H
 #define PECAS_H
 
@@ -17,6 +16,9 @@ class Pecas {
 	
 		virtual Peca* getPeca( int posX, int posY ) = 0;
 		
+		virtual Peca** getJogadorPecas() = 0;
+		virtual Peca** getComputadorPecas() = 0;
+
 		virtual void deleta_pecas() = 0;
 					
 };

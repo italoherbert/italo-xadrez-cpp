@@ -1,12 +1,19 @@
 #include "jogada_lista.h"
 
 #include <cstdlib>
+#include <iostream>
 
 #include "jogada.h"
 #include "jogada_roque.h"
+#include "jogada_en_passant.h"
 
 JogadaLista::JogadaLista() {
 	jogadas_tam = 0;
+}
+
+JogadaLista::~JogadaLista() {
+	for( int i = 0; i < jogadas_tam; i++ )
+		delete jogadas[ i ];
 }
 
 void JogadaLista::addJogada( int posX, int posY, Peca* captura, int tipo ) {
@@ -21,15 +28,15 @@ void JogadaLista::addJogada( Jogada* jogada ) {
 	jogadas[ jogadas_tam++ ] = jogada;
 }
 
-void JogadaLista::limpaJogadas() {
+void JogadaLista::deletaTodasAsJogadas() {
 	for( int i = 0; i < jogadas_tam; i++ )
-		jogadas[ i ] = NULL;
+		delete jogadas[ i ];
 	jogadas_tam = 0;
 }
 
-void JogadaLista::copia( JogadaLista* lista ) {
-	lista->limpaJogadas();
-	for( int i = 0; i < jogadas_tam; i++ ) {	
+void JogadaLista::copiaPara( JogadaLista* lista ) {
+	lista->deletaTodasAsJogadas();
+	for( int i = 0; i < jogadas_tam; i++ ) {
 		int posX = jogadas[i]->getPosX();
 		int posY = jogadas[i]->getPosY();
 		Peca* captura = jogadas[i]->getCaptura();
@@ -43,7 +50,9 @@ void JogadaLista::copia( JogadaLista* lista ) {
 			int torrePosX = ((JogadaRoque*)jogadas[i])->getTorrePosX();
 			int torrePosY = ((JogadaRoque*)jogadas[i])->getTorrePosY();
 			lista->addJogada( new JogadaRoque( reiPosX, reiPosY, torrePosX, torrePosY, captura, rei, torre ) );
-		} else {						
+		} else if ( tipo == Jogada::EN_PASSANT ) {
+			lista->addJogada( new JogadaEnPassant( posX, posY, captura ) );
+		} else {
 			lista->addJogada( new Jogada( posX, posY, captura, tipo ) );		
 		}
 	}

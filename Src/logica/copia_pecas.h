@@ -5,7 +5,7 @@
 class CopiaPecas {
 		
 	public:		
-		void copia_pecas()	
+		void copia_pecas();
 };
 
 #endif

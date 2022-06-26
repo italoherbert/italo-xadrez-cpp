@@ -2,42 +2,35 @@
 #ifndef JOGO_GRAFICO_CONTROLADOR_H
 #define JOGO_GRAFICO_CONTROLADOR_H
 
-#include "../algoritmo/algoritmo.h"
-#include "../animacao/animacao.h"
-#include "../audio/jogo_audio.h"
-#include "../grafico/jogo_grafico.h"
-#include "../gui/GUI.h"
-#include "../gui/GUI_Listener.h"
-#include "../jogada/jogada_gerenciador.h"
-#include "../logica/jogo.h"
+#include "../sistema.h"
+
+class Sistema;
 
 class JogoGraficoControlador : public JogoGraficoListener {
 	
 	private:
-		Jogo* jogo;
-		GUI* gui;
+		const long NO_START = -1;
+
+		const long NO_DELAY = -1;
+		const long MENSAGEM_DELAY = 1500;
+		const long FIM_JOGO_MENSAGEM_DELAY = 4000;
+
+		Peca* pecaSelecionada = nullptr;
+		long mensagemDelay = -1;
 		
-		JogoGrafico* jogoGrafico;
-		JogoAudio* audio;
-		
-		JogadaGerenciador* jGer;
-		Algoritmo* algoritmo;
-		Animacao* animacao;		
-		
-		Peca* pecaSelecionada;
+		Sistema* sistema;
 		
 		bool selecionaPeca( int posX, int posY, bool isComp );
 		bool processaJogada( int posX, int posY );		
-		void processaMensagem();
+
+		void setMensagem( std::string mensagem, long delay );
+		void removeMensagem();
 		
-		void verificaXequeEXequeMate( bool moveu );
-		
-		bool isMensagemDelay;
-		
+		bool verificaSeXeque();
+		int verificaEProcessaXequeMate();
+
 	public:
-		JogoGraficoControlador( Jogo* jogo, JogadaGerenciador* jGer, 
-			Algoritmo* alg, Animacao* anim, 
-			GUI* gui, JogoGrafico* jG, JogoAudio* audio );
+		JogoGraficoControlador( Sistema* sistema );
 		
 		void executando();
 		

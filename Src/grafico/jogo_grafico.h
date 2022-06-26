@@ -9,6 +9,7 @@
 #include "../gui/GUI.h"
 #include "../logica/jogo.h"
 #include "audio_ligado_desenho.h"
+#include "info_desenho.h"
 #include "mensagem_desenho.h"
 #include "peca_desenho.h"
 #include "tabuleiro_desenho.h"
@@ -21,7 +22,8 @@ class JogoGrafico : public Grafico {
 		
 		SDL_Surface* imagens[12];
 		
-		TabuleiroDesenho* tabDesenho;		
+		InfoDesenho* infoDesenho;
+		TabuleiroDesenho* tabuleiroDesenho;		
 		PecaDesenho* pecaDesenho;
 		MensagemDesenho* mensagemDesenho;
 		AudioLigadoDesenho* audioLigadoDesenho;
@@ -39,6 +41,7 @@ class JogoGrafico : public Grafico {
 	
 		MensagemDesenho* getMensagemDesenho();
 		AudioLigadoDesenho* getAudioLigadoDesenho();
+		InfoDesenho* getInfoDesenho();
 };
 
 #endif

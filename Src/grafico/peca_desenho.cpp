@@ -4,9 +4,6 @@
 
 
 void PecaDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor, Peca* peca, int corTipo ) {
-	if ( peca->isRemovida() )
-		return;
-		
 	SDL_Surface* imagem = this->getPecaIMG( peca->getTipo(), corTipo );			
 				
 	SDL_Rect ret;
@@ -53,7 +50,7 @@ void PecaDesenho::carregaIMGs() {
 	
 	reiPreto = IMG_Load( "img/rei-preto.png" );			
 	reiBranco = IMG_Load( "img/rei-branco.png" );			
-	reiVermelho = IMG_Load( "img/rei-vermelho.png" );				
+	reiVermelho = IMG_Load( "img/rei-vermelho.png" );
 }
 
 void PecaDesenho::liberaIMGs() {

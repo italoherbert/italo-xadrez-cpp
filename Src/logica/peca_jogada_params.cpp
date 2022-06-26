@@ -1,19 +1,14 @@
 
 #include "peca_jogada_params.h"
 
-PecaJogadaParams::PecaJogadaParams( JogadaUtil* jUtil, Jogo* jogo, JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp, bool isCaptura ) {
-	this->jUtil = jUtil;
+PecaJogadaParams::PecaJogadaParams( Jogo* jogo, JogadaLista* lista, Pecas* pecas, int posX, int posY, bool isComp, bool isCaptura ) {
 	this->jogo = jogo;
 	this->lista = lista;
+	this->pecas = pecas;
 	this->posX = posX;
 	this->posY = posY;
 	this->isComp = isComp;
-	this->isCaptura = isCaptura;
-	this->pecas = pecas;
-}
-
-JogadaUtil* PecaJogadaParams::getJogadaUtil() {
-	return jUtil;
+	this->isIncluirRoque = isCaptura;
 }
 
 Jogo* PecaJogadaParams::getJogo() {
@@ -36,8 +31,8 @@ bool PecaJogadaParams::getIsComp() {
 	return isComp;
 }
 
-bool PecaJogadaParams::getIsCaptura() {
-	return isCaptura;
+bool PecaJogadaParams::getIsIncluirRoque() {
+	return isIncluirRoque;
 }
 
 Pecas* PecaJogadaParams::getPecas() {

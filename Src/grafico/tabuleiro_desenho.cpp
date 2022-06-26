@@ -7,7 +7,7 @@ void TabuleiroDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 	int tab_y = jogo->getTela()->getTabuleiroY();
 	int tab_dim = jogo->getTela()->getTabuleiroDIM();
 	
-	int borda = Consts::TABULEIRO_BORDA;
+	int borda = TABULEIRO_BORDA;
 	
 	SDL_Rect ret_fundo;
 	ret_fundo.x = tab_x - borda;

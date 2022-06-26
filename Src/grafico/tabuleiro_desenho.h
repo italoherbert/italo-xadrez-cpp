@@ -2,12 +2,16 @@
 #ifndef TABULEIRO_DESENHO_H
 #define TABULEIRO_DESENHO_H
 
-#include "desenho.h"
+#include "../gui/GUI.h"
+#include "../logica/Jogo.h"
 
 class TabuleiroDesenho {
 	
+	private:
+		const int TABULEIRO_BORDA = 20;
+
 	public:		
-		void desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor );		
+		void desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor );
 	
 };
 

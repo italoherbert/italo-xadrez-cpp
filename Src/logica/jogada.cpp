@@ -1,17 +1,22 @@
 #include "jogada.h"
 
 #include <cstdlib>
-
+#include <iostream>
 
 Jogada::Jogada( int posX, int posY, Peca* captura, int tipo ) {
 	this->posX = posX;
 	this->posY = posY;
-	this->captura = captura;
+	this->captura = captura != NULL ? captura->nova() : NULL;
 	this->tipo = tipo;
 }
 
+Jogada::~Jogada() {
+	if ( captura != NULL )
+		delete captura;
+}
+
 Jogada* Jogada::nova() {
-	return new Jogada( posX, posY, captura, tipo );	
+	return new Jogada( posX, posY, captura, tipo );
 }
 
 int Jogada::getPosX() {

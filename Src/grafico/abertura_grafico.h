@@ -8,64 +8,95 @@
 #include "../gui/GUI.h"
 #include "../logica/jogo.h"
 
-struct AberturaRet {
-	int x;
-	int y;
-	int largura;
-	int altura;	
-};
+class AberturaGrafico : public Grafico {
 
-struct AberturaTexto {
-	AberturaRet textoRet;
-	char rotulo[127];	
-	SDL_Color cor;
-};
-
-struct AberturaBT {
-	AberturaRet fundoRet;	
-	AberturaTexto texto;	
-	
-	SDL_Color corFundo;
-};
-
-class AberturaGrafico : public Grafico {		
-		
 	private:
 		GUI* gui;	
+		Jogo* jogo;
 		
-		SDL_Surface* aberturaIMG;				 	
-		SDL_Color corTexto;
-		SDL_Color corFundo;
+		SDL_Surface* aberturaIMG;
+
+		SDL_Color* opcaoTextoCor = new SDL_Color;
+		SDL_Color* opcaoFundoCor = new SDL_Color;
+		SDL_Color* opcaoTextoSobreCor = new SDL_Color;
+		SDL_Color* opcaoFundoSobreCor = new SDL_Color;
+		SDL_Color* opcaoBordaCor = new SDL_Color;
 		
-		SDL_Color corTextoBTSobre;
-		SDL_Color corFundoBTSobre;
+		SDL_Color* btnFundoCor = new SDL_Color;
+		SDL_Color* btnTextoCor = new SDL_Color;
+		SDL_Color* btnTextoSobreCor = new SDL_Color;
+		SDL_Color* btnFundoSobreCor = new SDL_Color;
+		SDL_Color* btnBordaCor = new SDL_Color;
 			
-		AberturaRet menuRet;
-		AberturaTexto opcoesTextoRet;
-		AberturaBT facilBT;
-		AberturaBT normalBT;
-		AberturaBT dificilBT;				
-					
-		void desenhaMenu( SDL_Renderer* pintor );	
-		void desenhaTexto( SDL_Renderer* pintor, AberturaTexto at );	
-		void desenhaBTFundo( SDL_Renderer* pintor, AberturaBT bt );
+		SDL_Rect* jogador1TextoRet = nullptr;
+		SDL_Rect* jogador2TextoRet = nullptr;
+
+		SDL_Rect* menuRet = nullptr;
+		SDL_Rect* opcoesTituloRet = nullptr;
+		SDL_Rect* jogadorOpcaoRet = nullptr;
+		SDL_Rect* computadorOpcaoRet = nullptr;
+		SDL_Rect* jogarBTOpcaoRet = nullptr;
+
+		SDL_Rect* jogadorTextoOpcaoRet = nullptr;
+		SDL_Rect* computadorTextoOpcaoRet = nullptr;
+		SDL_Rect* jogarBTTextoOpcaoRet = nullptr;
+
+		SDL_Color* jogadorTextoOpcaoCor = new SDL_Color;
+		SDL_Color* computadorTextoOpcaoCor = new SDL_Color;
+		SDL_Color* jogarBTTextoOpcaoCor = new SDL_Color;
+
+		SDL_Color* jogadorFundoOpcaoCor = new SDL_Color;
+		SDL_Color* computadorFundoOpcaoCor = new SDL_Color;
+		SDL_Color* jogarBTFundoOpcaoCor = new SDL_Color;
+
+		SDL_Color* textoCor = new SDL_Color;
+
+		const std::string opcoesStr = "Opções";
+		const std::string jogarStr = "Jogar";
+		const std::string humanoStr = "Humano";
+		const std::string facilStr = "Fácil";
+		const std::string normalStr = "Normal";
+		const std::string dificilStr = "Difícil";
+		const std::string jogadorStr = "Jogador:";
+		const std::string computadorStr = "Computador:";
+
+		void desenhaMenu( SDL_Renderer* pintor );
+		void desenhaTexto( SDL_Renderer* pintor, SDL_Rect* ret, const char* rotulo, SDL_Color* cor );
+		void desenhaBTFundo( SDL_Renderer* pintor, SDL_Rect* ret, SDL_Color* cor, SDL_Color* bordaCor );
 		
-		bool isMouseEmBT( AberturaRet btFundoRet, int mouseX, int mouseY );
-		
-	public:				
-		AberturaGrafico( GUI* gui );
+		bool isMouseEmBT( SDL_Rect* btFundoRet, int mouseX, int mouseY );
+
+	public:
+		const static int NAO_OPCAO = 0;
+		const static int OPCAO_SET_TIPO_JOGADOR = 1;
+		const static int OPCAO_SET_TIPO_COMPUTADOR = 2;
+		const static int OPCAO_JOGAR = 3;
+
+		const int MENSAGEM_FONTE_TAM = 24;
+
+		const int MENU_ABERTURA_ESP = 10;
+
+		const int MENU_ABERTURA_ESP_OP_H = 20;
+		const int MENU_ABERTURA_ESP_OP_ROTULO_W = 20;
+
+		const int MENU_ABERTURA_ESP_BT_H = 50;
+		const int MENU_ABERTURA_ESP_BT_V = 10;
+
+		const int MENU_ABERTURA_LARGURA_FUNDO_TEXTO = 300;
+
+		AberturaGrafico( GUI* gui, Jogo* jogo );
 		
 		void inicializa();
 		void finaliza();
 		
-		void desenha( SDL_Renderer* pintor ); 	
+		void desenha( SDL_Renderer* pintor );
 	
-		void sobreNivel( int nivel );
+		void sobreOpcao( int opcao );
 	
-		bool isMouseEmFacilBT( int mouseX, int mouseY );		
-		bool isMouseEmNormalBT( int mouseX, int mouseY );		
-		bool isMouseEmDificilBT( int mouseX, int mouseY );					
-	
+		bool isMouseJogadorUmOpBT( int mouseX, int mouseY );		
+		bool isMouseJogadorDoisOpBT( int mouseX, int mouseY );		
+		bool isMouseJogarBT( int mouseX, int mouseY );					
+
 };
 
 #endif

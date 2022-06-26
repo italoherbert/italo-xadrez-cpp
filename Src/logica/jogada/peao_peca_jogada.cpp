@@ -1,10 +1,11 @@
 #include "peao_peca_jogada.h"
 
 #include <cstdlib>
+#include <iostream>
 
-#include "../logica/jogada_en_passant.h"
-#include "../logica/jogada_lista.h"
-#include "../logica/jogo.h"
+#include "../jogada_en_passant.h"
+#include "../jogada_lista.h"
+#include "../jogo.h"
 
 void PeaoPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {		
 	Jogo* jogo = params->getJogo();
@@ -68,29 +69,41 @@ void PeaoPecaJogada::calculaJogadasPossiveis( PecaJogadaParams* params ) {
 		}
 	}
 
-	if ( jogo->getUltimaPeca() != NULL ) {
-		if ( jogo->getUltimaPeca()->getTipo() == Jogo::PEAO && jogo->getUltimaPeca()->getMoveuContador() == 1 )	 {		
-			peca = pecas->getPeca( posX, posY );
-			
-			int ultPecaX = jogo->getUltimaPeca()->getPosX();
-			int ultPecaY = jogo->getUltimaPeca()->getPosY();
-			Peca* ultPeca = pecas->getPeca( ultPecaX, ultPecaY );
-			if ( ultPeca != NULL ) {	
-				if ( isComp ) {	
-					Peca* peca = pecas->getComputadorPeca( posX, posY );
-					if ( peca->getPosY() == 4 && ultPeca->getPosY() == 4 )
-						if ( ultPeca->getPosX() == peca->getPosX() - 1 || ultPeca->getPosX() == peca->getPosX() + 1 )
-							lista->addJogada( new JogadaEnPassant( ultPeca->getPosX(), ultPeca->getPosY() + 1, ultPeca ) );
-				} else {	
-					Peca* peca = pecas->getJogadorPeca( posX, posY );		
-					if ( peca->getPosY() == 3 && ultPeca->getPosY() == 3 )
-						if ( ultPeca->getPosX() == peca->getPosX() - 1 || ultPeca->getPosX() == peca->getPosX() + 1 ) 
-							lista->addJogada( new JogadaEnPassant( ultPeca->getPosX(), ultPeca->getPosY() - 1, ultPeca ) );
-				}
-			
+	if ( isComp ) {
+		if ( posY == 4 ) {
+			if ( posX > 0 ) {
+				Peca* jogPecaEsq = pecas->getJogadorPeca( posX-1, posY );
+				if ( jogPecaEsq != NULL )
+					if ( jogPecaEsq->getTipo() == Jogo::PEAO && jogPecaEsq->getMoveuContador() == 1 )
+						if ( pecas->getPeca( posX-1, posY+1 ) == NULL )
+							lista->addJogada( new JogadaEnPassant( posX-1, posY+1, jogPecaEsq ) );
 			}
-			
+			if ( posX < 7 ) {
+				Peca* jogPecaDir = pecas->getJogadorPeca( posX+1, posY );
+				if ( jogPecaDir != NULL )
+					if ( jogPecaDir->getTipo() == Jogo::PEAO && jogPecaDir->getMoveuContador() == 1 )
+						if ( pecas->getPeca( posX+1, posY+1 ) == NULL )
+							lista->addJogada( new JogadaEnPassant( posX+1, posY+1, jogPecaDir ) );
+			}
+		}
+	} else {
+		if ( posY == 3 ) {
+			if ( posX > 0 ) {
+				Peca* compPecaEsq = pecas->getComputadorPeca( posX-1, posY );
+				if ( compPecaEsq != NULL )
+					if ( compPecaEsq->getTipo() == Jogo::PEAO && compPecaEsq->getMoveuContador() == 1 )
+						if ( pecas->getPeca( posX-1, posY - 1 ) == NULL )
+							lista->addJogada( new JogadaEnPassant( posX-1, posY-1, compPecaEsq ) );
+			}
+			if ( posX < 7 ) {
+				Peca* compPecaDir = pecas->getComputadorPeca( posX+1, posY );
+				if ( compPecaDir != NULL )
+					if ( compPecaDir->getTipo() == Jogo::PEAO && compPecaDir->getMoveuContador() == 1 )
+						if ( pecas->getPeca( posX+1, posY-1 ) == NULL )
+							lista->addJogada( new JogadaEnPassant( posX+1, posY-1, compPecaDir ) );
+			}
 		}
 	}
+
 }
 

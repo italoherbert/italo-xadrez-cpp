@@ -1,24 +1,27 @@
 
 #include "GUI.h"
 
-GUI::GUI() {
+GUI::GUI( GUI_Driver* drv ) {
+	this->drv = drv;
 	this->graficoTipo = ABERTURA_GRAFICO;
 }
 
 void GUI::reinicia() {
 	this->setGraficoTipo( ABERTURA_GRAFICO );
+	this->repinta();
 }
 
-void GUI::executa( std::string titulo, int largura, int altura ) {
-	SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO );
+void GUI::execGUI( std::string titulo, int largura, int altura ) {
+	SDL_Init( SDL_INIT_EVERYTHING );
 	IMG_Init( IMG_INIT_PNG );
-	TTF_Init();
 	Mix_Init( MIX_INIT_MID );
+	TTF_Init();
 
-	Mix_OpenAudio( 22050, AUDIO_S16SYS, 2, 1024 );	
+	Mix_OpenAudio( 22050, AUDIO_S16SYS, 2, 1024 );
+
+	fonte = TTF_OpenFont( "arial.ttf", 24 );
+	infoFonte = TTF_OpenFont( "arial.ttf", 18 );
 	
-	mensagemFonte = TTF_OpenFont( "BASKVILL.TTF", Consts::MENSAGEM_FONTE_TAM );
-
 	janela = SDL_CreateWindow( titulo.c_str(), 
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 		largura, altura, 
@@ -33,24 +36,24 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	
 	SDL_Event evento;
 	
-	bool fim = false;		
-	
 	if ( listener != NULL )
 		listener->inicializou();		
 	
-	while( !fim ) {	
-		switch ( graficoTipo ) {
-			case ABERTURA_GRAFICO:
-				aberturaGrafico->desenha( pintor );
-				break;
-			case JOGO_GRAFICO:
-				jogoGrafico->desenha( pintor );
-				break;
-		}
+	fim = false;
+	repintar = true;
 
-		if ( graficoTipo == JOGO_GRAFICO )
-			if ( jogoGraficoListener != NULL )
-				jogoGraficoListener->executando();
+	while( !fim ) {
+		if ( repintar ) {
+			switch ( graficoTipo ) {
+				case ABERTURA_GRAFICO:
+					aberturaGrafico->desenha( pintor );
+					break;
+				case JOGO_GRAFICO:
+					jogoGrafico->desenha( pintor );
+					break;
+			}
+			repintar = false;
+		}
 
 		if ( listener != NULL ) {		
 			while( SDL_PollEvent( &evento ) != 0 ) {
@@ -59,44 +62,51 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 						listener->janelaFechada();
 						fim = true;
 						break;
-					case SDL_MOUSEBUTTONDOWN:						
-						if ( graficoTipo == ABERTURA_GRAFICO ) {																			
-							if ( aberturaGraficoListener != NULL)		
-								aberturaGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );														
+					case SDL_MOUSEBUTTONDOWN:
+						if ( graficoTipo == ABERTURA_GRAFICO ) {
+							if ( aberturaGraficoListener != NULL )
+								aberturaGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );
 						} else if ( graficoTipo == JOGO_GRAFICO ) {
 							if ( jogoGraficoListener != NULL )
 								jogoGraficoListener->mousePressionado( evento.motion.x, evento.motion.y );
 						}
 						break;
 					case SDL_MOUSEMOTION:
-						if ( graficoTipo == ABERTURA_GRAFICO ) {																			
+						if ( graficoTipo == ABERTURA_GRAFICO ) {
 							if ( aberturaGraficoListener != NULL)		
-								aberturaGraficoListener->mouseSobre( evento.motion.x, evento.motion.y );														
+								aberturaGraficoListener->mouseSobre( evento.motion.x, evento.motion.y );
 						}
 						break;
 					case SDL_KEYDOWN:
 						if ( graficoTipo == ABERTURA_GRAFICO ) {												
-							if ( aberturaGraficoListener != NULL)		
-								if ( evento.key.keysym.sym == SDLK_ESCAPE )
+							if ( aberturaGraficoListener != NULL )
+								if ( evento.key.keysym.scancode == SDL_SCANCODE_ESCAPE )
 									aberturaGraficoListener->teclaPressionada( JogoGraficoListener::TECLA_ESQ );						
 						} else if ( graficoTipo == JOGO_GRAFICO ) {
-							if ( jogoGraficoListener != NULL )		
-								if ( evento.key.keysym.sym == SDLK_ESCAPE )
+							if ( jogoGraficoListener != NULL ) {
+								if ( evento.key.keysym.scancode == SDL_SCANCODE_ESCAPE ) {
 									jogoGraficoListener->teclaPressionada( JogoGraficoListener::TECLA_ESQ );
+								} else if ( evento.key.keysym.scancode == SDL_SCANCODE_RETURN ) {
+									jogoGraficoListener->teclaPressionada( JogoGraficoListener::TECLA_ENTER );
+								}
+							}
 						}
 						break;						
 				}
 			}
 		}
 
-		SDL_Delay( Consts::DELAY );			
+		SDL_Delay( DELAY );
 	}
 	
 	if ( listener != NULL )
 		listener->finalizando();
 	
-	TTF_CloseFont( mensagemFonte );
 	IMG_Quit();
+
+	TTF_CloseFont( infoFonte );
+	TTF_CloseFont( fonte );
+	TTF_Quit();
 	
 	Mix_CloseAudio();	
 	Mix_Quit();
@@ -104,6 +114,20 @@ void GUI::executa( std::string titulo, int largura, int altura ) {
 	SDL_DestroyRenderer( pintor );
 	SDL_DestroyWindow( janela );
 	SDL_Quit();	
+}
+
+void GUI::execJogo( void* id ) {
+	while( !fim ) {
+		if ( graficoTipo == JOGO_GRAFICO )
+			if ( jogoGraficoListener != NULL )
+				jogoGraficoListener->executando();
+
+		SDL_Delay( DELAY );
+	}
+}
+
+void GUI::repinta() {
+	this->repintar = true;
 }
 
 void GUI::setCursorTipo( int tipo ) {
@@ -149,6 +173,10 @@ SDL_Surface* GUI::getTela() {
 	return tela;
 }
 
-TTF_Font* GUI::getMensagemFonte() {
-	return this->mensagemFonte;
+TTF_Font* GUI::getFonte() {
+	return fonte;
+}
+
+TTF_Font* GUI::getInfoFonte() {
+	return infoFonte;
 }

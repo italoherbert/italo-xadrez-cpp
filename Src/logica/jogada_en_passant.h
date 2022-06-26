@@ -9,6 +9,7 @@ class JogadaEnPassant : public Jogada {
 	
 	public:
 		JogadaEnPassant( int posX, int posY, Peca* captura );
+		~JogadaEnPassant();
 };
 
 #endif

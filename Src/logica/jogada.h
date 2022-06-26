@@ -5,10 +5,9 @@
 #include "peca.h"
 
 class Jogada {
-	private:
+	protected:
 		int posX;
 		int posY;
-		int peso;
 		Peca* captura;
 		
 		int tipo;		
@@ -19,8 +18,9 @@ class Jogada {
 		const static int EN_PASSANT = 3;
 		
 		Jogada( int posX, int posY, Peca* captura, int tipo );
+		virtual ~Jogada();
 
-		Jogada* nova();
+		virtual Jogada* nova();
 
 		int getPosX();
 		int getPosY();

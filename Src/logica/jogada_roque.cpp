@@ -7,23 +7,17 @@ JogadaRoque::JogadaRoque( int reiPosX, int reiPosY, int torrePosX, int torrePosY
 				: Jogada( reiPosX, reiPosY, captura, ROQUE ) {
 	this->torrePosX = torrePosX;
 	this->torrePosY = torrePosY;
-	this->rei = rei;
-	this->torre = torre;		
+	this->rei = rei->nova();
+	this->torre = torre->nova();
+}
+
+JogadaRoque::~JogadaRoque() {
+	delete rei;
+	delete torre;
 }
 
 JogadaRoque* JogadaRoque::nova() {
-	Jogada* jog = Jogada::nova();	
-	int posX = jog->getPosX();
-	int posY = jog->getPosY();
-	
-	Peca* captura = NULL;
-	if ( jog->getCaptura() != NULL )
-		captura = jog->getCaptura()->nova();
-	
-	Peca* pRei = rei->nova();
-	Peca* pTorre = torre->nova();
-					
- 	return new JogadaRoque( posX, posY, torrePosX, torrePosY, captura, pRei, pTorre );	
+ 	return new JogadaRoque( posX, posY, torrePosX, torrePosY, captura, rei, torre );
 }
 
 int JogadaRoque::getReiPosX() {

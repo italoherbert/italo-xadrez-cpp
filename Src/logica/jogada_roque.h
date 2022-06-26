@@ -15,6 +15,7 @@ class JogadaRoque : public Jogada {
 	
 	public:
 		JogadaRoque( int reiPosX, int reiPosY, int torrePosX, int torrePosY, Peca* captura, Peca* rei, Peca* torre );
+		~JogadaRoque();
 		
 		JogadaRoque* nova();
 		

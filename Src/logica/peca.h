@@ -14,10 +14,15 @@ class Peca {
 		bool removida;
 		int moveuContador;
 		
+		int jogadaCont;
+
 	public:
 		Peca( bool deComp, int tipo, int posX, int posY );
 		
 		Peca* nova();
+
+		void incJogadaCont();
+		int getJogadaCont();
 		
 		bool isIgual( Peca* peca );
 		

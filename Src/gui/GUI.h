@@ -12,16 +12,26 @@
 #include "abertura_grafico_listener.h"
 #include "grafico.h"
 #include "GUI_Listener.h"
+#include "GUI_Driver.h"
 #include "jogo_grafico_listener.h"
 
 class GUI {
+
+	public:
+		const static int ABERTURA_GRAFICO = 1;
+		const static int JOGO_GRAFICO = 2;
+
+		const static int CURSOR_MAOZINHA = 2;
+		const static int CURSOR_SETA = 1;
+
+		const int DELAY = 30;
+		const int DELAY_MENSAGEM = 1500;
+
 	private:
 		SDL_Window* janela = nullptr;
 		SDL_Surface* tela = nullptr;
 		SDL_Renderer* pintor = nullptr;
-		
-		TTF_Font* mensagemFonte = nullptr;
-		
+
 		SDL_Cursor* cursorSeta = nullptr;
 		SDL_Cursor* cursorMaozinha = nullptr;
 		
@@ -33,19 +43,22 @@ class GUI {
 		Grafico* jogoGrafico = nullptr;
 		
 		int graficoTipo = ABERTURA_GRAFICO;
-	
+		TTF_Font* fonte = NULL;
+		TTF_Font* infoFonte = NULL;
+
+		GUI_Driver* drv;
+
+		bool fim = false;
+		bool repintar = false;
+
 	public:
-		const static int ABERTURA_GRAFICO = 1;
-		const static int JOGO_GRAFICO = 2;
-		
-		const static int CURSOR_MAOZINHA = 2;
-		const static int CURSOR_SETA = 1;
-		
-		GUI();
+		GUI( GUI_Driver* drv );
 		
 		void reinicia();
+		void repinta();
 		
-		void executa( std::string titulo, int largura, int altura );
+		void execGUI( std::string titulo, int largura, int altura );
+		void execJogo( void* id );
 
 		void carregaTelaDIM( int* largura, int* altura );
 
@@ -60,7 +73,8 @@ class GUI {
 		void setJogoGraficoListener( JogoGraficoListener* listener );
 		
 		SDL_Surface* getTela();
-		TTF_Font* getMensagemFonte();		
+		TTF_Font* getFonte();
+		TTF_Font* getInfoFonte();
 };
 
 #endif

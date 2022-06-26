@@ -44,10 +44,7 @@ Peca* JogoPecas::getPeca( int posX, int posY ) {
 	return jogo->getPeca( jogadorPecas, computadorPecas, posX, posY );
 }
 
-void JogoPecas::setPecas( Peca* jogPecas[ Jogo::N_PECAS ], Peca* compPecas[ Jogo::N_PECAS ] )  {
-	for( int i = 0; i < Jogo::N_PECAS; i++ ) {	
-		this->jogadorPecas[i] = jogPecas[i]->nova();
-		this->computadorPecas[i] = compPecas[i]->nova();
-	}
+void JogoPecas::setPecas( Peca** jogPecas, Peca** compPecas )  {
+	jogo->copia_pecas( jogadorPecas, computadorPecas, jogPecas, compPecas );
 }
 
