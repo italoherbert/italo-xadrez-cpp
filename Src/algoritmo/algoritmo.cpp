@@ -180,22 +180,23 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 			}
 
 			Peca* capturada = jog->getCaptura();
-			if ( capturada != NULL ) {
-				if ( capturada->getTipo() != Jogo::REI ) {
+			if ( capturada != NULL )
+				if ( capturada->getTipo() != Jogo::REI )
 					peso += this->calculaPeso( capturada );
-
-					if ( capturadoura != NULL )
-						if ( capturada->isIgual( capturadoura ) )
-							peso -= pecaPeso;
-				}
-			}
 
 			if ( no->pai == NULL ) {
 				if ( isXeque )
 					peso += 0.001 - p->getJogadaCont() * 0.0001;
 
-				if ( capturadoura != NULL )
-					peso += pecaPeso;
+				if ( capturadoura != NULL ) {
+					bool isCapturadouraCapturavel = jogo->isCapturaOutraPeca(
+							isComp ? compPecas : jogPecas,
+							jogPecas, compPecas,
+							capturadoura->getPosX(), capturadoura->getPosY(), isComp );
+
+					if ( !isCapturadouraCapturavel )
+						peso += pecaPeso;
+				}
 
 				bool isCapturadaAposMov = jogo->isCapturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, jog->getPosX(), jog->getPosY(), !isComp );
 				if ( isCapturadaAposMov )
