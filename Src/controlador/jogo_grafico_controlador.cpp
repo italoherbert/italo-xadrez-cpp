@@ -167,6 +167,8 @@ void JogoGraficoControlador::executando() {
 		
 		bool animou = animacao->move( movimento, Consts::ANIM_RAIO_INC );
 		if ( animou ) {		
+			gui->repinta();
+
 			int posX = movimento->getMovimento1()->getPeca()->getPosX();
 			int posY = movimento->getMovimento1()->getPeca()->getPosY();
 
