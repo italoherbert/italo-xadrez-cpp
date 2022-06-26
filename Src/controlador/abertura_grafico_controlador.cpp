@@ -14,7 +14,7 @@ void AberturaGraficoControlador::mousePressionado( int x, int y ) {
 
 	if ( aberturaGrafico->isMouseJogadorUmOpBT( x, y ) ) {
 		jogo->incNivel( false );
-	} else if ( aberturaGrafico->isMouseJogador2OpBT( x, y ) ) {
+	} else if ( aberturaGrafico->isMouseJogadorDoisOpBT( x, y ) ) {
 		jogo->incNivel( true );
 	} else if ( aberturaGrafico->isMouseJogarBT( x, y ) ) {
 		aberturaGrafico->sobreOpcao( AberturaGrafico::OPCAO_JOGAR );
@@ -34,7 +34,7 @@ void AberturaGraficoControlador::mouseSobre( int x, int y ) {
 	bool mouseEm = true;
 	if ( aberturaGrafico->isMouseJogadorUmOpBT( x, y ) ) {
 		aberturaGrafico->sobreOpcao( AberturaGrafico::OPCAO_SET_TIPO_JOGADOR );
-	} else if ( aberturaGrafico->isMouseJogador2OpBT( x, y ) ) {
+	} else if ( aberturaGrafico->isMouseJogadorDoisOpBT( x, y ) ) {
 		aberturaGrafico->sobreOpcao( AberturaGrafico::OPCAO_SET_TIPO_COMPUTADOR );
 	} else if ( aberturaGrafico->isMouseJogarBT( x, y ) ) {
 		aberturaGrafico->sobreOpcao( AberturaGrafico::OPCAO_JOGAR );

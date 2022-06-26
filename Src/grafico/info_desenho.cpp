@@ -23,12 +23,19 @@ int InfoDesenho::desenha( Jogo* jogo, GUI* gui, SDL_Renderer* pintor ) {
 	int derrotas = jogo->getVitoriasCont( true );
 	int empates = jogo->getEmpatesCont();
 
-	const char* brancasNivelStr = jogo->getNivelString( brancasNivel ).c_str();
-	const char* pretasNivelStr = jogo->getNivelString( pretasNivel ).c_str();
+	std::string brancasNivelString = jogo->getNivelString( brancasNivel ).c_str();
+	std::string pretasNivelString = jogo->getNivelString( pretasNivel ).c_str();
 
-	const char* vitoriasStr = std::to_string( vitorias ).c_str();
-	const char* derrotasStr = std::to_string( derrotas ).c_str();
-	const char* empatesStr = std::to_string( empates ).c_str();
+	std::string vitoriasString = std::to_string( vitorias );
+	std::string derrotasString = std::to_string( derrotas );
+	std::string empatesString = std::to_string( empates );
+
+	const char* brancasNivelStr = brancasNivelString.c_str();
+	const char* pretasNivelStr = pretasNivelString.c_str();
+
+	const char* vitoriasStr = vitoriasString.c_str();
+	const char* derrotasStr = derrotasString.c_str();
+	const char* empatesStr = empatesString.c_str();
 
 	int w = 0;
 	w += this->calculaPainelLargura( gui, reiBranco, brancasNivelStr ) + infoEsp;

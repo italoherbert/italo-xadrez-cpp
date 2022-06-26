@@ -10,13 +10,13 @@
 #include "jogada/rei_peca_jogada.h"
 #include "jogada/torre_peca_jogada.h"
 
+#include "jogo_constantes.h"
 #include "jogada_lista.h"
 #include "movimento.h"
 #include "peca.h"
 #include "pecas.h"
 #include "peca_mov.h"
 #include "tela.h"
-#include "jogo_constantes.h"
 #include "peca_jogada_params.h"
 #include "jogo_driver.h"
 
@@ -31,7 +31,7 @@ class TorrePecaJogada;
 
 class Jogo : public Pecas, public JogoConstantes {
 
-	private:		
+	private:
 		Tela* tela;
 		
 		Peca* jogadorPecas[ N_PECAS ];
@@ -244,7 +244,7 @@ class Jogo : public Pecas, public JogoConstantes {
 		JogoDriver* getJogoDriver();
 
 		std::string getNivelString( int nivel );
-		std::string get_peca_str( int tipo );
+		std::string getPecaTipoString( int tipo );
 };
 
 #endif

@@ -19,6 +19,9 @@ Jogo::Jogo( JogoDriver* drv ) {
 	this->torrePecaJogada = new TorrePecaJogada();
 	this->bispoPecaJogada = new BispoPecaJogada();
 	this->rainhaPecaJogada = new RainhaPecaJogada( torrePecaJogada, bispoPecaJogada );
+
+	this->jogadorNivel = NIVEL_HUMANO;
+	this->computadorNivel = NIVEL_NORMAL;
 }
 
 Jogo::~Jogo() {
@@ -813,15 +816,15 @@ JogoDriver* Jogo::getJogoDriver() {
 
 std::string Jogo::getNivelString( int nivel ) {
 	switch( nivel ) {
-		case NIVEL_HUMANO: return "Humano";
-		case NIVEL_FACIL: return "Fácil";
-		case NIVEL_NORMAL: return "Normal";
-		case NIVEL_DIFICIL: return "Difícil";
+		case Jogo::NIVEL_HUMANO:  return "Humano";
+		case Jogo::NIVEL_FACIL:   return "Fácil";
+		case Jogo::NIVEL_NORMAL:  return "Normal";
+		case Jogo::NIVEL_DIFICIL: return "Difícil";
 	}
 	return "";
 }
 
-std::string Jogo::get_peca_str( int tipo ) {
+std::string Jogo::getPecaTipoString( int tipo ) {
 	switch( tipo ) {
 		case Jogo::REI: return "REI";
 		case Jogo::RAINHA: return "RAINHA";

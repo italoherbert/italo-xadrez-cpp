@@ -94,7 +94,7 @@ class AberturaGrafico : public Grafico {
 		void sobreOpcao( int opcao );
 	
 		bool isMouseJogadorUmOpBT( int mouseX, int mouseY );		
-		bool isMouseJogador2OpBT( int mouseX, int mouseY );		
+		bool isMouseJogadorDoisOpBT( int mouseX, int mouseY );		
 		bool isMouseJogarBT( int mouseX, int mouseY );					
 
 };

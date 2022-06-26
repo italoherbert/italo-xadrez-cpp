@@ -122,8 +122,11 @@ void AberturaGrafico::desenha( SDL_Renderer* pintor ) {
 }
 
 void AberturaGrafico::desenhaMenu( SDL_Renderer* pintor ) {
-	const char* jogadorOpcaoTexto = jogo->getNivelString( jogo->getNivel( false ) ).c_str();
-	const char* computadorOpcaoTexto = jogo->getNivelString( jogo->getNivel( true ) ).c_str();
+	std::string jogadorOpcaoTextoStr = jogo->getNivelString( jogo->getNivel( false ) );
+	std::string computadorOpcaoTextoStr = jogo->getNivelString( jogo->getNivel( true ) );
+
+	const char* jogadorOpcaoTexto = jogadorOpcaoTextoStr.c_str();
+	const char* computadorOpcaoTexto = computadorOpcaoTextoStr.c_str();
 
 	int espacamento = MENU_ABERTURA_ESP;
 
@@ -287,7 +290,7 @@ bool AberturaGrafico::isMouseJogadorUmOpBT( int mouseX, int mouseY ) {
 	return this->isMouseEmBT( jogadorOpcaoRet, mouseX, mouseY );
 }
 
-bool AberturaGrafico::isMouseJogador2OpBT( int mouseX, int mouseY ) {
+bool AberturaGrafico::isMouseJogadorDoisOpBT( int mouseX, int mouseY ) {
 	return this->isMouseEmBT( computadorOpcaoRet, mouseX, mouseY );
 }
 
