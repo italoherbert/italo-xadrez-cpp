@@ -134,12 +134,6 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 		jogo->calculaJogadasPossiveis( lista, jogoPecas, p->getPosX(), p->getPosY(), p->getTipo(), isComp, true );
 		jogo->filtraJogadas( lista, jogPecas, compPecas, p->getPosX(), p->getPosY(), isComp );
 
-		Peca* capturadoura = jogo->capturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, p->getPosX(), p->getPosY(), !isComp );
-
-		float pecaPeso = 0;
-		if ( capturadoura != NULL )
-			pecaPeso = this->calculaPeso( p );
-
 		jogo->deleta_pecas( jogPecas );
 		jogo->deleta_pecas( compPecas );
 		delete jogoPecas;
@@ -188,19 +182,7 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 				if ( isXeque )
 					peso += 0.001 - p->getJogadaCont() * 0.0001;
 
-				if ( capturadoura != NULL ) {
-					bool isCapturadouraCapturavel = jogo->isCapturaOutraPeca(
-							isComp ? compPecas : jogPecas,
-							jogPecas, compPecas,
-							capturadoura->getPosX(), capturadoura->getPosY(), isComp );
-
-					if ( !isCapturadouraCapturavel )
-						peso += pecaPeso;
-				}
-
-				bool isCapturadaAposMov = jogo->isCapturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, jog->getPosX(), jog->getPosY(), !isComp );
-				if ( isCapturadaAposMov )
-					peso -= this->calculaPeso( p );
+				peso += this->estadoAtualSomaPesos( jogPecas, compPecas, isComp ) * 0.01;
 			}
 
 			jogo->deleta_pecas( jogPecas );
@@ -264,6 +246,28 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 	}
 
 	return minimaxNo;
+}
+
+float Algoritmo::estadoAtualSomaPesos( Peca** jps, Peca** cps, bool isComp ) {
+	float somaJog = 0;
+	float somaOutroJog = 0;
+	for( int i = 0; i < Jogo::N_PECAS; i++ ) {
+		Peca* p = jogo->getPeca( isComp ? cps : jps, i );
+		if ( p == NULL )
+			continue;
+
+		somaJog += this->calculaPeso( p );
+	}
+
+	for( int i = 0; i < Jogo::N_PECAS; i++ ) {
+		Peca* p = jogo->getPeca( isComp ? jps : cps, i );
+		if ( p == NULL )
+			continue;
+
+		somaOutroJog += this->calculaPeso( p );
+	}
+
+	return somaJog - somaOutroJog;
 }
 
 void Algoritmo::limpaMiniMaxArvore( MiniMaxNo** no ) {

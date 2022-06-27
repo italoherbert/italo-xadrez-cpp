@@ -51,6 +51,7 @@ class Algoritmo {
 		Peca* sorteiaPeca( Peca** jps, Peca** cps, bool isComp );
 		Jogada* sorteiaPecaJogada( Peca* peca, Peca** jps, Peca** cps, bool isComp );
 
+		float estadoAtualSomaPesos( Peca** jps, Peca** cps, bool isComp );
 		float calculaPeso( Peca* peca );
 
 	public:
