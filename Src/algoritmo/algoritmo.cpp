@@ -14,34 +14,44 @@ Algoritmo::Algoritmo( Jogo* jogo ) {
 }
 
 bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp ) {
-	MiniMaxNo* raiz = new MiniMaxNo;
-	raiz->peso = 0;
-	raiz->pai = NULL;
-	raiz->filhos = NULL;
-	raiz->jogada = NULL;
-	raiz->terminal = false;
-	raiz->venceu = false;
 
-	int nivel = jogo->getNivel( isComp );
-
-	MiniMaxNo* no = this->minimax( raiz, true, nivel, INT32_MIN, INT32_MAX, isComp );
-
-	bool tentativaDominioCentro = false;
 	bool sorteou = false;
+	if ( jogo->getJogadasCont( isComp ) < 3 ) {
+		jogo->copia_pecas( jogPecas, compPecas );
 
-	while( no->pai->pai != NULL  )
-		no = no->pai;
+		PecaMov* ultMov = jogo->getUltimoMov( isComp );
+		sorteou = this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, isComp, ultMov );
+
+		jogo->deleta_pecas( jogPecas );
+		jogo->deleta_pecas( compPecas );
+	}
 
 	bool jogadaMinimaxEncontrada = false;
-	if ( !tentativaDominioCentro && !sorteou ) {
+	if ( !sorteou ) {
+		MiniMaxNo* raiz = new MiniMaxNo;
+		raiz->peso = 0;
+		raiz->pai = NULL;
+		raiz->filhos = NULL;
+		raiz->jogada = NULL;
+		raiz->terminal = false;
+		raiz->venceu = false;
+
+		int nivel = jogo->getNivel( isComp );
+
+		MiniMaxNo* no = this->minimax( raiz, true, nivel, INT32_MIN, INT32_MAX, isComp );
+
+		while( no->pai->pai != NULL  )
+			no = no->pai;
+
 		*posX = no->posX;
 		*posY = no->posY;
 		*jogada = no->jogada->nova();
 
+		this->limpaMiniMaxArvore( &raiz );
 		jogadaMinimaxEncontrada = true;
 	}
 
-	this->limpaMiniMaxArvore( &raiz );
+
 
 	if ( jogadaMinimaxEncontrada ) {
 		Peca* escolhida = jogo->getPeca( *posX, *posY );
@@ -80,11 +90,11 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 		}
 
 		escolhida->incJogadaCont();
-
-		jogo->incJogadasCont( isComp );
 	}
 
-	return jogadaMinimaxEncontrada || tentativaDominioCentro || sorteou;
+	jogo->incJogadasCont( isComp );
+
+	return jogadaMinimaxEncontrada || sorteou;
 }
 
 MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp ) {
@@ -318,11 +328,11 @@ float Algoritmo::calculaPeso( Peca* peca ) {
 	float peso = 0;
 	switch( peca->getTipo() ) {
 		case Jogo::REI:     peso = 0.5;  break;
-		case Jogo::RAINHA:  peso = 8;   break;
-		case Jogo::TORRE:   peso = 5;   break;
-		case Jogo::BISPO:   peso = 3;   break;
+		case Jogo::RAINHA:  peso = 10;   break;
+		case Jogo::TORRE:   peso = 6;   break;
+		case Jogo::BISPO:   peso = 4;   break;
 		case Jogo::CAVALO:  peso = 3;   break;
-		case Jogo::PEAO:    peso = 1;  break;
+		case Jogo::PEAO:    peso = 2;  break;
 	}
 	return peso;
 }
