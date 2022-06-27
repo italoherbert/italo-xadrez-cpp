@@ -168,6 +168,11 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 			if ( no->pai == NULL ) {
 				if ( isXeque )
 					peso += 0.001 - p->getJogadaCont() * 0.0001;
+
+				PecaMov* ultMov = jogo->getUltimoMov( isComp );
+				if ( ultMov != nullptr )
+					if ( p->getPosX() == ultMov->getY2() && p->getPosY() == ultMov->getY2() )
+						peso -= 0.01;
 			}
 
 			jogo->deleta_pecas( jogPecas );
