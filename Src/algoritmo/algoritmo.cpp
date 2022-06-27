@@ -134,11 +134,9 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 		jogo->calculaJogadasPossiveis( lista, jogoPecas, p->getPosX(), p->getPosY(), p->getTipo(), isComp, true );
 		jogo->filtraJogadas( lista, jogPecas, compPecas, p->getPosX(), p->getPosY(), isComp );
 
-		Peca* capturadoura = jogo->capturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, p->getPosX(), p->getPosY(), !isComp );
+		Peca* adversariaQueCaptura = jogo->capturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, p->getPosX(), p->getPosY(), !isComp );
 
-		float pecaPeso = 0;
-		if ( capturadoura != NULL )
-			pecaPeso = this->calculaPeso( p );
+		float pecaPeso = this->calculaPeso( p );
 
 		jogo->deleta_pecas( jogPecas );
 		jogo->deleta_pecas( compPecas );
@@ -188,19 +186,8 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 				if ( isXeque )
 					peso += 0.001 - p->getJogadaCont() * 0.0001;
 
-				if ( capturadoura != NULL ) {
-					bool isCapturadouraCapturavel = jogo->isCapturaOutraPeca(
-							isComp ? compPecas : jogPecas,
-							jogPecas, compPecas,
-							capturadoura->getPosX(), capturadoura->getPosY(), isComp );
-
-					if ( !isCapturadouraCapturavel )
-						peso += pecaPeso;
-				}
-
-				bool isCapturadaAposMov = jogo->isCapturaOutraPeca( ( isComp ? jogPecas : compPecas ), jogPecas, compPecas, jog->getPosX(), jog->getPosY(), !isComp );
-				if ( isCapturadaAposMov )
-					peso -= this->calculaPeso( p );
+				if ( adversariaQueCaptura != NULL )
+					peso += pecaPeso * 0.01;
 			}
 
 			jogo->deleta_pecas( jogPecas );
