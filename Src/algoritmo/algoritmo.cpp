@@ -16,7 +16,7 @@ Algoritmo::Algoritmo( Jogo* jogo ) {
 bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool isComp ) {
 
 	bool sorteou = false;
-	if ( jogo->getJogadasCont( isComp ) < 3 ) {
+	if ( jogo->getJogadasCont( isComp ) < 2 ) {
 		jogo->copia_pecas( jogPecas, compPecas );
 
 		PecaMov* ultMov = jogo->getUltimoMov( isComp );
