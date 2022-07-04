@@ -1,5 +1,7 @@
 #include "peca.h"
 
+#include "jogo.h"
+
 #include <cstdlib>
 
 Peca::Peca( bool deComp, int tipo, int posX, int posY ) {
@@ -12,6 +14,7 @@ Peca::Peca( bool deComp, int tipo, int posX, int posY ) {
 	this->removida = false;	
 	this->moveuContador = 0;
 	this->jogadaCont = 0;
+	this->ehPeaoNoInicio = ( tipo == Jogo::PEAO );
 }
 
 Peca* Peca::nova() {
@@ -31,6 +34,10 @@ void Peca::incJogadaCont() {
 
 int Peca::getJogadaCont() {
 	return jogadaCont;
+}
+
+bool Peca::isPeaoNoInicio() {
+	return ehPeaoNoInicio;
 }
 
 bool Peca::isIgual( Peca* peca ) {

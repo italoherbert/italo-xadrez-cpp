@@ -40,7 +40,7 @@ class Algoritmo {
 	protected:
 		Jogo* jogo;
 
-		MiniMaxNo* minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp );
+		MiniMaxNo* minimax( MiniMaxNo* no, bool isMaximizador, int iniNivel, int nivel, float alpha, float beta, bool isComp );
 
 		void limpaMiniMaxArvore( MiniMaxNo** no );
 		void efetuaJogadas( MiniMaxNo* no, Peca* jps[Jogo::N_PECAS], Peca* cps[Jogo::N_PECAS] );
@@ -53,6 +53,7 @@ class Algoritmo {
 
 		float estadoAtualSomaPesos( Peca** jps, Peca** cps, bool isComp );
 		float calculaPeso( Peca* peca );
+		float calculaPeso( int tipo );
 
 	public:
 		Algoritmo( Jogo* jogo );

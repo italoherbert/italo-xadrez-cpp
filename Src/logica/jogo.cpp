@@ -157,9 +157,9 @@ void Jogo::move2( Peca** jogPecas, Peca** compPecas, Peca* p, Jogada* jogada ) {
 		this->move( jogPecas, compPecas, p->getPosX(), p->getPosY(), jogada->getPosX(), jogada->getPosY() );
 	}
 
-	if( p->getTipo() == Jogo::PEAO )
+	if( p->getTipo() == PEAO )
 		if( jogada->getPosY() == 0 || jogada->getPosY() == 7 )
-			p->setTipo( Jogo::RAINHA );
+			p->setTipo( RAINHA );
 }
 
 bool Jogo::isPossivelEstaEmXequeMateOuEmpate( Peca** jogPecas, Peca** compPecas, bool isComp ) {

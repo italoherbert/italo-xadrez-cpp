@@ -12,6 +12,7 @@ class Peca {
 		int tipo;
 		bool deComp;
 		bool removida;
+		bool ehPeaoNoInicio;
 		int moveuContador;
 		
 		int jogadaCont;
@@ -33,6 +34,7 @@ class Peca {
 		int getTipo();
 		bool isRemovida();
 		bool isDeComp();
+		bool isPeaoNoInicio();
 		int getMoveuContador();
 		
 		void setPosX( int posX );
