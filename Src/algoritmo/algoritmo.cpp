@@ -25,7 +25,7 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 	int nivel = jogo->getNivel( isComp );
 
 	srand( time( NULL ) );
-	MiniMaxNo* no = this->minimax( raiz, true, nivel, INT32_MIN, INT32_MAX, isComp );
+	MiniMaxNo* no = this->minimax( raiz, true, nivel, nivel, INT32_MIN, INT32_MAX, isComp );
 
 	while( no->pai->pai != NULL  )
 		no = no->pai;
@@ -78,7 +78,7 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 	return true;
 }
 
-MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, float alpha, float beta, bool isComp ) {
+MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int iniNivel, int nivel, float alpha, float beta, bool isComp ) {
 	if ( nivel <= 0 || no->terminal )
 		return no;
 
@@ -128,10 +128,16 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 
 			float peso = 0;
 
-
-			bool isAntesMoveCap = jogo->isCapturaOutraPeca(
+			float pecaPeso = 0;
+			if ( nivel == iniNivel ) {
+				bool isCap = jogo->isCapturaOutraPeca(
 						( isComp ? jogPecas : compPecas ),
-						jogPecas, compPecas, p->getPosX(), p->getPosY(), !isComp );
+						jogPecas, compPecas,
+						p->getPosX(), p->getPosY(), !isComp );
+
+				if ( isCap )
+					pecaPeso = this->calculaPeso( p );
+			}
 
 			jogo->move2( jogPecas, compPecas, p, jog );
 
@@ -163,15 +169,27 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 				if ( capturada->getTipo() != Jogo::REI )
 					peso += this->calculaPeso( capturada );
 
-			if ( isAntesMoveCap )
-				peso += this->calculaPeso( p ) * 0.1;
+			if ( nivel == iniNivel ) {
+				bool verificar = true;
+				if ( pecaPeso > 0 ) {
+					bool isAposMovCap = jogo->isCapturaOutraPeca(
+							( isComp ? jogPecas : compPecas ),
+							jogPecas, compPecas,
+							jog->getPosX(), jog->getPosY(), !isComp );
 
-			if ( no->pai == NULL ) {
-				if ( isXeque )
+					if ( !isAposMovCap ) {
+						peso += pecaPeso;
+						verificar = false;
+					}
+				}
+
+				if ( verificar && isXeque ) {
 					peso += 0.002 + p->getJogadaCont() * 0.0001;
+					verificar = false;
+				}
 
-				if ( p->getTipo() == Jogo::PEAO )
-					peso += 0.001 * ( rand() / 100.0 );
+				if ( verificar && p->getTipo() == Jogo::PEAO )
+					peso += ( rand() % 100 ) / 1000.0;
 			}
 
 			jogo->deleta_pecas( jogPecas );
@@ -204,7 +222,7 @@ MiniMaxNo* Algoritmo::minimax( MiniMaxNo* no, bool isMaximizador, int nivel, flo
 				continue;
 			}
 
-			MiniMaxNo* no2 = this->minimax( filho, !isMaximizador, nivel-1, alpha, beta, !isComp );
+			MiniMaxNo* no2 = this->minimax( filho, !isMaximizador, iniNivel, nivel-1, alpha, beta, !isComp );
 			if ( isMaximizador ) {
 				if ( no2->peso > minimaxNo->peso )
 					minimaxNo = no2;
@@ -311,13 +329,17 @@ void Algoritmo::efetuaJogadas( MiniMaxNo* no, Peca** jps, Peca** cps) {
 }
 
 float Algoritmo::calculaPeso( Peca* peca ) {
+	return this->calculaPeso( peca->getTipo() );
+}
+
+float Algoritmo::calculaPeso( int tipo ) {
 	float peso = 0;
-	switch( peca->getTipo() ) {
+	switch( tipo ) {
 		case Jogo::REI:     peso = 20;  break;
 		case Jogo::RAINHA:  peso = 10;   break;
 		case Jogo::TORRE:   peso = 6;   break;
 		case Jogo::BISPO:   peso = 4;   break;
-		case Jogo::CAVALO:  peso = 4;   break;
+		case Jogo::CAVALO:  peso = 3;   break;
 		case Jogo::PEAO:    peso = 2;  break;
 	}
 	return peso;
