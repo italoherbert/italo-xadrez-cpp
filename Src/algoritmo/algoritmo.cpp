@@ -38,36 +38,22 @@ bool Algoritmo::calculaMelhorJogada( int* posX, int* posY, Jogada** jogada, bool
 
 	Peca* escolhida = jogo->getPeca( *posX, *posY );
 
-	bool sortear = false;
-
 	PecaMov* ultMov = jogo->getUltimoMov( isComp );
 	if ( ultMov != nullptr ) {
-		if ( ( jogo->getJogadaRepetidaCont( isComp )+1 ) % 3 == 0 ) {
-			if (  ultMov->getX2() == escolhida->getPosX() && ultMov->getY2() == escolhida->getPosY() ) {
-				if ( ultMov->getX1() == (*jogada)->getPosX() &&	ultMov->getY1() == (*jogada)->getPosY() ) {
-					sortear = true;
-				} else {
-					jogo->incJogadaRepetidaCont( isComp );
-				}
+		if ( ultMov->getX2() == escolhida->getPosX() && ultMov->getY2() == escolhida->getPosY() ) {
+			if ( ( jogo->getJogadaRepetidaCont( isComp )+1 ) % 5 == 0 ) {
+				jogo->copia_pecas( jogPecas, compPecas );
+
+				this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, isComp, ultMov );
+				jogo->zeraJogadaRepetidaCont( isComp );
+
+				jogo->deleta_pecas( jogPecas );
+				jogo->deleta_pecas( compPecas );
 			} else {
-				if ( ( jogo->getJogadaRepetidaCont( isComp )+1 ) % 3 == 0 ) {
-					sortear = true;
-				} else {
-					jogo->incJogadaRepetidaCont( isComp );
-				}
+				jogo->incJogadaRepetidaCont( isComp );
 			}
 		} else {
-			jogo->incJogadaRepetidaCont( isComp );
-		}
-
-		if ( sortear ) {
-			jogo->copia_pecas( jogPecas, compPecas );
-
-			this->sorteiaJogada( posX, posY, jogada, jogPecas, compPecas, isComp, ultMov );
 			jogo->zeraJogadaRepetidaCont( isComp );
-
-			jogo->deleta_pecas( jogPecas );
-			jogo->deleta_pecas( compPecas );
 		}
 	}
 
